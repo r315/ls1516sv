@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'application'
 
 version = '1.0'
 
@@ -6,3 +7,9 @@ dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
 }
+
+run {
+    standardInput = System.in
+    mainClassName = mainClass
+}
+
