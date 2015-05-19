@@ -15,7 +15,7 @@ dependencies {
     appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.20'
 }
 
-mainClassName = "pt.isel.ls.apps.http.FirstHttpServer"
+mainClassName = "pt.isel.ls.apps.http.HerokuFirstHttpServer"
 
 task stage(dependsOn: ['clean', 'installApp'])
 
