@@ -1,15 +1,46 @@
 apply plugin: 'java'
-apply plugin: 'application'
+apply plugin: 'war'
+apply plugin: 'appengine'
 
 version = '1.0'
+
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.20'
 }
 
-run {
-    standardInput = System.in
-    mainClassName = mainClass
+mainClassName = "pt.isel.ls.apps.http.FirstHttpServer"
+
+appengine {
+    httpPort = 8080
+    downloadSdk = true
+    appcfg {
+        email = 'pmhsfelix@gmail.com'
+        passIn = true
+
+        logs {
+            severity = 1
+            outputFile = file('mylogs.txt')
+        }
+
+        app {
+            id = 'sample-app'
+        }
+    }
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.20'
+    }
 }
 
