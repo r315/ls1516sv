@@ -11,39 +11,9 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
-    testCompile fileTree(dir: 'vendor/test', include: '*.jar')
-    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.20'
+    testCompile fileTree(dir: 'vendor/test', include: '*.jar')    
 }
 
 mainClassName = "pt.isel.ls.apps.http.HerokuFirstHttpServer"
 
 task stage(dependsOn: ['clean', 'installApp'])
-
-appengine {
-    httpPort = 8080
-    downloadSdk = true
-    appcfg {
-        email = 'pmhsfelix@gmail.com'
-        passIn = true
-
-        logs {
-            severity = 1
-            outputFile = file('mylogs.txt')
-        }
-
-        app {
-            id = 'sample-app'
-        }
-    }
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.20'
-    }
-}
-
