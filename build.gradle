@@ -15,9 +15,9 @@ dependencies {
     appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.20'
 }
 
-run{
-    mainClass = "pt.isel.ls.apps.http.FirstHttpServer"
-}
+mainClassName = "pt.isel.ls.apps.http.FirstHttpServer"
+
+task stage(dependsOn: ['clean', 'installApp'])
 
 appengine {
     httpPort = 8080
