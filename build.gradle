@@ -1,13 +1,7 @@
 apply plugin: 'java'
-apply plugin: 'war'
-apply plugin: 'appengine'
 apply plugin: 'application'
 
 version = '1.0'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compile fileTree(dir: 'vendor/main', include: '*.jar')
