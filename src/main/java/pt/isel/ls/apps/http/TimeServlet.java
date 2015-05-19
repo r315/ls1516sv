@@ -23,7 +23,7 @@ public class TimeServlet extends HttpServlet{
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/plain; charset=%s",utf8.name()));
         
-        String respBody = String.format("Current date and time is %s",new DateTime().toString());        
+        String respBody = String.format("Current date and time is %s\nVersion:0.3.0",new DateTime().toString());        
         byte[] respBodyBytes = respBody.getBytes(utf8); 
         resp.setStatus(200);
         resp.setContentLength(respBodyBytes.length);        
