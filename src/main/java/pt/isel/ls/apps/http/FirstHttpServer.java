@@ -19,7 +19,7 @@ public class FirstHttpServer {
     	Server server = new Server(port);
         ServletHandler handler = new ServletHandler();
         server.setHandler(handler);
-        handler.addServletWithMapping(new ServletHolder(new StudentsServlet()), "/students");
+        handler.addServletWithMapping(new ServletHolder(new TimeServlet()), "/*");
         server.start();
         server.join();
     }    
