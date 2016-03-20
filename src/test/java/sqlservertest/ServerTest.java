@@ -18,21 +18,25 @@ public class ServerTest {
 
     @Before
     public void getConnectionAndCreateTable()throws SQLException {
-        SQLServerDataSource ds=new SQLServerDataSource();
-        Map<String,String> env=System.getenv();
-        ds.setServerName(env.get("LS_SERVER"));
-        ds.setUser(env.get("LS_USER"));
-        ds.setPassword(env.get("LS_PASS"));
-        ds.setPortNumber(Integer.parseInt(env.get("LS_PORT")));
-        ds.setDatabaseName(env.get("LS_DBNAME"));
-        conn=ds.getConnection();
-        Statement stmt= conn.createStatement();
-        stmt.executeUpdate(
-            "create table Test(" +
-            "number int primary key," +
-            "name varchar (100));"
-        );
-        stmt.close();
+    	try{
+    		SQLServerDataSource ds=new SQLServerDataSource();
+    		Map<String,String> env=System.getenv();
+    		ds.setServerName(env.get("LS_SERVER"));
+    		ds.setUser(env.get("LS_USER"));
+    		ds.setPassword(env.get("LS_PASS"));
+    		ds.setPortNumber(Integer.parseInt(env.get("LS_PORT")));
+    		ds.setDatabaseName(env.get("LS_DBNAME"));
+    		conn=ds.getConnection();
+    		Statement stmt= conn.createStatement();
+    		stmt.executeUpdate(
+    				"create table Test(" +
+    						"number int primary key," +
+    						"name varchar (100));"
+    				);
+    		stmt.close();
+    	}catch (SQLException ex){
+    		throw new SQLException("Error getting SQLServer connection");
+    	}
 
         datamap= new HashMap<Integer, String>(3);
         datamap.put(38241,"João Duarte");   datamap.put(36187,"Luís Almeida");  datamap.put(38652,"Hugo Reis");
