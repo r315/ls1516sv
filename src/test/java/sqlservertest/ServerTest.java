@@ -54,6 +54,7 @@ public class ServerTest {
                 "DROP TABLE Test;"
         );
         stmt.close();
+        conn.close();
     }
 
     @Test
