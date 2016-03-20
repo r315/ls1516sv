@@ -17,8 +17,7 @@ public class ServerTest {
     Map<Integer,String> datamap=null;
 
     @Before
-    public void getConnectionAndCreateTable()throws SQLException {
-    	try{
+    public void getConnectionAndCreateTable() throws SQLException {
     		SQLServerDataSource ds=new SQLServerDataSource();
     		Map<String,String> env=System.getenv();
     		ds.setServerName(env.get("LS_SERVER"));
@@ -34,9 +33,6 @@ public class ServerTest {
     						"name varchar (100));"
     				);
     		stmt.close();
-    	}catch (SQLException ex){
-    		throw new SQLException("Error getting SQLServer connection");
-    	}
 
         datamap= new HashMap<Integer, String>(3);
         datamap.put(38241,"João Duarte");   datamap.put(36187,"Luís Almeida");  datamap.put(38652,"Hugo Reis");
