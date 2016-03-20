@@ -64,7 +64,9 @@ public class IntsTests {
     @Test
     public void sorts_all_elements_of_a_small_array() {
         // Arrange
-        int[] values = {-20,4,-1,2,1,0,10};
+        //int[] values = {-20,4,-1,2,1,0,10};
+        int[] values = {0,-2,-4,-20,-22,-30};
+
         // Act
         Ints.insertionSort(values, 0, values.length-1);
         // Assert
