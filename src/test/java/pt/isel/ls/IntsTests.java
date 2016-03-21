@@ -64,13 +64,22 @@ public class IntsTests {
     @Test
     public void sorts_all_elements_of_a_small_array() {
         // Arrange
-        //int[] values = {-20,4,-1,2,1,0,10};
-        int[] values = {0,-2,-4,-20,-22,-30};
-
+        //int[] values = {-20,4,-1,2,1,0,10,-5};
+        int[] values = {0,2,0,0};
         // Act
         Ints.insertionSort(values, 0, values.length-1);
         // Assert
-        assertTrue(isNonDecreasingOrder(values, 0, values.length-1));
+        assertTrue(isNonDecreasingOrder(values, 2, values.length-1));
+    }
+
+    @Test
+    public void sorts_a_sub_range_last_5(){
+        //Arrange
+        int[] values={0,1,2,3,4,-1,-2,-3,-4,-5};
+        //Act
+        Ints.insertionSort(values,5,values.length-1);
+        //Assert
+        assertArrayEquals(values,new int[]{0,1,2,3,4,-5,-4,-3,-2,-1});
     }
 
     @Test
@@ -78,8 +87,8 @@ public class IntsTests {
         // Arrange
         int[] values = {-20,4,-1,2,1,0,10};
         // Act
-        Ints.insertionSort(values, 2, 5);
+        Ints.insertionSort(values, 0, 5);
         // Assert
-        assertTrue(isNonDecreasingOrder(values, 2, 5));
+        assertTrue(isNonDecreasingOrder(values, 0, 5));
     }
 }
