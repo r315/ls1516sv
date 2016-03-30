@@ -1,58 +1,47 @@
 package sqlserver;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
-import configuration.Configuration;
-import configuration.ServerConfiguration;
+import java.sql.Connection;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.util.Map;
 
 public class ConnectionFactory {
-	private static Connection conn = null;
-	private static ServerConfiguration serverConfiguration;
-	
-	//"jdbc:mysql://<server>/<database>?user=<username>&password=<password>"
-	private void mysqlConnection() throws Exception{
-		String url;			
-		url = "jdbc:mysql://" + serverConfiguration.server;			
-		if (serverConfiguration.port != null && serverConfiguration.port.length() > 0) 
-			url += ":" + serverConfiguration.port;
-		url += "/";
-		if (serverConfiguration.database != null && serverConfiguration.database.length() > 0)
-			url += serverConfiguration.database + "?";
-		url += "user=" + serverConfiguration.user + "&password=" + serverConfiguration.pass;	
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			conn = (Connection) DriverManager.getConnection(url);
-			//conn.setAutoCommit(false);
-		}catch(Exception ex){
-			conn = null;
-			throw new Exception("ConnectionFactory: fail to create mysql connection");
-		}	
-	}
 
-	private void sqlserverConnection() throws Exception {
-		// TODO Auto-generated method stub
-		throw new Exception("ConnectionFactory: sqlserver not implemented");
-	}
-	
-	private static ConnectionFactory instance = new ConnectionFactory();
-	public ConnectionFactory getInstance(){ 
-		return instance;
-	}
-	
-	public Connection getConnection(){
-			return conn;
-	}
-	
-	private ConnectionFactory(){		
-		try{
-		if(Configuration.getInstance().getDataBase().type == ServerConfiguration.SERVER_TYPE_MYSQL)
-			mysqlConnection();
-		else
-			sqlserverConnection();
-		}catch (Exception ex){
-			//TODO: log this
-			System.out.println(ex.toString());
-		}
-	}		
+    static public Connection getConn () throws SQLException {
+        SQLServerDataSource ds=new SQLServerDataSource();
+        Map<String,String> env=System.getenv();
+        ds.setServerName(env.get("LS_SERVER"));
+        ds.setUser(env.get("LS_USER"));
+        ds.setPassword(env.get("LS_PASS"));
+        ds.setPortNumber(Integer.parseInt(env.get("LS_PORT")));
+        ds.setDatabaseName(env.get("LS_DBNAME"));
+
+        return ds.getConnection();
+    }
+
+    static public void closeConn (Connection conn) throws SQLException {
+        conn.close();
+    }
+
+    static public void printResultSet(ResultSet rs) throws SQLException {
+        ResultSetMetaData rsMetaData = rs.getMetaData();
+        int columnNumber = rsMetaData.getColumnCount();
+        String columnName[] = new String[columnNumber];
+        for (int i = 0; i < columnNumber; i++) {
+            columnName[i] = rsMetaData.getColumnName(i + 1);
+        }
+        while (rs.next()) {
+            for (int i = 0; i < columnNumber; i++) {
+                if (i > 0)
+                    System.out.print(", ");
+                System.out.print(columnName[i] + " " + rs.getObject(i + 1));
+            }
+            System.out.println();
+        }
+    }
 }
+
+
