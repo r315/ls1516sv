@@ -3,29 +3,32 @@ package commands;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
-import java.util.List;
+import java.util.Calendar;
+import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 30/03/2016.
- */
-public class GetMovies implements Command {
+
+public class GetMovies implements ICommand {
 
     @Override
-    public void execute(List<Object> args, ConnectionFactory cf) throws SQLException {
+    public void execute(Iterable<Object> args, HashMap<String, String> prmts, ConnectionFactory cf) throws SQLException {
         Connection conn = cf.getConn();
         Statement stmt = conn.createStatement();
 
-        ResultSet rs = stmt.executeQuery("SELECT title FROM Movie ORDER BY title");
+        ResultSet rs = stmt.executeQuery("SELECT title, release_year FROM Movie ORDER BY title");
 
         printRS(rs);
 
         stmt.close();
-        conn.close();
+        cf.closeConn();
     }
 
     private void printRS(ResultSet rs) throws SQLException {
         while(rs.next()) {
-            System.out.println(rs.getString("title"));
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(rs.getDate("release_year"));
+
+            System.out.println(rs.getString("title") + " (" +calendar.get(Calendar.YEAR) + ")");
         }
     }
+
 }

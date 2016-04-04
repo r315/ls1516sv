@@ -3,21 +3,26 @@ package commands;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
-import java.util.List;
+import java.util.HashMap;
 
 
-public class GetMoviesMid implements Command {
+public class GetMoviesMid implements ICommand {
+
     @Override
-    public void execute(List<Object> args, ConnectionFactory cf) throws SQLException {
+    public void execute(Iterable<Object> args, HashMap<String, String> prmts, ConnectionFactory cf) throws SQLException {
+        int mID = (int) args.iterator().next();
+
         Connection conn = cf.getConn();
 
         PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Movie WHERE movie_id = ?");
-        pstmt.setInt(1,(int)args.get(0));
+        pstmt.setInt(1,mID);
 
         ResultSet rs = pstmt.executeQuery();
 
         printRS(rs);
 
+        pstmt.close();
+        cf.closeConn();
     }
 
     private void printRS(ResultSet rs) throws SQLException {
@@ -37,4 +42,5 @@ public class GetMoviesMid implements Command {
         }
 
     }
+
 }
