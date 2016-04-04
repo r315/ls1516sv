@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class ConnectionFactory {
 
+    static Connection conn = null;
+
     static public Connection getConn () throws SQLException {
         SQLServerDataSource ds=new SQLServerDataSource();
         Map<String,String> env=System.getenv();
@@ -19,10 +21,12 @@ public class ConnectionFactory {
         ds.setPortNumber(Integer.parseInt(env.get("LS_PORT")));
         ds.setDatabaseName(env.get("LS_DBNAME"));
 
-        return ds.getConnection();
+        conn = ds.getConnection();
+
+        return conn;
     }
 
-    static public void closeConn (Connection conn) throws SQLException {
+    static public void closeConn () throws SQLException {
         conn.close();
     }
 
