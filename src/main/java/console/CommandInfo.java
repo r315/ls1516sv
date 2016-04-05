@@ -1,69 +1,47 @@
 package console;
 
-public class CommandInfo {
-	
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+public class CommandInfo {	
 	private String method;			//GET
-	private String fullpath;		// /movie/{mid}/review
-	private String fullparam;		// name=filme&ano=2016
-	
-	private String[] resources;
-	private int ridx;
-	
-	
-	
+	private Map<String, String> parameters;		// name=filme&ano=2016	
+	private Collection<String> resources;	
 	
 	public CommandInfo(String method, String path, String param){
 		this.method = method;
-		this.fullpath = path;
-		this.fullparam = param;
+				
+		resources = new ArrayList<String>();
+		String [] tmpresources = path.split("/");		
+		for(int i = 1; i < tmpresources.length ; i++) // i=1 skip initial ""
+			resources.add(tmpresources[i]);			
 		
-		this.resources = fullpath.split("/");
-		ridx = 1;  // skip initial '/'
+		if(param == null) return;
 		
+		parameters = new HashMap<String,String>();
+		String [] tmpparam = param.split("&");
 		
-		
+		for(int i = 0; i < tmpparam.length; i++){			
+			String [] aux = tmpparam[i].split("=");	
+			parameters.put(aux[0],aux[1]);
+		}		
 	}
 	
-	
-	public String[] getResources(){ return resources;}
+	/**
+	 * @return method POST or GET
+	 */
 	public String getMethod() { return method;}
 	
-	public int getInt(){
-		if(ridx < this.resources.length) return -1;
-		try{
-			int val = Integer.parseInt(resources[ridx]);
-			ridx++;
-			return val;
-		}catch (NumberFormatException ex){
-			return -1;		
-		}
-	}
+	/**
+	 * @return 
+	 */
+	public Collection<String> getResources(){ return resources;}
 	
-	
-	public boolean isString(){		
-		try{
-			int val = Integer.parseInt(resources[ridx]);			
-		}catch (NumberFormatException ex){
-			return true;			
-		}		
-		return false;
-	}
-	
-	
-	
-	public String getString(){
-		if(ridx < this.resources.length) return null;		
-		return resources[ridx++];		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/**
+	 * 
+	 */
+	public Map<String,String> getParameters(){ return parameters;}		
 }
 

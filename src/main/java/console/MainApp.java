@@ -1,9 +1,14 @@
 package console;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainApp {
 
+	
 	public static void main(String [] args){
 		CommandInfo cmdinfo = null;		
+		
 	
 		switch(args.length){
 		case 2:
@@ -16,7 +21,21 @@ public class MainApp {
 				System.out.println("Bad parameters");
 				break;
 		
-		}		
-	}
+		}			
+		DataNode dnode = CommandMap.createMap(cmdinfo.getMethod(), cmdinfo.getResources());		
 		
+		Cnode = dnode.next;
+		
+		while(cnode != null){
+			
+			
+			
+			
+			
+		}
+		
+		
+		
+		
+	}		
 }
