@@ -18,7 +18,7 @@ public class CommandInfo {
 		String [] tmpresources = path.split("/");		
 		
 		table = tmpresources[1];
-		for(int i = 2; i < tmpresources.length ; i++) // i=2 skip initial "" and first resource
+		for(int i = 1; i < tmpresources.length ; i++) // i=2 skip initial "" and first resource
 			resources.add(tmpresources[i]);			
 		
 		if(param == null) return;
