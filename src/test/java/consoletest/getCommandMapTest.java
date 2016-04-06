@@ -1,4 +1,4 @@
-package console;
+package consoletest;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.junit.Test;
 
 import commands.ICommand;
+import console.CommandInfo;
 import Logic.MapManager;
 import Strutures.CNode;
 import static org.junit.Assert.assertTrue;
