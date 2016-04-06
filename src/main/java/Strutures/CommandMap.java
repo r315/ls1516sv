@@ -13,9 +13,9 @@ import java.util.HashMap;
 
 public class CommandMap {
 
-    public static HashMap<String,Object> createMap(){
+    public static HashMap<String,HashMap<String,DataNode>> createMap(){
         //Methods
-        HashMap<String,Object> commandsMap=new HashMap<String, Object>(2);
+        HashMap<String,HashMap<String,DataNode>> commandsMap=new HashMap<String, HashMap<String,DataNode>>(2);
         //Tables
         HashMap<String, DataNode> postMap=new HashMap<String, DataNode>(1);
         HashMap<String, DataNode> getMap=new HashMap<String, DataNode>(2);

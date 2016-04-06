@@ -1,6 +1,12 @@
 package console;
 
+import Strutures.CNode;
+import Strutures.CommandMap;
+import Strutures.DataNode;
+
+import javax.xml.crypto.Data;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class MainApp {
@@ -20,18 +26,6 @@ public class MainApp {
 			default :
 				System.out.println("Bad parameters");
 				break;
-		
-		}			
-		DataNode dnode = CommandMap.createMap(cmdinfo.getMethod(), cmdinfo.getResources());		
-		
-		Cnode = dnode.next;
-		
-		while(cnode != null){
-			
-			
-			
-			
-			
 		}
 		
 		

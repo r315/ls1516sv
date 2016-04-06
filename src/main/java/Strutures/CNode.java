@@ -2,17 +2,18 @@ package Strutures;
 
 import commands.ICommand;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
  * Created by Red on 04/04/2016.
  */
 public class CNode {
-    private Iterable<String> resources;
+    private Collection<String> resources;
     ICommand command;
     private CNode next;
 
-    public CNode(Iterable<String> resources,ICommand command){
+    public CNode(Collection<String> resources,ICommand command){
         this.resources=resources;
         this.command=command;
     }
@@ -27,5 +28,9 @@ public class CNode {
 
     public Iterator<String> resources(){
         return this.resources.iterator();
+    }
+
+    public int getCollectionSize(){
+        return resources.size();
     }
 }

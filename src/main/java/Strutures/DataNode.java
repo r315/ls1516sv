@@ -17,6 +17,10 @@ public class DataNode {
         this.next=next;
     }
 
+    public CNode getNext(){
+        return this.next;
+    }
+
     public Iterator<String> resources(){
         return this.resources.iterator();
     }
