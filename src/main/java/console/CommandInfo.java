@@ -9,13 +9,16 @@ public class CommandInfo {
 	private String method;			//GET
 	private Map<String, String> parameters;		// name=filme&ano=2016	
 	private Collection<String> resources;	
+	private String table;
 	
 	public CommandInfo(String method, String path, String param){
 		this.method = method;
 				
 		resources = new ArrayList<String>();
 		String [] tmpresources = path.split("/");		
-		for(int i = 1; i < tmpresources.length ; i++) // i=1 skip initial ""
+		
+		table = tmpresources[1];
+		for(int i = 2; i < tmpresources.length ; i++) // i=2 skip initial "" and first resource
 			resources.add(tmpresources[i]);			
 		
 		if(param == null) return;
@@ -42,6 +45,17 @@ public class CommandInfo {
 	/**
 	 * 
 	 */
-	public Map<String,String> getParameters(){ return parameters;}		
+	public Map<String,String> getParameters(){ return parameters;}	
+	
+	/**
+	 * 
+	 */
+	public String getTable() { return table; }
+	
+	 /*
+	  * 
+	  */
+	public int getResourcesSize() { return resources.size();}
+	
 }
 
