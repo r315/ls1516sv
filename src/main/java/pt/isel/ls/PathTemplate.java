@@ -18,7 +18,7 @@ public class PathTemplate extends LinkedList<PathTemplate.Segment> {
 
     public Optional<Map<String,String>> match(Path p){
         if(p.size() != this.size()){
-            return null;
+            return Optional.empty();
         }
         LinkedList<MatchResult> acc = new LinkedList<>();
         for(int i = 0 ; i<this.size() ; ++i){

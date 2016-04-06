@@ -37,4 +37,11 @@ public class PathTemplateTests {
         Optional<Map<String,String>> vars = pt.match(new Path("/Movies/123"));
         assertFalse(vars.isPresent());
     }
+
+    @Test
+    public void PathTemplate_fail_matches_on_empty() throws InvalidPathException {
+        PathTemplate pt = new PathTemplate("//");
+        Optional<Map<String,String>> vars = pt.match(new Path("/Movies/123"));
+        assertFalse(vars.isPresent());
+    }
 }
