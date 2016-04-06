@@ -1,6 +1,6 @@
 package Strutures;
 
-import commands.Command;
+import commands.ICommand;
 
 import java.util.Iterator;
 
@@ -9,10 +9,10 @@ import java.util.Iterator;
  */
 public class CNode {
     private Iterable<String> resources;
-    Command command;
+    ICommand command;
     private CNode next;
 
-    public CNode(Iterable<String> resources,Command command){
+    public CNode(Iterable<String> resources,ICommand command){
         this.resources=resources;
         this.command=command;
     }
