@@ -1,15 +1,16 @@
 package Strutures;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
  * Created by Red on 29/03/2016.
  */
 public class DataNode {
-    private Iterable<String> resources;
+    private Collection<String> resources;
     private CNode next;
 
-    public DataNode(Iterable<String> resources){
+    public DataNode(Collection<String> resources){
         this.resources=resources;
     }
 
@@ -21,8 +22,8 @@ public class DataNode {
         return this.next;
     }
 
-    public Iterator<String> resources(){
-        return this.resources.iterator();
+    public Collection<String> resources(){
+        return this.resources;
     }
 
 

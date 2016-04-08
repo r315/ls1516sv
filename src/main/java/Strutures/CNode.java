@@ -26,7 +26,7 @@ public class CNode {
         return this.next;
     }
 
-    public Iterator<String> resources(){
+    public Iterator<String> iterator(){
         return this.resources.iterator();
     }
 
