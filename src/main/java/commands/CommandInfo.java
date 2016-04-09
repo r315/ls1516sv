@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import exceptions.InvalidCommandException;
-
 public class CommandInfo {	
 	private String method;			//GET
 	private HashMap<String, String> parameters;		// name=filme&release_year=2016

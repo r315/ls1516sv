@@ -1,15 +1,13 @@
 package logic;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 import commands.GetMovies;
+import junit.framework.Assert;
 import org.junit.Test;
 
 import commands.*;
-import logic.MapManager;
 import Strutures.CNode;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 
@@ -25,7 +23,7 @@ public class CommandMapTest {
 	@Test
 	public void shouldBeAbleToGetCnodePostRatings(){
 		CommandInfo cmdInfo = new CommandInfo("POST","/movies/123/ratings","3");
-		CNode expected = new CNode(cmdInfo.getResources(),new PostMovies());
+		CNode expected = new CNode(cmdInfo.getResources(),new PostMoviesMidRatings());
 		cnodeCmp(cmdInfo,expected);		
 	}
 	
@@ -33,15 +31,18 @@ public class CommandMapTest {
 	public void shouldBeAbleToGetCnodePostReviews(){
 		CommandInfo cmdInfo = new CommandInfo("POST","/movies/123/reviews",
 				"reviewerName=Afonso&reviewSummary=reviewhere&review=fullreview&rating=4");
-		CNode expected = new CNode(cmdInfo.getResources(),new PostMovies());
+		CNode expected = new CNode(cmdInfo.getResources(),new PostMoviesMidReviews());
 		cnodeCmp(cmdInfo,expected);		
 	}	
 	
 	@Test
-	public void shouldBeAbleToGetCnodeGetMovies(){
+	public void shouldBeAbleToGetCnodeGetMovies() throws Exception{
 		CommandInfo cmdInfo = new CommandInfo("GET","/movies",null);
 		CNode expected = new CNode(cmdInfo.getResources(),new GetMovies());
-		cnodeCmp(cmdInfo,expected);		
+
+		CNode cnode= MapManager.getCNode(cmdInfo);
+		Assert.assertTrue(cnode.getCommand() instanceof GetMovies);
+		//cnodeCmp(cmdInfo,expected);
 	}
 	
 	@Test
@@ -75,42 +76,42 @@ public class CommandMapTest {
 	@Test
 	public void shouldBeAbleToGetCnodeGetTopsHigherAvg(){
 		CommandInfo cmdInfo = new CommandInfo("GET","/tops/ratings/higher/average",null);
-		CNode expected = new CNode(cmdInfo.getResources(),new GetTops());
+		CNode expected = new CNode(cmdInfo.getResources(),new GetTopsNRatingsHigherAverage());
 		cnodeCmp(cmdInfo,expected);		
 	}
 	
 	@Test
 	public void shouldBeAbleToGetCnodeGetTopsHigherAvgWithCount(){
 		CommandInfo cmdInfo = new CommandInfo("GET","/tops/5/ratings/higher/average",null);
-		CNode expected = new CNode(cmdInfo.getResources(),new GetTops());
+		CNode expected = new CNode(cmdInfo.getResources(),new GetTopsNRatingsHigherAverage());
 		cnodeCmp(cmdInfo,expected);		
 	}
 	
 	@Test
 	public void shouldBeAbleToGetCnodeGetTopsLowerAvg(){
 		CommandInfo cmdInfo = new CommandInfo("GET","/tops/ratings/lower/average",null);
-		CNode expected = new CNode(cmdInfo.getResources(),new GetTops());
+		CNode expected = new CNode(cmdInfo.getResources(),new GetTopsRatingsLowerAverage());
 		cnodeCmp(cmdInfo,expected);		
 	}
 	
 	@Test
 	public void shouldBeAbleToGetCnodeGetTopsLowerAvgWithCount(){
 		CommandInfo cmdInfo = new CommandInfo("GET","/tops/5/ratings/lower/average",null);
-		CNode expected = new CNode(cmdInfo.getResources(),new GetTops());
+		CNode expected = new CNode(cmdInfo.getResources(),new GetTopsNRatingsLowerAverage());
 		cnodeCmp(cmdInfo,expected);		
 	}
 	
 	@Test
 	public void shouldBeAbleToGetCnodeGetTopsMostReviews(){
 		CommandInfo cmdInfo = new CommandInfo("GET","/tops/reviews/higher/count",null);
-		CNode expected = new CNode(cmdInfo.getResources(),new GetTops());
+		CNode expected = new CNode(cmdInfo.getResources(),new GetTopsReviewsHigherCount());
 		cnodeCmp(cmdInfo,expected);		
 	}
 	
 	@Test
 	public void shouldBeAbleToGetCnodeGetTopsMostReviewsCount(){
 		CommandInfo cmdInfo = new CommandInfo("GET","/tops/5/reviews/higher/count",null);
-		CNode expected = new CNode(cmdInfo.getResources(),new GetTops());
+		CNode expected = new CNode(cmdInfo.getResources(),new GetTopsNReviewsHigherCount());
 		cnodeCmp(cmdInfo,expected);		
 	}	
 	
