@@ -30,9 +30,9 @@ public class GetMoviesMidReviews implements ICommand {
     }
 
     private String getQuery() {
-        return "SELECT Review.review_id, Review.user, Review.summary, Review.rating" +
-                "FROM Reviews" +
-                "INNER JOIN Movie ON Review.movie_id=Movie.movie_id" +
+        return "SELECT Review.review_id, Review.name, Review.summary, Review.rating " +
+                "FROM Review " +
+                "INNER JOIN Movie ON Review.movie_id=Movie.movie_id " +
                 "WHERE Movie.movie_id = ?";
     }
 
