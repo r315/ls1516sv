@@ -61,7 +61,7 @@ public class CommandMap {
         //GET tops CNodes
         //
 
-        curr=new CNode(Arrays.asList(new String[]{"tops","ratings","higher","average"}),new getTopsRatingsHigherAverage());
+        curr=new CNode(Arrays.asList(new String[]{"tops","ratings","higher","average"}),new GetTopsRatingsHigherAverage());
         get_tops.setNext(curr);
 
         curr.setNext(new CNode(Arrays.asList(new String[]{"tops",var,"ratings","higher","average"}),new GetTopsNRatingsHigherAverage()));curr=curr.getNext();

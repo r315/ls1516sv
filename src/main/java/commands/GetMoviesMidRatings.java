@@ -29,27 +29,23 @@ public class GetMoviesMidRatings implements ICommand {
 
     }
 
-    //Mising ratings from Review table
     private String getQuery() {
-        return "SELECT Movie.title, Movie.release_year, ((Rating.one * 1 + Rating.two * 2 + Rating.three * 3 + Rating.four * 4 + Rating.five * 5) / (Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratavg, AVG(Review.rating) AS revavg" +
-        "FROM Movie" +
-        "LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id" +
-        "LEFT JOIN Review ON Review.movie_id = Movie.movie_id" +
-        "WHERE Movie.movie_id = 3" +
-        "GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five";
+        return "SELECT title, release_year, COALESCE ((ratavg + revavg) / 2, ratavg, revavg) AS average " +
+                "FROM " +
+                "(" +
+                        "SELECT ((Rating.one * 1 + Rating.two * 2 + Rating.three * 3 + Rating.four * 4 + Rating.five * 5) / (Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratavg, AVG(Review.rating) AS revavg " +
+                        "FROM Movie " +
+                        "LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
+                        "LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
+                        "WHERE Movie.movie_id = ? " +
+                        "GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five " +
+                ") AS average";
     }
 
     private void printRS(ResultSet rs) throws SQLException {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(rs.getDate("release_year"));
 
-        int avg = 0;
-
-        if (rs.getInt("ratavg") != 0 || rs.getInt("revavg") != 0)
-            if (rs.getInt("ratavg") == 0) avg = rs.getInt("revavg");
-            else if (rs.getInt("revavg") == 0) avg = rs.getInt("ratavg");
-            else avg = (rs.getInt("revavg") + rs.getInt("ratavg")) / 2;
-
-        System.out.println(rs.getString("title") + " (" +calendar.get(Calendar.YEAR) + "): " + avg);
+        System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + "): " + rs.getInt("average"));
     }
 }
