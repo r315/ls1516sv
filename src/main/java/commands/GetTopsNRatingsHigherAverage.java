@@ -10,12 +10,15 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class GetTopsNRatingsHigherAverage implements ICommand {
 
 	@Override
 	public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
 		int n;
+		Iterator<String> it = args.iterator();
+		it.next();
 		try {
 			n = Integer.parseInt(args.iterator().next());
 		} catch (NumberFormatException e) {

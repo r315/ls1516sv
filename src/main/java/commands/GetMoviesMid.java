@@ -6,6 +6,7 @@ import sqlserver.ConnectionFactory;
 import java.sql.*;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 public class GetMoviesMid implements ICommand {
@@ -13,8 +14,10 @@ public class GetMoviesMid implements ICommand {
     @Override
     public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
         int mID;
+        Iterator<String> it = args.iterator();
+        it.next();
         try {
-            mID = Integer.parseInt(args.iterator().next());
+            mID = Integer.parseInt(it.next());
         } catch (NumberFormatException e) {
                 throw new CommandWrongVariableException();
         }
