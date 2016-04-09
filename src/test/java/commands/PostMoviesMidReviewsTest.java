@@ -8,15 +8,11 @@ public class PostMoviesMidReviewsTest {
 	
 	
 	@Test
-	public void shoudPostMovieOnDataBase(){
+	public void shoudPostMovieOnDataBase() throws Exception{
 		ICommand pm = new PostMoviesMidReviews();
 		CommandInfo cmdInf = new CommandInfo("POST","/movies/2/reviews",
 				"reviewerName=Toni&reviewSummary=filmesobrevidadetoni&review=todaahistoria&rating=2");		
-		try {
-			pm.execute(cmdInf.getResources(),cmdInf.getParameters());
-		} catch (Exception e) {			
-			fail();
-		}		
+		pm.execute(cmdInf.getResources(),cmdInf.getParameters());			
 	}
 
 }

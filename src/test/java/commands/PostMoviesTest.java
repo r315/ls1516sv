@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.junit.Before;
@@ -16,28 +17,18 @@ import exceptions.InvalidCommandParameters;
 public class PostMoviesTest {
 	CommandInfo cmdInf;
 	@Before
-	public void removeIfExists(){
-		try
-		{	
+	public void removeIfExists() throws SQLException{		
 			Connection conn = ConnectionFactory.getConn();
 			Statement stmt= conn.createStatement();
 	        stmt.executeUpdate("delete from Movie where title='filme' and release_year='2016-01-01 00:00:00'");
-	        stmt.close();	        				
-		}catch(Exception ex){
-			
-		}
-		
+	        stmt.close();		
 	}
+	
 	@Test
-	public void shouldPostMovieOnDataBase(){
+	public void shouldPostMovieOnDataBase() throws Exception{
 		PostMovies pm = new PostMovies();
 		cmdInf = new CommandInfo("POST","/movies","title=filme&release_year=2016");		
-		try {
-			pm.execute(cmdInf.getResources(),cmdInf.getParameters());
-		} catch (Exception e) {
-			fail();
-		}
-		
+		pm.execute(cmdInf.getResources(),cmdInf.getParameters());		
 	}
 
 }
