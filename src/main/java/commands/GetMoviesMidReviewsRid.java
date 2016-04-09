@@ -21,9 +21,9 @@ public class GetMoviesMidReviewsRid implements ICommand {
         it.next();
 
         try {
-            mID = Integer.parseInt(args.iterator().next());
+            mID = Integer.parseInt(it.next());
             it.next();
-            rID = Integer.parseInt(args.iterator().next());
+            rID = Integer.parseInt(it.next());
         } catch (NumberFormatException e) {
             throw new CommandWrongVariableException();
         }
@@ -44,14 +44,16 @@ public class GetMoviesMidReviewsRid implements ICommand {
     }
 
     private String getQuery() {
-        return "SELECT Review.review_id, Review.user, Review.summary, Review.review, Review.rating" +
-                "FROM Review" +
-                "INNER JOIN Movie ON Review.movie_id=Movie.movie_id" +
+        return "SELECT Review.review_id, Review.name, Review.summary, Review.review, Review.rating " +
+                "FROM Review " +
+                "INNER JOIN Movie ON Review.movie_id=Movie.movie_id " +
                 "WHERE Movie.movie_id = ? AND Review.review_id = ?";
     }
 
     private void printRS(ResultSet rs) throws SQLException {
-        System.out.println(rs.getInt("review_id") + " " + rs.getString("user") + " " + rs.getInt("rating") + "\n" +
+        rs.next();
+
+        System.out.println(rs.getInt("review_id") + " " + rs.getString("name") + " " + rs.getInt("rating") + "\n" +
                 "Summary: " + rs.getString("summary") + "\n" +
                 "Review: " + rs.getString("review"));
     }

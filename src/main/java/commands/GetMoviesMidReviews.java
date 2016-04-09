@@ -19,7 +19,7 @@ public class GetMoviesMidReviews implements ICommand {
         Iterator<String> it = args.iterator();
         it.next();
         try {
-            mID = Integer.parseInt(args.iterator().next());
+            mID = Integer.parseInt(it.next());
         } catch (NumberFormatException e) {
             throw new CommandWrongVariableException();
         }
@@ -47,7 +47,7 @@ public class GetMoviesMidReviews implements ICommand {
 
     private void printRS(ResultSet rs) throws SQLException {
         while(rs.next()) {
-            System.out.println(rs.getInt("review_id") + " " + rs.getString("user") + " " + rs.getInt("rating") + " \n" +
+            System.out.println(rs.getInt("review_id") + " " + rs.getString("name") + " " + rs.getInt("rating") + " \n" +
                     "Summary: " + rs.getString("summary"));
         }
     }

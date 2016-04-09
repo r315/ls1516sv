@@ -20,7 +20,7 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 		Iterator<String> it = args.iterator();
 		it.next();
 		try {
-			n = Integer.parseInt(args.iterator().next());
+			n = Integer.parseInt(it.next());
 		} catch (NumberFormatException e) {
 			throw new CommandWrongVariableException();
 		}
@@ -39,7 +39,7 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 	}
 
 	private String getQuery() {
-		return "SELECT TOP ? title, release_year, COALESCE (ratcount + revcount, ratcount, revcount) AS total " +
+		return "SELECT TOP (?) title, release_year, COALESCE (ratcount + revcount, ratcount, revcount) AS total " +
 				"FROM " +
 				"(" +
 				"SELECT Movie.title, Movie.release_year, ((Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratcount, COUNT(Review.rating) AS revcount " +
@@ -56,7 +56,7 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(rs.getDate("release_year"));
 
-			System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + "): " + rs.getInt("count"));
+			System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + "): " + rs.getInt("total"));
 		}
 
 	}

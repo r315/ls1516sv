@@ -20,7 +20,7 @@ public class GetTopsNRatingsLowerAverage implements ICommand {
 		Iterator<String> it = args.iterator();
 		it.next();
 		try {
-			n = Integer.parseInt(args.iterator().next());
+			n = Integer.parseInt(it.next());
 		} catch (NumberFormatException e) {
 			throw new CommandWrongVariableException();
 		}
@@ -39,10 +39,10 @@ public class GetTopsNRatingsLowerAverage implements ICommand {
 	}
 
 	private String getQuery() {
-		return "SELECT TOP ? title, release_year, COALESCE ((ratavg + revavg) / 2, ratavg, revavg) AS average " +
+		return "SELECT TOP (?) title, release_year, COALESCE ((ratavg + revavg) / 2, ratavg, revavg) AS average " +
 				"FROM " +
 				"(" +
-				"SELECT ((Rating.one * 1 + Rating.two * 2 + Rating.three * 3 + Rating.four * 4 + Rating.five * 5) / (Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratavg, AVG(Review.rating) AS revavg " +
+				"SELECT Movie.title, Movie.release_year, ((Rating.one * 1 + Rating.two * 2 + Rating.three * 3 + Rating.four * 4 + Rating.five * 5) / (Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratavg, AVG(Review.rating) AS revavg " +
 				"FROM Movie " +
 				"LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
 				"LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
