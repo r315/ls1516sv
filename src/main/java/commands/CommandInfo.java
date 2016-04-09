@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 public class CommandInfo {	
 	private String method;			//GET
+	private String table;
 	private HashMap<String, String> parameters;		// name=filme&release_year=2016
 	private Collection<String> resources;	
 
@@ -19,7 +20,7 @@ public class CommandInfo {
 				
 		resources = new ArrayList<String>();
 		String [] tmpresources = path.split("/");		
-		
+		table=tmpresources[1];
 		for(int i = 1; i < tmpresources.length ; i++) // i=1 skip initial ""
 			resources.add(tmpresources[i]);
 		if(param == null) return;
@@ -37,7 +38,10 @@ public class CommandInfo {
 	 * @return method POST or GET
 	 */
 	public String getMethod() { return method;}
-	
+
+	public String getTable(){
+		return table;
+	}
 	/**
 	 * @return 
 	 */

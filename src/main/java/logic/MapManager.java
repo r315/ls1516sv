@@ -24,14 +24,15 @@ public class MapManager{
         if(cmdsMap==null)throw new InvalidCommandMethodException();
         HashMap<String, DataNode> tablesMap = cmdsMap.get(cmdInfo.getMethod());
 
-        Iterator<String> commandIterator = cmdInfo.getResources().iterator();
-        DataNode dataNode = tablesMap.get(cmdInfo.getMethod());
+        //Iterator<String> commandIterator = cmdInfo.getResources().iterator();
+        DataNode dataNode = tablesMap.get(cmdInfo.getTable());
         if(tablesMap==null)throw new InvalidCommandTableException();
         Collection<String> dataNodeSegmentList= dataNode.resources();
         CNode curr = dataNode.getNext();
 
         while (curr!=null){
             Iterator<String> cnodeIterator = curr.iterator();
+            Iterator<String> commandIterator = cmdInfo.getResources().iterator();
             boolean invalidCmd=false;
             if (cmdInfo.getResourcesSize() == curr.getCollectionSize()) {
                 while(commandIterator.hasNext()) {

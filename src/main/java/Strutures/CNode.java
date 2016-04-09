@@ -30,6 +30,10 @@ public class CNode {
         return this.resources.iterator();
     }
 
+    public Collection<String> collection(){
+        return this.resources;
+    }
+
     public int getCollectionSize(){
         return resources.size();
     }

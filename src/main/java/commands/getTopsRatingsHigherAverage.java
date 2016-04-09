@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class getTopsRatingsHigherAverage implements ICommand {
+public class GetTopsRatingsHigherAverage implements ICommand {
 
 	@Override
 	public void execute(Collection<String> args, HashMap<String, String> prmts)
