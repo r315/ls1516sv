@@ -10,8 +10,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import exceptions.InvalidCommandException;
-
 public class CommandInfoTest {
 	
 	
