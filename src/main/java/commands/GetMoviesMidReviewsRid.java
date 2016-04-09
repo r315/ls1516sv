@@ -1,5 +1,6 @@
 package commands;
 
+import exceptions.CommandWrongVariableException;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
@@ -12,9 +13,15 @@ import java.util.HashMap;
 public class GetMoviesMidReviewsRid implements ICommand {
 
     @Override
-    public void execute(Collection<String> args, HashMap<String, String> prmts) throws SQLException {
-        int mID = Integer.parseInt(args.iterator().next());
-        int rID = Integer.parseInt(args.iterator().next());
+    public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
+        int mID, rID;
+
+        try {
+            mID = Integer.parseInt(args.iterator().next());
+            rID = Integer.parseInt(args.iterator().next());
+        } catch (NumberFormatException e) {
+            throw new CommandWrongVariableException();
+        }
 
         Connection conn = ConnectionFactory.getConn();
 

@@ -1,5 +1,6 @@
 package commands;
 
+import exceptions.CommandWrongVariableException;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
@@ -13,8 +14,13 @@ import java.util.HashMap;
 public class GetTopsNRatingsHigherAverage implements ICommand {
 
 	@Override
-	public void execute(Collection<String> args, HashMap<String, String> prmts) throws SQLException {
-		int n = Integer.parseInt(args.iterator().next());
+	public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
+		int n;
+		try {
+			n = Integer.parseInt(args.iterator().next());
+		} catch (NumberFormatException e) {
+			throw new CommandWrongVariableException();
+		}
 
 		Connection conn = ConnectionFactory.getConn();
 

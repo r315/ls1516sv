@@ -44,7 +44,7 @@ public class GetTopsReviewsHigherCount implements ICommand {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(rs.getDate("release_year"));
 
-			System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + "): " + rs.getInt("count"));
+			System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + ")");
 		}
 
 	}
