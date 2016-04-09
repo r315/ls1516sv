@@ -1,4 +1,4 @@
-package commands;
+package Commands;
 
 import sqlserver.ConnectionFactory;
 
@@ -14,12 +14,16 @@ public class GetMovies implements ICommand {
         Connection conn = cf.getConn();
         Statement stmt = conn.createStatement();
 
-        ResultSet rs = stmt.executeQuery("SELECT title, release_year FROM Movie ORDER BY title");
+        ResultSet rs = stmt.executeQuery(getQuery());
 
         printRS(rs);
 
         stmt.close();
         cf.closeConn();
+    }
+
+    private String getQuery() {
+        return "SELECT title, release_year FROM Movie ORDER BY title";
     }
 
     private void printRS(ResultSet rs) throws SQLException {

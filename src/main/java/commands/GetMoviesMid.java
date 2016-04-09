@@ -1,4 +1,4 @@
-package commands;
+package Commands;
 
 import sqlserver.ConnectionFactory;
 
@@ -14,7 +14,7 @@ public class GetMoviesMid implements ICommand {
 
         Connection conn = cf.getConn();
 
-        PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Movie WHERE movie_id = ?");
+        PreparedStatement pstmt = conn.prepareStatement(getQuery());
         pstmt.setInt(1,mID);
 
         ResultSet rs = pstmt.executeQuery();
@@ -23,6 +23,10 @@ public class GetMoviesMid implements ICommand {
 
         pstmt.close();
         cf.closeConn();
+    }
+
+    private String getQuery() {
+        return "SELECT * FROM Movie WHERE movie_id = ?";
     }
 
     private void printRS(ResultSet rs) throws SQLException {

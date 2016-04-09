@@ -12,7 +12,7 @@ public class ConnectionFactory {
 
     static Connection conn = null;
 
-    static public Connection getConn () throws SQLException {
+    static private Connection createConn() throws SQLException {
         SQLServerDataSource ds=new SQLServerDataSource();
         Map<String,String> env=System.getenv();
         ds.setServerName(env.get("LS_SERVER"));
@@ -21,13 +21,18 @@ public class ConnectionFactory {
         ds.setPortNumber(Integer.parseInt(env.get("LS_PORT")));
         ds.setDatabaseName(env.get("LS_DBNAME"));
 
-        conn = ds.getConnection();
+        return ds.getConnection();
+    }
+
+    static public Connection getConn () throws SQLException {
+        if (conn == null) conn = createConn();
 
         return conn;
     }
 
     static public void closeConn () throws SQLException {
         conn.close();
+        conn = null;
     }
 
     static public void printResultSet(ResultSet rs) throws SQLException {
