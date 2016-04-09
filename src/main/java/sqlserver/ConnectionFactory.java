@@ -18,7 +18,13 @@ public class ConnectionFactory {
         ds.setServerName(env.get("LS_SERVER"));
         ds.setUser(env.get("LS_USER"));
         ds.setPassword(env.get("LS_PASS"));
-        ds.setPortNumber(Integer.parseInt(env.get("LS_PORT")));
+        try{
+        	ds.setPortNumber(Integer.parseInt(env.get("LS_PORT")));
+		}catch (NumberFormatException e){
+			//use default port
+			ds.setPortNumber(1433);
+		}		
+        
         ds.setDatabaseName(env.get("LS_DBNAME"));
 
         return ds.getConnection();
