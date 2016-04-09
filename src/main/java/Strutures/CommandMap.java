@@ -1,6 +1,6 @@
 package Strutures;
 
-import commands.*;
+import Commands.*;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -1,19 +1,12 @@
-package console;
+package Console;
 
-import Strutures.CNode;
-import Strutures.CommandMap;
-import Strutures.DataNode;
-
-import javax.xml.crypto.Data;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import Commands.CommandInfo;
 
 public class MainApp {
 
 	
 	public static void main(String [] args){
-		CommandInfo cmdinfo = null;		
+		CommandInfo cmdinfo = null;
 		
 	
 		switch(args.length){

@@ -1,6 +1,6 @@
-package commands;
+package Commands;
 
-import sqlserver.ConnectionFactory;
+import SQLServer.ConnectionFactory;
 
 import java.sql.*;
 import java.util.HashMap;

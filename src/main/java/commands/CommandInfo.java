@@ -1,4 +1,4 @@
-package console;
+package Commands;
 
 import java.util.ArrayList;
 import java.util.Collection;
