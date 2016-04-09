@@ -4,11 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 
 import exceptions.InvalidCommandParameters;
@@ -36,18 +32,8 @@ public class PostMovies implements ICommand {
 				ResultSet rs = pstmt.getGeneratedKeys();
 				printRS(rs);
 			}			
-			pstmt.close();
-			
-		}catch(SQLException e)
-		{
-			throw e;
-		}	
-		catch(DateTimeParseException de){
-			throw new Exception("Invalid Date");
-		} catch (InvalidCommandParameters e) {
-			throw e; 
-		}
-		
+			pstmt.close();			
+		}		
     }   
 
     private void printRS(ResultSet rs) throws SQLException {
