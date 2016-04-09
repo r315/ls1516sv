@@ -1,11 +1,11 @@
-package Logic;
+package logic;
 
 import Strutures.CNode;
 import Strutures.CommandMap;
 import Strutures.DataNode;
-import Commands.CommandInfo;
+import commands.CommandInfo;
 
-import Exceptions.*;
+import exceptions.*;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,7 +16,9 @@ import java.util.Iterator;
  */
 public class MapManager{
 
-    public static CNode getCNode(CommandInfo cmdInfo) throws Exception {
+    public static CNode getCNode(CommandInfo cmdInfo)
+            throws InvalidCommandMethodException,InvalidCommandTableException,InvalidCommandPathException {
+
         if (cmdInfo == null) return null;
         HashMap<String, HashMap<String, DataNode>> cmdsMap = CommandMap.createMap();
         if(cmdsMap==null)throw new InvalidCommandMethodException();

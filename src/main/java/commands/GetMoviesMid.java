@@ -1,18 +1,19 @@
-package Commands;
+package commands;
 
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
+import java.util.Collection;
 import java.util.HashMap;
 
 
 public class GetMoviesMid implements ICommand {
 
     @Override
-    public void execute(Iterable<Object> args, HashMap<String, String> prmts, ConnectionFactory cf) throws SQLException {
-        int mID = (int) args.iterator().next();
+    public void execute(Collection<String> args, HashMap<String, String> prmts) throws SQLException {
+        int mID = Integer.parseInt(args.iterator().next());
 
-        Connection conn = cf.getConn();
+        Connection conn = ConnectionFactory.getConn();
 
         PreparedStatement pstmt = conn.prepareStatement(getQuery());
         pstmt.setInt(1,mID);
@@ -22,7 +23,7 @@ public class GetMoviesMid implements ICommand {
         printRS(rs);
 
         pstmt.close();
-        cf.closeConn();
+        ConnectionFactory.closeConn();
     }
 
     private String getQuery() {

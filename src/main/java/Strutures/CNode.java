@@ -1,6 +1,6 @@
 package Strutures;
 
-import Commands.ICommand;
+import commands.ICommand;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -32,5 +32,9 @@ public class CNode {
 
     public int getCollectionSize(){
         return resources.size();
+    }
+
+    public ICommand getCommand(){
+        return command;
     }
 }

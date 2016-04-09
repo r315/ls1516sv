@@ -1,6 +1,9 @@
-package Console;
+package console;
 
-import Commands.CommandInfo;
+import commands.CommandInfo;
+import commands.ICommand;
+import logic.MapManager;
+import Strutures.CNode;
 
 public class MainApp {
 
@@ -20,9 +23,19 @@ public class MainApp {
 				System.out.println("Bad parameters");
 				break;
 		}
-		
-		
-		
-		
+		CNode cnode=null;
+		try{
+			cnode= MapManager.getCNode(cmdinfo);
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+			return;
+		}
+
+		ICommand command= cnode.getCommand();
+		try {
+			command.execute(cmdinfo.getResources(), cmdinfo.getParameters());
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
 	}		
 }

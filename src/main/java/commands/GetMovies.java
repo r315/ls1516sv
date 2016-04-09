@@ -1,17 +1,18 @@
-package Commands;
+package commands;
 
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 
 
 public class GetMovies implements ICommand {
 
     @Override
-    public void execute(Iterable<Object> args, HashMap<String, String> prmts, ConnectionFactory cf) throws SQLException {
-        Connection conn = cf.getConn();
+    public void execute(Collection<String> args, HashMap<String, String> prmts) throws SQLException {
+        Connection conn = ConnectionFactory.getConn();
         Statement stmt = conn.createStatement();
 
         ResultSet rs = stmt.executeQuery(getQuery());
@@ -19,7 +20,7 @@ public class GetMovies implements ICommand {
         printRS(rs);
 
         stmt.close();
-        cf.closeConn();
+        ConnectionFactory.closeConn();
     }
 
     private String getQuery() {

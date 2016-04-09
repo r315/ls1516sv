@@ -1,13 +1,12 @@
-package Commands;
+package commands;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 public class CommandInfo {	
 	private String method;			//GET
-	private Map<String, String> parameters;		// name=filme&ano=2016	
+	private HashMap<String, String> parameters;		// name=filme&ano=2016
 	private Collection<String> resources;	
 
 	
@@ -19,7 +18,7 @@ public class CommandInfo {
 		
 		
 		for(int i = 1; i < tmpresources.length ; i++) // i=2 skip initial "" and first resource
-			resources.add(tmpresources[i]);			
+			resources.add(tmpresources[i]);
 		
 		if(param == null) return;
 		
@@ -45,7 +44,7 @@ public class CommandInfo {
 	/**
 	 * 
 	 */
-	public Map<String,String> getParameters(){ return parameters;}	
+	public HashMap<String,String> getParameters(){ return parameters;}
 	
 	 /*
 	  * 
