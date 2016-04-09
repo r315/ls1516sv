@@ -1,16 +1,10 @@
 package logic;
 
-import java.util.Collection;
-import java.util.Iterator;
-
 import commands.GetMovies;
 import junit.framework.Assert;
 import org.junit.Test;
-
 import commands.*;
 import Strutures.CNode;
-import static org.junit.Assert.fail;
-
 
 public class CommandMapTest {
 
@@ -29,8 +23,6 @@ public class CommandMapTest {
 		CNode expected = new CNode(cmdInfo.getResources(),new PostMoviesMidRatings());
 		CNode cnode= MapManager.getCNode(cmdInfo);
 		Assert.assertTrue(cnode.getCommand() instanceof PostMoviesMidRatings);
-		Collection<String> cinfo=cmdInfo.getResources();
-		Collection<String> exp= expected.collection();
 		Assert.assertTrue(cmdInfo.getResources().equals(expected.collection()));
 	}
 	
@@ -41,8 +33,6 @@ public class CommandMapTest {
 		CNode expected = new CNode(cmdInfo.getResources(),new PostMoviesMidReviews());
 		CNode cnode= MapManager.getCNode(cmdInfo);
 		Assert.assertTrue(cnode.getCommand() instanceof PostMoviesMidReviews);
-		Collection<String> cinfo=cmdInfo.getResources();
-		Collection<String> exp= expected.collection();
 		Assert.assertTrue(cmdInfo.getResources().equals(expected.collection()));
 	}	
 	
@@ -114,7 +104,6 @@ public class CommandMapTest {
 		CommandInfo cmdInfo = new CommandInfo("GET","/tops/ratings/lower/average",null);
 		CNode expected = new CNode(cmdInfo.getResources(),new GetTopsRatingsLowerAverage());
 		CNode cnode= MapManager.getCNode(cmdInfo);
-		ICommand ic=cnode.getCommand();
 		Assert.assertTrue(cnode.getCommand() instanceof GetTopsRatingsLowerAverage);
 		Assert.assertTrue(cmdInfo.getResources().equals(expected.collection()));
 	}
@@ -144,28 +133,5 @@ public class CommandMapTest {
 		CNode cnode= MapManager.getCNode(cmdInfo);
 		Assert.assertTrue(cnode.getCommand() instanceof GetTopsNReviewsHigherCount);
 		Assert.assertTrue(cmdInfo.getResources().equals(expected.collection()));
-	}	
-	
-	private void cnodeCmp(CommandInfo cmdInfo, CNode expected){
-		CNode actual = null;
-		try {
-			actual = MapManager.getCNode(cmdInfo);
-		} catch (Exception e) {
-			fail();
-		}
-		
-		Iterator<String> it1 = expected.iterator();
-		Iterator<String> it2 = actual.iterator();
-		
-		if(expected.getCollectionSize() != actual.getCollectionSize())
-			fail();
-		
-		if(!actual.getCommand().getClass().isInstance(expected.getCommand()))
-			fail();
-		
-		while(it1.hasNext())
-			if(! it1.next().equals(it2.next()))
-				fail();	
 	}
-
 }
