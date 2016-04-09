@@ -5,8 +5,8 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import commands.ICommand;
-import console.CommandInfo;
+import Commands.ICommand;
+import Commands.CommandInfo;
 import Logic.MapManager;
 import Strutures.CNode;
 import static org.junit.Assert.assertTrue;
@@ -32,8 +32,8 @@ public class getCommandMapTest {
 	
 	
 	private boolean cnodeCmp(CNode c1, CNode c2){
-		Iterator<String> it1 = c1.resources();
-		Iterator<String> it2 = c2.resources();
+		Iterator<String> it1 = c1.iterator();
+		Iterator<String> it2 = c2.iterator();
 		
 		if(c1.getCollectionSize() != c2.getCollectionSize())
 			return false;		

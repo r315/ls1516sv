@@ -1,6 +1,6 @@
 package Strutures;
 
-import commands.ICommand;
+import Commands.ICommand;
 
 import java.util.Collection;
 import java.util.Iterator;

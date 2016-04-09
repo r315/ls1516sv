@@ -3,7 +3,7 @@ package Logic;
 import Strutures.CNode;
 import Strutures.CommandMap;
 import Strutures.DataNode;
-import console.CommandInfo;
+import Commands.CommandInfo;
 
 import Exceptions.*;
 
