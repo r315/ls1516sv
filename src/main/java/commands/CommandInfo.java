@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import exceptions.InvalidCommandException;
+
 public class CommandInfo {	
 	private String method;			//GET
-	private HashMap<String, String> parameters;		// name=filme&ano=2016
+	private HashMap<String, String> parameters;		// name=filme&release_year=2016
 	private Collection<String> resources;	
 
 	
-	public CommandInfo(String method, String path, String param){
+	public CommandInfo(String method, String path, String param) {
+		
+		if(method == null || path == null)
+			return;
+		
 		this.method = method;
 				
 		resources = new ArrayList<String>();
 		String [] tmpresources = path.split("/");		
 		
-		
-		for(int i = 1; i < tmpresources.length ; i++) // i=2 skip initial "" and first resource
+		for(int i = 1; i < tmpresources.length ; i++) // i=1 skip initial ""
 			resources.add(tmpresources[i]);
-		
 		if(param == null) return;
 		
 		parameters = new HashMap<String,String>();

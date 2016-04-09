@@ -2,12 +2,14 @@ package commands;
 
 import sqlserver.ConnectionFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
 
-
-public class GetMoviesMid implements ICommand {
+public class GetMoviesMidReviews implements ICommand {
 
     @Override
     public void execute(Collection<String> args, HashMap<String, String> prmts) throws SQLException {
@@ -24,28 +26,20 @@ public class GetMoviesMid implements ICommand {
 
         pstmt.close();
         ConnectionFactory.closeConn();
+
     }
 
     private String getQuery() {
-        return "SELECT * FROM Movie WHERE movie_id = ?";
+        return "SELECT Review.review_id, Review.user, Review.summary, Review.rating" +
+                "FROM Reviews" +
+                "INNER JOIN Movie ON Review.movie_id=Movie.movie_id" +
+                "WHERE Movie.movie_id = ?";
     }
 
     private void printRS(ResultSet rs) throws SQLException {
-        ResultSetMetaData rsMetaData = rs.getMetaData();
-        int columnNumber = rsMetaData.getColumnCount();
-        String columnName[] = new String[columnNumber];
-        for (int i = 0; i < columnNumber; i++) {
-            columnName[i] = rsMetaData.getColumnName(i + 1);
+        while(rs.next()) {
+            System.out.println(rs.getInt("review_id") + " " + rs.getString("user") + " " + rs.getInt("rating") + " \n" +
+                    "Summary: " + rs.getString("summary"));
         }
-        while (rs.next()) {
-            for (int i = 0; i < columnNumber; i++) {
-                if (i > 0)
-                    System.out.print("&");
-                System.out.print(columnName[i] + "=" + rs.getObject(i + 1));
-            }
-            System.out.println();
-        }
-
     }
-
 }

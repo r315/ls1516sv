@@ -64,11 +64,11 @@ public class CommandMap {
         curr=new CNode(Arrays.asList(new String[]{"tops","ratings","higher","average"}),new getTopsRatingsHigherAverage());
         get_tops.setNext(curr);
 
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops",var,"ratings","higher","average"}),new getTopsNRatingsHigherAverage()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","ratings","lower","average"}),new getTopsRatingsLowerAverage()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops",var,"ratings","lower","average"}),new getTopsNRatingsLowerAverage()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","reviews","higher","count"}),new getTopsReviewsHigherCount()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops",var,"reviews","higher","count"}),new getTopsNReviewsHigherCount()));
+        curr.setNext(new CNode(Arrays.asList(new String[]{"tops",var,"ratings","higher","average"}),new GetTopsNRatingsHigherAverage()));curr=curr.getNext();
+        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","ratings","lower","average"}),new GetTopsRatingsLowerAverage()));curr=curr.getNext();
+        curr.setNext(new CNode(Arrays.asList(new String[]{"tops",var,"ratings","lower","average"}),new GetTopsNRatingsLowerAverage()));curr=curr.getNext();
+        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","reviews","higher","count"}),new GetTopsReviewsHigherCount()));curr=curr.getNext();
+        curr.setNext(new CNode(Arrays.asList(new String[]{"tops",var,"reviews","higher","count"}),new GetTopsNReviewsHigherCount()));
 
         return commandsMap;
     }
