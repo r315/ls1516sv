@@ -1,4 +1,4 @@
-package SQLServer;
+package sqlserver;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
