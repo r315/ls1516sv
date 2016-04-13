@@ -12,15 +12,15 @@ public class GetMovies implements ICommand {
 
     @Override
     public void execute(Collection<String> args, HashMap<String, String> prmts) throws SQLException {
-        Connection conn = ConnectionFactory.getConn();
-        Statement stmt = conn.createStatement();
+        try(Connection conn = ConnectionFactory.getConn()) {
+            Statement stmt = conn.createStatement();
 
-        ResultSet rs = stmt.executeQuery(getQuery());
+            ResultSet rs = stmt.executeQuery(getQuery());
 
-        printRS(rs);
+            printRS(rs);
 
-        stmt.close();
-        ConnectionFactory.closeConn();
+            stmt.close();
+        }
     }
 
     private String getQuery() {

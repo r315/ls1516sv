@@ -10,10 +10,10 @@ import java.util.Map;
 
 public class ConnectionFactory {
 
-    static Connection conn = null;
+    static SQLServerDataSource ds = null;
 
-    static private Connection createConn() throws SQLException {
-        SQLServerDataSource ds=new SQLServerDataSource();
+    static private void createDataSource() throws SQLException {
+        ds = new SQLServerDataSource();
         Map<String,String> env=System.getenv();
         ds.setServerName(env.get("LS_SERVER"));
         ds.setUser(env.get("LS_USER"));
@@ -25,19 +25,16 @@ public class ConnectionFactory {
 			ds.setPortNumber(1433);
 		}        
         ds.setDatabaseName(env.get("LS_DBNAME"));
+    }
+
+    static public Connection getConn () throws SQLException {
+        if (ds == null) createDataSource();
 
         return ds.getConnection();
     }
 
-    static public Connection getConn () throws SQLException {
-        if (conn == null) conn = createConn();
-
-        return conn;
-    }
-
-    static public void closeConn () throws SQLException {
+    static public void closeConn (Connection conn) throws SQLException {
         conn.close();
-        conn = null;
     }
 
     static public void printResultSet(ResultSet rs) throws SQLException {

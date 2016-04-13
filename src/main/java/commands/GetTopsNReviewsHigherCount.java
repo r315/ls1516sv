@@ -16,26 +16,25 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 
 	@Override
 	public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
-		int n;
-		Iterator<String> it = args.iterator();
-		it.next();
-		try {
-			n = Integer.parseInt(it.next());
-		} catch (NumberFormatException e) {
-			throw new CommandWrongVariableException();
+		try(Connection conn = ConnectionFactory.getConn()) {
+			int n;
+			Iterator<String> it = args.iterator();
+			it.next();
+			try {
+				n = Integer.parseInt(it.next());
+			} catch (NumberFormatException e) {
+				throw new CommandWrongVariableException();
+			}
+
+			PreparedStatement pstmt = conn.prepareStatement(getQuery());
+			pstmt.setInt(1, n);
+
+			ResultSet rs = pstmt.executeQuery();
+
+			printRS(rs);
+
+			pstmt.close();
 		}
-
-		Connection conn = ConnectionFactory.getConn();
-
-		PreparedStatement pstmt = conn.prepareStatement(getQuery());
-		pstmt.setInt(1,n);
-
-		ResultSet rs = pstmt.executeQuery();
-
-		printRS(rs);
-
-		pstmt.close();
-		ConnectionFactory.closeConn();
 	}
 
 	private String getQuery() {

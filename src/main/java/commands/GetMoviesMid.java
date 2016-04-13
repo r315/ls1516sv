@@ -13,26 +13,25 @@ public class GetMoviesMid implements ICommand {
 
     @Override
     public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
-        int mID;
-        Iterator<String> it = args.iterator();
-        it.next();
-        try {
-            mID = Integer.parseInt(it.next());
-        } catch (NumberFormatException e) {
+        try(Connection conn = ConnectionFactory.getConn()) {
+            int mID;
+            Iterator<String> it = args.iterator();
+            it.next();
+            try {
+                mID = Integer.parseInt(it.next());
+            } catch (NumberFormatException e) {
                 throw new CommandWrongVariableException();
+            }
+
+            PreparedStatement pstmt = conn.prepareStatement(getQuery());
+            pstmt.setInt(1, mID);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            printRS(rs);
+
+            pstmt.close();
         }
-
-        Connection conn = ConnectionFactory.getConn();
-
-        PreparedStatement pstmt = conn.prepareStatement(getQuery());
-        pstmt.setInt(1,mID);
-
-        ResultSet rs = pstmt.executeQuery();
-
-        printRS(rs);
-
-        pstmt.close();
-        ConnectionFactory.closeConn();
     }
 
     private String getQuery() {
