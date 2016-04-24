@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.HashMap;
 
+import Strutures.Result;
 import exceptions.InvalidCommandParameters;
 import sqlserver.ConnectionFactory;
 
@@ -14,11 +14,11 @@ public class PostMovies implements ICommand {
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
 	
 	@Override
-    public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {		
+    public Result execute(HashMap<String, String> data) throws Exception {
 		try(Connection conn = ConnectionFactory.getConn())
 		{			
-			String title = prmts.get("title");
-			String date = dateParser(prmts.get("release_year"));					
+			String title = data.get("title");
+			String date = dateParser(data.get("release_year"));
 					
 			if(title == null || date == null)
 				throw new InvalidCommandParameters();
@@ -33,7 +33,11 @@ public class PostMovies implements ICommand {
 				printRS(rs);
 			}			
 			pstmt.close();			
-		}		
+		}
+
+		//Builderino stuff
+		Result stuff = new Result();
+		return stuff;
     }   
 
     private void printRS(ResultSet rs) throws SQLException {

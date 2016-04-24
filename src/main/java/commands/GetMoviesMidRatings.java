@@ -1,6 +1,8 @@
 package commands;
 
-import exceptions.CommandWrongVariableException;
+import Strutures.Result;
+import exceptions.InvalidCommandVariableException;
+import pt.isel.ls.Utils;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
@@ -10,15 +12,14 @@ import java.util.*;
 public class GetMoviesMidRatings implements ICommand {
 
     @Override
-    public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
+    public Result execute(HashMap<String, String> data) throws Exception {
         try(Connection conn = ConnectionFactory.getConn()) {
             int mID;
-            Iterator<String> it = args.iterator();
-            it.next();
+
             try {
-                mID = Integer.parseInt(it.next());
+                mID = Utils.getInt(data.get("mID"));
             } catch (NumberFormatException e) {
-                throw new CommandWrongVariableException();
+                throw new InvalidCommandVariableException();
             }
 
             PreparedStatement pstmt = conn.prepareStatement(getQuery());
@@ -31,6 +32,9 @@ public class GetMoviesMidRatings implements ICommand {
             pstmt.close();
         }
 
+        //Builderino stuff
+        Result stuff = new Result();
+        return stuff;
     }
 
     private String getQuery() {

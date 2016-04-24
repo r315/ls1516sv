@@ -1,17 +1,16 @@
 package commands;
 
-import exceptions.CommandWrongVariableException;
+import Strutures.Result;
+import exceptions.InvalidCommandVariableException;
 import exceptions.InvalidCommandParameters;
-import exceptions.InvalidCommandPathException;
+import pt.isel.ls.Utils;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class PostMoviesMidRatings implements ICommand {
 
@@ -21,20 +20,18 @@ public class PostMoviesMidRatings implements ICommand {
 	*/
 
 	@Override
-	public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
+	public Result execute(HashMap<String, String> data) throws Exception {
 		try(Connection conn = ConnectionFactory.getConn())
 		{
-			String rID= getRating(prmts.get("rating"));
+			String rID= getRating(data.get("rating"));
 			if(rID==null)
 				throw new InvalidCommandParameters();
 
-			Iterator<String> it= args.iterator();
-			it.next();
 			int mID;
 			try {
-				mID = Integer.parseInt(it.next());
+				mID = Utils.getInt(data.get("mID"));
 			} catch (NumberFormatException e) {
-				throw new CommandWrongVariableException();
+				throw new InvalidCommandVariableException();
 			}
 
 			PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);
@@ -49,6 +46,9 @@ public class PostMoviesMidRatings implements ICommand {
 
 		}
 
+		//Builderino stuff
+		Result stuff = new Result();
+		return stuff;
 	}
 
 	private void printRS(ResultSet rs) throws SQLException {
