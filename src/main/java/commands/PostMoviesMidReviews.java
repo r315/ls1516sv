@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import Strutures.Result;
-import pt.isel.ls.Utils;
+import utils.Utils;
 import sqlserver.ConnectionFactory;
 import exceptions.InvalidCommandParameters;
 

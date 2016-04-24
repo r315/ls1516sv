@@ -2,7 +2,7 @@ package commands;
 
 import Strutures.Result;
 import exceptions.InvalidCommandVariableException;
-import pt.isel.ls.Utils;
+import utils.Utils;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
