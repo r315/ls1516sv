@@ -1,11 +1,11 @@
 package commands;
 
-import java.sql.SQLException;
-import java.util.Collection;
-import java.util.HashMap;
 
+import Strutures.Result;
+
+import java.util.HashMap;
 
 public interface ICommand {
 
-    void execute (Collection<String> args, HashMap<String,String> prmts) throws Exception;
+    Result execute(HashMap<String, String> data) throws Exception;
 }
