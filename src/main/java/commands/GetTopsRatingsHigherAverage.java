@@ -1,16 +1,16 @@
 package commands;
 
+import Strutures.Result;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.HashMap;
 
 public class GetTopsRatingsHigherAverage implements ICommand {
 
     @Override
-    public void execute(Collection<String> args, HashMap<String, String> prmts) throws SQLException {
+    public Result execute(HashMap<String, String> data) throws SQLException {
         try(Connection conn = ConnectionFactory.getConn()) {
             Statement stmt = conn.createStatement();
 
@@ -20,6 +20,10 @@ public class GetTopsRatingsHigherAverage implements ICommand {
 
             stmt.close();
         }
+
+        //Builderino stuff
+        Result stuff = new Result();
+        return stuff;
     }
 
     private String getQuery() {

@@ -1,30 +1,26 @@
 package commands;
 
+import Strutures.Result;
 import exceptions.InvalidCommandVariableException;
+import pt.isel.ls.Utils;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class GetMoviesMidReviewsRid implements ICommand {
 
     @Override
-    public void execute(Collection<String> args, HashMap<String, String> prmts) throws Exception {
+    public Result execute(HashMap<String, String> data) throws Exception {
         try(Connection conn = ConnectionFactory.getConn()) {
             int mID, rID;
 
-            Iterator<String> it = args.iterator();
-            it.next();
-
             try {
-                mID = Integer.parseInt(it.next());
-                it.next();
-                rID = Integer.parseInt(it.next());
+                mID = Utils.getInt(data.get("mID"));
+                rID = Utils.getInt(data.get("rID"));
             } catch (NumberFormatException e) {
                 throw new InvalidCommandVariableException();
             }
@@ -40,6 +36,9 @@ public class GetMoviesMidReviewsRid implements ICommand {
             pstmt.close();
         }
 
+        //Builderino stuff
+        Result stuff = new Result();
+        return stuff;
     }
 
     private String getQuery() {
