@@ -17,7 +17,7 @@ public class CommandInfo {
 			return;
 		
 		this.method = method;
-				
+
 		resources = new ArrayList<String>();
 		String [] tmpresources = path.split("/");		
 		table=tmpresources[1];

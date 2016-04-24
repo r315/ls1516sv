@@ -1,6 +1,6 @@
 package commands;
 
-import exceptions.CommandWrongVariableException;
+import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
@@ -18,7 +18,7 @@ public class GetMoviesMidRatings implements ICommand {
             try {
                 mID = Integer.parseInt(it.next());
             } catch (NumberFormatException e) {
-                throw new CommandWrongVariableException();
+                throw new InvalidCommandVariableException();
             }
 
             PreparedStatement pstmt = conn.prepareStatement(getQuery());

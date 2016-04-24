@@ -7,10 +7,8 @@ import Strutures.CNode;
 
 public class MainApp {
 
-	
 	public static void main(String [] args){
 		CommandInfo cmdinfo = null;
-		
 	
 		switch(args.length){
 		case 2:

@@ -1,6 +1,5 @@
 package commands;
 
-import exceptions.CommandWrongVariableException;
 import exceptions.InvalidCommandParameters;
 import exceptions.InvalidCommandPathException;
 import sqlserver.ConnectionFactory;
@@ -34,7 +33,7 @@ public class PostMoviesMidRatings implements ICommand {
 			try {
 				mID = Integer.parseInt(it.next());
 			} catch (NumberFormatException e) {
-				throw new CommandWrongVariableException();
+				throw new InvalidCommandPathException();
 			}
 
 			PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);

@@ -1,11 +1,11 @@
 package commands;
 
 
-import Strutures.Result;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public interface ICommand {
 
-    Result execute(HashMap<String, String> data) throws Exception;
+    void execute (Collection<String> args, HashMap<String,String> prmts) throws Exception;
 }

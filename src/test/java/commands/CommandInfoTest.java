@@ -16,8 +16,8 @@ public class CommandInfoTest {
 	
 	@Test
 	public void shouldGetResourcesSize(){		
-			CommandInfo cmdInfo = new CommandInfo("POST","/movies/123",null);
-			assertEquals(2,cmdInfo.getResourcesSize());		
+		CommandInfo cmdInfo = new CommandInfo("POST","/movies/123",null);
+		assertEquals(2,cmdInfo.getResourcesSize());
 	}
 	
 	@Test

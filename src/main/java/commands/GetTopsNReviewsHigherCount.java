@@ -1,6 +1,6 @@
 package commands;
 
-import exceptions.CommandWrongVariableException;
+import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 			try {
 				n = Integer.parseInt(it.next());
 			} catch (NumberFormatException e) {
-				throw new CommandWrongVariableException();
+				throw new InvalidCommandVariableException();
 			}
 
 			PreparedStatement pstmt = conn.prepareStatement(getQuery());

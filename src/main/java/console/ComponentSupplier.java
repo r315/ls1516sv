@@ -15,10 +15,10 @@ public class ComponentSupplier {
 	
 	private CommandInfo cmdinfo = null;	
 	private HeaderInfo headerInfo = null;	
-	
+
 	public ComponentSupplier(String[] components)throws InvalidCommandPathException{
 		
-		cmdinfo = new CommandInfo(components[0],CommandDecoder.parsePath(components[1]));
+		//cmdinfo = new CommandInfo(components[0],CommandDecoder.parsePath(components[1]),null);
 		
 		for(String comp : components){			
 			Map<String,String> opt = parseOptions(comp,"\\|",":");
@@ -27,12 +27,12 @@ public class ComponentSupplier {
 			
 			opt = parseOptions(comp,"&","=");
 			if(opt!=null)
-				CommandInfo = new HeaderInfo(opt);	
+				headerInfo = new HeaderInfo(opt);
 			
 		}		
 		
 	}
-	
+
 	public CommandInfo getCommadInfo(){ 
 		return cmdinfo;
 	}	
