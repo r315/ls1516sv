@@ -1,18 +1,14 @@
 package commands;
 
-import static org.junit.Assert.*;
-
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import Strutures.CommandInfo;
 import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
-import exceptions.InvalidCommandParameters;
 
 public class PostMoviesTest {
 	CommandInfo cmdInf;

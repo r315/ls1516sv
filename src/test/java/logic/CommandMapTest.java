@@ -1,7 +1,7 @@
 package logic;
 
+import Strutures.CommandInfo;
 import Strutures.CommandMap;
-import commands.GetMovies;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;

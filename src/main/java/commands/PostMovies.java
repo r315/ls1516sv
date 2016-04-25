@@ -6,7 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 
-import Strutures.Result;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
 import exceptions.InvalidCommandParameters;
 import sqlserver.ConnectionFactory;
 
@@ -14,7 +15,7 @@ public class PostMovies implements ICommand {
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
 	
 	@Override
-    public Result execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws Exception {
 		try(Connection conn = ConnectionFactory.getConn())
 		{			
 			String title = data.get("title");
@@ -36,7 +37,7 @@ public class PostMovies implements ICommand {
 		}
 
 		//Builderino stuff
-		Result stuff = new Result();
+		ResultInfo stuff = new ResultInfo();
 		return stuff;
     }   
 

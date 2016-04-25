@@ -1,6 +1,7 @@
 package commands;
 
-import Strutures.Result;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 public class GetTopsReviewsHigherCount implements ICommand {
 
 	@Override
-	public Result execute(HashMap<String, String> data) throws SQLException {
+	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
 		try(Connection conn = ConnectionFactory.getConn()) {
 			Statement stmt = conn.createStatement();
 
@@ -22,7 +23,7 @@ public class GetTopsReviewsHigherCount implements ICommand {
 		}
 
 		//Builderino stuff
-		Result stuff = new Result();
+		ResultInfo stuff = new ResultInfo();
 		return stuff;
 	}
 

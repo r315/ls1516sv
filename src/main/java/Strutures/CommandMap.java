@@ -47,6 +47,7 @@ public class CommandMap {
         return true;
     }
 
+    //TODO
     public ICommand get(CommandInfo cmdInfo)
             throws InvalidCommandMethodException, InvalidCommandTableException, InvalidCommandPathException {
 
@@ -76,7 +77,7 @@ public class CommandMap {
                             invalidCmd=true;
                             break; //goto next CNode
                         }
-                    }else if (!cnode_segment.equals("{v}")) {//The segment is not a variable and thus it is not this CNode we are looking for
+                    }else if(!cnode_segment.equals("{v}")) {//The segment is not a variable and thus it is not this CNode we are looking for
                         invalidCmd=true;
                         break;  //goto next CNode
                     }
@@ -89,8 +90,10 @@ public class CommandMap {
         throw new InvalidCommandPathException();
     }
 
-    public static HashMap<String,HashMap<String,DataNode>> createMap(){
+    public static CommandMap createMap(){
 
+        CommandMap map=new CommandMap();
+        //TODO
         //Methods
         HashMap<String,HashMap<String,DataNode>> commandsMap=new HashMap<String, HashMap<String,DataNode>>(2);
         //Tables
@@ -146,6 +149,6 @@ public class CommandMap {
         curr.setNext(new CNode(Arrays.asList(new String[]{"tops","reviews","higher","count"}),new GetTopsReviewsHigherCount()));curr=curr.getNext();
         curr.setNext(new CNode(Arrays.asList(new String[]{"tops","{n}","reviews","higher","count"}),new GetTopsNReviewsHigherCount()));
 
-        return commandsMap;
+        return map;
     }
 }

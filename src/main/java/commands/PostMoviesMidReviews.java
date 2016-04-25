@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import Strutures.Result;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
 import utils.Utils;
 import sqlserver.ConnectionFactory;
 import exceptions.InvalidCommandParameters;
@@ -26,7 +27,7 @@ public class PostMoviesMidReviews implements ICommand {
 	private static final int NPARAM = 4;
 	
 	@Override
-	public Result execute(HashMap<String, String> data) throws Exception{
+	public ResultInfo execute(HashMap<String, String> data) throws Exception{
 		try(Connection conn = ConnectionFactory.getConn())
 		{
 			Collection<String> values = new ArrayList<String>(); 
@@ -57,7 +58,7 @@ public class PostMoviesMidReviews implements ICommand {
 		}
 
 		//Builderino stuff
-		Result stuff = new Result();
+		ResultInfo stuff = new ResultInfo();
 		return stuff;
 	}
 	

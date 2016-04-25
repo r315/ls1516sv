@@ -1,6 +1,7 @@
 package commands;
 
-import Strutures.Result;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 import utils.Utils;
 import sqlserver.ConnectionFactory;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 public class GetMoviesMidReviews implements ICommand {
 
     @Override
-    public Result execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws Exception {
         try(Connection conn = ConnectionFactory.getConn()) {
             int mID;
 
@@ -35,7 +36,7 @@ public class GetMoviesMidReviews implements ICommand {
         }
 
         //Builderino stuff
-        Result stuff = new Result();
+        ResultInfo stuff = new ResultInfo();
         return stuff;
     }
 

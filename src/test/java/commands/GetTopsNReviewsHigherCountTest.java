@@ -1,6 +1,7 @@
 package commands;
 
 import Strutures.CNode;
+import Strutures.CommandInfo;
 import logic.MapManager;
 import org.junit.Before;
 import org.junit.Test;

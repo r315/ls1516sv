@@ -2,6 +2,8 @@ package commands;
 
 import static org.junit.Assert.fail;
 
+import Strutures.CommandInfo;
+import Strutures.ICommand;
 import org.junit.Test;
 
 public class PostMoviesMidReviewsTest {

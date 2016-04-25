@@ -1,6 +1,7 @@
 package commands;
 
-import Strutures.Result;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 import exceptions.InvalidCommandParameters;
 import utils.Utils;
@@ -20,7 +21,7 @@ public class PostMoviesMidRatings implements ICommand {
 	*/
 
 	@Override
-	public Result execute(HashMap<String, String> data) throws Exception {
+	public ResultInfo execute(HashMap<String, String> data) throws Exception {
 		try(Connection conn = ConnectionFactory.getConn())
 		{
 			String rID= getRating(data.get("rating"));
@@ -47,7 +48,7 @@ public class PostMoviesMidRatings implements ICommand {
 		}
 
 		//Builderino stuff
-		Result stuff = new Result();
+		ResultInfo stuff = new ResultInfo();
 		return stuff;
 	}
 
