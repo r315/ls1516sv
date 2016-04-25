@@ -77,7 +77,9 @@ public class CommandMap {
                             invalidCmd=true;
                             break; //goto next CNode
                         }
-                    }else if(!cnode_segment.equals("{v}")) {//The segment is not a variable and thus it is not this CNode we are looking for
+                    }else if(cnode_segment.startsWith("{")&& cnode_segment.endsWith("}")) {//var
+                        cmdInfo.addToMapData(truncate(cnode_segment),cmdInfo_segment);
+                    }else{////The segment is not a variable and thus it is not this CNode we are looking for
                         invalidCmd=true;
                         break;  //goto next CNode
                     }
@@ -150,5 +152,9 @@ public class CommandMap {
         curr.setNext(new CNode(Arrays.asList(new String[]{"tops","{n}","reviews","higher","count"}),new GetTopsNReviewsHigherCount()));
 
         return map;
+    }
+
+    private static String truncate(String s){
+        return s.substring(1,s.length()-1);
     }
 }
