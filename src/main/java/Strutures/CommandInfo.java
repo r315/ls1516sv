@@ -1,5 +1,7 @@
 package Strutures;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,7 +12,12 @@ public class CommandInfo {
 	private HashMap<String, String> parameters;		// name=filme&release_year=2016
 	private Collection<String> resources;	
 
-	
+
+	//TODO (see MainApp.java for details)
+	public CommandInfo(String[] args){
+		throw new NotImplementedException();
+	}
+
 	public CommandInfo(String method, String path, String param) {
 		
 		if(method == null || path == null)

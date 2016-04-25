@@ -47,7 +47,6 @@ public class CommandMap {
         return true;
     }
 
-    //TODO
     public ICommand get(CommandInfo cmdInfo)
             throws InvalidCommandMethodException, InvalidCommandTableException, InvalidCommandPathException {
 
@@ -78,7 +77,7 @@ public class CommandMap {
                             break; //goto next CNode
                         }
                     }else if(cnode_segment.startsWith("{")&& cnode_segment.endsWith("}")) {//var
-                        cmdInfo.addToMapData(truncate(cnode_segment),cmdInfo_segment);
+                        cmdInfo.addToMapData(trimBraces(cnode_segment),cmdInfo_segment);
                     }else{////The segment is not a variable and thus it is not this CNode we are looking for
                         invalidCmd=true;
                         break;  //goto next CNode
@@ -92,69 +91,7 @@ public class CommandMap {
         throw new InvalidCommandPathException();
     }
 
-    public static CommandMap createMap(){
-
-        CommandMap map=new CommandMap();
-        //TODO
-        //Methods
-        HashMap<String,HashMap<String,DataNode>> commandsMap=new HashMap<String, HashMap<String,DataNode>>(2);
-        //Tables
-        HashMap<String, DataNode> postMap=new HashMap<String, DataNode>(1);
-        HashMap<String, DataNode> getMap=new HashMap<String, DataNode>(2);
-
-        //Methods
-        commandsMap.put("GET",getMap);
-        commandsMap.put("POST",postMap);
-
-        //Set GET DataNodes
-        DataNode get_movies=new DataNode(Arrays.asList(
-                new String[]{"movies","ratings","reviews"}));
-        getMap.put("movies",get_movies);
-
-        DataNode get_tops= new DataNode(Arrays.asList(
-                new String[]{"tops","ratings","reviews","higher","lower","average","count"}));
-        getMap.put("tops",get_tops);
-
-        //Set POST DataNodes
-        DataNode post_movies=new DataNode(Arrays.asList(
-                new String[]{"movies","ratings","reviews"}));
-        postMap.put("movies",post_movies);
-
-        //Set POST movies CNodes
-        CNode curr= new CNode(Arrays.asList(new String[]{"movies"}),new PostMovies());
-        post_movies.setNext(curr);//sets first CNode
-
-        curr.setNext(new CNode(Arrays.asList(new String[]{"movies","{mid}","ratings"}),new PostMoviesMidRatings()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"movies","{mid}","reviews"}),new PostMoviesMidReviews()));
-
-        //
-        //GET movies CNodes
-        //
-        curr=new CNode(Arrays.asList(new String[]{"movies"}),new GetMovies());
-        get_movies.setNext(curr);
-
-        curr.setNext(new CNode(Arrays.asList(new String[]{"movies","{mid}"}),new GetMoviesMid())); curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"movies","{mid}","ratings"}),new GetMoviesMidRatings()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"movies","{mid}","reviews"}),new GetMoviesMidReviews())); curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"movies","{mid}","reviews","{rid}"}),new GetMoviesMidReviewsRid()));
-
-        //
-        //GET tops CNodes
-        //
-
-        curr=new CNode(Arrays.asList(new String[]{"tops","ratings","higher","average"}),new GetTopsRatingsHigherAverage());
-        get_tops.setNext(curr);
-
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","{n}","ratings","higher","average"}),new GetTopsNRatingsHigherAverage()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","ratings","lower","average"}),new GetTopsRatingsLowerAverage()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","{n}","ratings","lower","average"}),new GetTopsNRatingsLowerAverage()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","reviews","higher","count"}),new GetTopsReviewsHigherCount()));curr=curr.getNext();
-        curr.setNext(new CNode(Arrays.asList(new String[]{"tops","{n}","reviews","higher","count"}),new GetTopsNReviewsHigherCount()));
-
-        return map;
-    }
-
-    private static String truncate(String s){
+    private static String trimBraces(String s){
         return s.substring(1,s.length()-1);
     }
 }
