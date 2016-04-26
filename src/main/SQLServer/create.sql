@@ -27,7 +27,7 @@ CREATE TABLE Rating(
 	three INT NOT NULL,
 	four INT NOT NULL,
 	five INT NOT NULL,
-	PRIMARY KEY(rating_id, movie_id)
+	PRIMARY KEY(rating_id, movie_id),
 	CHECK (one>=0 AND two>=0 AND three>=0 AND four>=0 AND five>=0)
 )
 
