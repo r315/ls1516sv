@@ -20,7 +20,7 @@ public class PostMovies implements ICommand {
 		{			
 			String title = data.get("title");
 			String date = dateParser(data.get("release_year"));
-					
+
 			if(title == null || date == null)
 				throw new InvalidCommandParameters();
 			

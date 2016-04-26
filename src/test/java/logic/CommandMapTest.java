@@ -22,7 +22,7 @@ public class CommandMapTest {
 
 	@Test
 	public void shouldBeAbleToGetCnodePostMovies()throws Exception{
-		CommandInfo cmdInfo = new CommandInfo("POST","/movies","title=filme1&release_year=2014");
+		CommandInfo cmdInfo = new CommandInfo(new String[]{"POST","/movies","title=filme1&release_year=2014"});
 		Assert.assertTrue(map.get(cmdInfo) instanceof PostMovies);
 	}
 

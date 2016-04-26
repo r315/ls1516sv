@@ -9,8 +9,10 @@ public class HeaderMap {
 
     HashMap<String, IResult> headersMap;
 
-    public HeaderMap(){
+    public HeaderMap(){}
 
+    public HeaderMap(HashMap<String, IResult> headersMap){
+        this.headersMap=headersMap;
     }
 
     public void addResponseMethod(String resultMethod, IResult result){

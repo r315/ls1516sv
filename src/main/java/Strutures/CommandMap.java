@@ -26,7 +26,9 @@ public class CommandMap {
         this.commandsMap=new HashMap<String, HashMap<String,DataNode>>();
     }
 
-    public boolean add(String sCommand, ICommand iCommand) throws Exception{
+    public boolean add(String sCommand, ICommand iCommand)
+            throws InvalidCommandPathException, InvalidCommandMethodException{
+
         if(sCommand==null || iCommand==null) return false;
 
         String method= DecodeMethod.decode(sCommand);
@@ -109,6 +111,8 @@ public class CommandMap {
         map.add("GET /tops/reviews/higher/count",new GetTopsNReviewsHigherCount());
         map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
 
+        map.add("EXIT",new Exit());
+        map.add("OPTION",new Options());
         return map;
     }
 
