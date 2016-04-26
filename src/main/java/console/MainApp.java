@@ -6,7 +6,13 @@ public class MainApp {
 
 	public static void main(String [] args){
 
-		CommandInfo command = new CommandInfo(args);
+		CommandInfo command = null;
+		try {
+			command = new CommandInfo(args);
+		} catch (Exception e1) {
+			System.out.println("Invalid Arguments");
+			//exit APP?
+		}
 		HeaderInfo headerInfo = new HeaderInfo(args);
 		ResultInfo result;
 		try{
