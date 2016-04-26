@@ -11,7 +11,7 @@ public class MainApp {
 		ResultInfo result;
 		try{
 			result= CommandMap.createMap().get(command).execute(command.getData());
-
+			HeaderMap.createMap().getResponseMethod(headerInfo).display(result);
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}

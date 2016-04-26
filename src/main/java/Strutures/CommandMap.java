@@ -51,12 +51,12 @@ public class CommandMap {
             throws InvalidCommandMethodException, InvalidCommandTableException, InvalidCommandPathException {
 
         if (cmdInfo == null) return null;
-        if(commandsMap==null)throw new InvalidCommandMethodException();
         HashMap<String, DataNode> tablesMap = commandsMap.get(cmdInfo.getMethod());
 
         //Iterator<String> commandIterator = cmdInfo.getResources().iterator();
-        DataNode dataNode = tablesMap.get(cmdInfo.getTable());
         if(tablesMap==null)throw new InvalidCommandTableException();
+        DataNode dataNode = tablesMap.get(cmdInfo.getTable());
+
         Collection<String> dataNodeSegmentList= dataNode.resources();
         CNode curr = dataNode.getNext();
 
