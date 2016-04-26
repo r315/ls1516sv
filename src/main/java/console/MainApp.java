@@ -10,6 +10,7 @@ public class MainApp {
 		HeaderInfo headerInfo = new HeaderInfo(args);
 		ResultInfo result;
 		try{
+
 			result= CommandMap.createMap().get(command).execute(command.getData());
 			HeaderMap.createMap().getResponseMethod(headerInfo).display(result);
 		}catch (Exception e){

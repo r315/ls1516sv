@@ -7,11 +7,11 @@ import java.util.HashMap;
  */
 public class DecodeParameters {
 
-    public static HashMap<String, String> decode(String line) throws Exception {
+    public static HashMap<String, String> decode(String line) {
         return decode(line.split(" "));
     }
 
-    public static HashMap<String, String> decode (String [] args) throws Exception {
+    public static HashMap<String, String> decode (String [] args) {
         if (args.length > 3 && args[3] != "" && args[3] != null) return decodeParameters(args[3]);
         else if (args.length > 2 && args[2] != null && args[2].indexOf('=') >= 0) return decodeParameters(args[2]);
         else return null;
