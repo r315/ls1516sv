@@ -1,5 +1,7 @@
 package Strutures;
 
+import java.util.AbstractCollection;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -8,11 +10,11 @@ import java.util.Collection;
 public class ResultInfo {
 
     private Collection<String> title;
-    private Collection<Collection<String>> data;
+    private Collection<ArrayList<String>> data;
 
     public ResultInfo(){}
 
-    public ResultInfo(Collection<String> title, Collection<Collection<String>> data){
+    public ResultInfo(Collection<String> title, Collection<ArrayList<String>> data){
         this.title=title;
         this.data=data;
     }
@@ -21,12 +23,12 @@ public class ResultInfo {
         this.title= titles;
     }
 
-    public void setValues(Collection<Collection<String>> data){this.data=data;}
+    public void setValues(AbstractCollection<ArrayList<String>> data){this.data=data;}
 
     public Collection<String> getTitles(){
         return this.title;
     }
 
-    public Collection<Collection<String>> getValues(){return this.data;}
+    public Collection<ArrayList<String>> getValues(){return this.data;}
 
 }
