@@ -14,7 +14,7 @@ public class CommandInfo {
 
 
 	//TODO (see MainApp.java for details)
-	public CommandInfo(String[] args){
+	public CommandInfo(String[] command){
 		throw new NotImplementedException();
 	}
 

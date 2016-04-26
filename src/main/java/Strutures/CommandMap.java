@@ -91,6 +91,27 @@ public class CommandMap {
         throw new InvalidCommandPathException();
     }
 
+    public static CommandMap createMap() throws Exception{
+        CommandMap map=new CommandMap();
+        map.add("POST /movies",new PostMovies());
+        map.add("POST /movies/{mid}/ratings",new PostMoviesMidRatings());
+        map.add("POST /movies/{mid}/reviews",new PostMoviesMidReviews());
+
+        map.add("GET /movies",new GetMovies());
+        map.add("GET /movies/{mid}",new GetMoviesMid());
+        map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());
+        map.add("GET /movies/{mid}/reviews",new GetMoviesMidReviews());
+
+        map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
+        map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());
+        map.add("GET /tops/ratings/lower/average",new GetTopsRatingsLowerAverage());
+        map.add("GET /tops/{n}/ratings/lower/average",new GetTopsNRatingsLowerAverage());
+        map.add("GET /tops/reviews/higher/count",new GetTopsNReviewsHigherCount());
+        map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
+
+        return map;
+    }
+
     private static String trimBraces(String s){
         return s.substring(1,s.length()-1);
     }

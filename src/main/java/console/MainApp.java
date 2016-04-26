@@ -1,17 +1,17 @@
 package console;
 
-import Strutures.CommandInfo;
-import Strutures.CommandMap;
-import Strutures.ICommand;
-import logic.MapManager;
+import Strutures.*;
 
 public class MainApp {
 
 	public static void main(String [] args){
 
-		CommandInfo cmdinfo = new CommandInfo(args);
+		CommandInfo command = new CommandInfo(args);
+		HeaderInfo headerInfo = new HeaderInfo(args);
+		ResultInfo result;
 		try{
-			new CommandMap().get(cmdinfo).execute(cmdinfo.getData());
+			result= CommandMap.createMap().get(command).execute(command.getData());
+
 		}catch (Exception e){
 			System.out.println(e.getMessage());
 		}

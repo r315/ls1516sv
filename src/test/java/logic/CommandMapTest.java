@@ -2,6 +2,7 @@ package logic;
 
 import Strutures.CommandInfo;
 import Strutures.CommandMap;
+import Strutures.ICommand;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,14 +17,12 @@ public class CommandMapTest {
 	public void before() throws Exception{
 		map=new CommandMap();
 		map.add("POST /movies",new PostMovies());
+		map.add("POST /movies/{mid}/ratings", new PostMoviesMidRatings());
 	}
 
 	@Test
 	public void shouldBeAbleToGetCnodePostMovies()throws Exception{
 		CommandInfo cmdInfo = new CommandInfo("POST","/movies","title=filme1&release_year=2014");
-		CNode expected = new CNode(cmdInfo.getResources(), new PostMovies());
-		//CommandMap map=new CommandMap();
-		//map.add("POST /movies",new PostMovies());
 		Assert.assertTrue(map.get(cmdInfo) instanceof PostMovies);
 	}
 
