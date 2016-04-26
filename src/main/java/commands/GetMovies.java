@@ -5,8 +5,7 @@ import Strutures.ResultInfo;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
-import java.util.Calendar;
-import java.util.HashMap;
+import java.util.*;
 
 
 public class GetMovies implements ICommand {
@@ -18,27 +17,38 @@ public class GetMovies implements ICommand {
 
             ResultSet rs = stmt.executeQuery(getQuery());
 
-            printRS(rs);
+            ResultInfo result = printRS(rs);
 
             stmt.close();
+
+            return result;
         }
 
-        //Builderino stuff
-        ResultInfo stuff = new ResultInfo();
-        return stuff;
     }
 
     private String getQuery() {
         return "SELECT title, release_year FROM Movie ORDER BY title";
     }
 
-    private void printRS(ResultSet rs) throws SQLException {
+    private ResultInfo printRS(ResultSet rs) throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("Titulo");
+        columns.add("Ano de Lançamento");
+
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
         while(rs.next()) {
+            ArrayList<String> line = new ArrayList<>();
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(rs.getDate("release_year"));
 
-            System.out.println(rs.getString("title") + " (" +calendar.get(Calendar.YEAR) + ")");
+            line.add(rs.getString("title"));
+            line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+
+            data.add(line);
         }
+
+        return new ResultInfo(columns, data);
     }
 
 }

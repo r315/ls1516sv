@@ -28,21 +28,29 @@ public class DecodePathTest {
     }
 
     @Test
+    public void PathExecute_Method() throws Exception {
+        Collection<String> path = DecodePath.decode("EXIT");
+        assertEquals(null,path);
+    }
+
+    @Test
     public void PathExecute_Array() throws Exception {
         String [] aux = new String[]{"GET","/movies/1/reviews/4"};
         Collection<String> path = DecodePath.decode(aux);
         assertEquals(resources,path);
     }
 
-    @Test(expected= InvalidCommandPathException.class)
+    @Test
     public void PathExecute_isEmpty() throws Exception {
         String [] aux = new String[]{"GET",""};
-        DecodePath.decode(aux);
+        Collection<String> path = DecodePath.decode(aux);
+        assertEquals(null,path);
     }
 
-    @Test(expected=InvalidCommandPathException.class)
+    @Test
     public void PathExecute_isNull() throws Exception {
         String [] aux = new String[]{null,null};
-        DecodePath.decode(aux);
+        Collection<String> path = DecodePath.decode(aux);
+        assertEquals(null,path);
     }
 }

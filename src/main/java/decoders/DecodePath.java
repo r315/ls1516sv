@@ -10,14 +10,14 @@ import java.util.Collection;
  */
 public class DecodePath {
 
-    public static Collection<String> decode(String line) throws InvalidCommandPathException {
+    public static Collection<String> decode(String line) {
         return decode( line.split(" "));
     }
 
-    public static Collection<String> decode (String [] args) throws InvalidCommandPathException {
+    public static Collection<String> decode (String [] args) {
 
-        if (args[1] != null && args[1] != "") return decodePath(args[1]);
-        else throw new InvalidCommandPathException();
+        if (args.length >= 2 && args[1] != null && args[1] != "") return decodePath(args[1]);
+        else return null;
 
     }
 
