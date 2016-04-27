@@ -10,10 +10,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GetMoviesMidReviewsRid implements ICommand {
-    private final String INFO = "returns the full information for the review rid of the movie identified by mid.";
+    public static final String INFO = "GET /movies/{mid}/reviews/{rid} - returns the full information for the review rid of the movie identified by mid.";
+    private final String TITLE = "'s Review by "; //Movie title before, Username after
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -21,8 +23,8 @@ public class GetMoviesMidReviewsRid implements ICommand {
             int mID, rID;
 
             try {
-                mID = Utils.getInt(data.get("mID"));
-                rID = Utils.getInt(data.get("rID"));
+                mID = Utils.getInt(data.get("mid"));
+                rID = Utils.getInt(data.get("rid"));
             } catch (NumberFormatException e) {
                 throw new InvalidCommandVariableException();
             }
@@ -33,34 +35,44 @@ public class GetMoviesMidReviewsRid implements ICommand {
 
             ResultSet rs = pstmt.executeQuery();
 
-            printRS(rs);
+            ResultInfo result = createRI(rs);
 
             pstmt.close();
+
+            return result;
         }
-
-        //Builderino stuff
-        ResultInfo stuff = new ResultInfo();
-        return stuff;
-    }
-
-    @Override
-    public String getInfo() {
-        return INFO;
     }
 
     private String getQuery() {
-        return "SELECT Review.review_id, Review.name, Review.summary, Review.review, Review.rating " +
+        return "SELECT Movie.title, Review.review_id, Review.name, Review.summary, Review.review, Review.rating " +
                 "FROM Review " +
                 "INNER JOIN Movie ON Review.movie_id=Movie.movie_id " +
                 "WHERE Movie.movie_id = ? AND Review.review_id = ?";
     }
 
-    private void printRS(ResultSet rs) throws SQLException {
+    private ResultInfo createRI(ResultSet rs) throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("Review's ID");
+        columns.add("Username");
+        columns.add("Rating");
+        columns.add("Summary");
+        columns.add("Review");
+
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
         rs.next();
 
-        System.out.println(rs.getInt("review_id") + " " + rs.getString("name") + " " + rs.getInt("rating") + "\n" +
-                "Summary: " + rs.getString("summary") + "\n" +
-                "Review: " + rs.getString("review"));
+        ArrayList<String> line = new ArrayList<>();
+
+        line.add(rs.getString("review_id"));
+        line.add(rs.getString("name"));
+        line.add(rs.getString("ratings"));
+        line.add(rs.getString("summary"));
+        line.add(rs.getString("review"));
+
+        data.add(line);
+
+        return new ResultInfo(rs.getString("title") + TITLE + rs.getString("name"),columns,data);
     }
 
 }

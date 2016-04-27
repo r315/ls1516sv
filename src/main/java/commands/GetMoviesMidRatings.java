@@ -11,8 +11,8 @@ import java.util.*;
 
 
 public class GetMoviesMidRatings implements ICommand {
-    private final String INFO = "returns the rating information for the movie identified by mid.";
-    private final String TITLE = "Ratings do filme "; //Adicionar titulo ao retornar
+    public static final String INFO = "GET /movies/{mid}/ratings - returns the rating information for the movie identified by mid.";
+    private final String TITLE = "'s Ratings"; //Adicionar titulo ao retornar
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -37,11 +37,6 @@ public class GetMoviesMidRatings implements ICommand {
             return result;
         }
 
-    }
-
-    @Override
-    public String getInfo() {
-        return INFO;
     }
 
     private String getQuery() {
@@ -70,7 +65,7 @@ public class GetMoviesMidRatings implements ICommand {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Titulo");
         columns.add("Ano de Lançamento");
-        columns.add("Average");
+        columns.add("Average Rating");
         columns.add("One");
         columns.add("Two");
         columns.add("Three");
@@ -99,7 +94,7 @@ public class GetMoviesMidRatings implements ICommand {
 
         data.add(line);
 
-        return new ResultInfo(TITLE + rs.getString("title"), columns, data);
+        return new ResultInfo(rs.getString("title") + TITLE, columns, data);
 
     }
 }

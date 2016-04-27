@@ -12,8 +12,10 @@ import exceptions.InvalidCommandParameters;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
-	private final String INFO = "creates a new movie, given the parameters \"title\" and \"releaseYear\"";
+	public static final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
+
+	// TODO: Rollback
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -41,11 +43,6 @@ public class PostMovies implements ICommand {
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
     }
-
-	@Override
-	public String getInfo() {
-		return INFO;
-	}
 
 	private void printRS(ResultSet rs) throws SQLException {
         while(rs.next()) {

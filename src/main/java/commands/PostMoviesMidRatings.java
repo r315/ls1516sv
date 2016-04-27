@@ -14,12 +14,14 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
-	private String INFO = "submits a new rating for the movie identified by mid, given the parameters \"rating\"";
+	public static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*
 		POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the following parameters
 		rating - integer between 1 and 5.
 	*/
+
+	// TODO: Rollback
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -51,11 +53,6 @@ public class PostMoviesMidRatings implements ICommand {
 		//Builderino stuff
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
-	}
-
-	@Override
-	public String getInfo() {
-		return INFO;
 	}
 
 	private void printRS(ResultSet rs) throws SQLException {

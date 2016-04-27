@@ -10,8 +10,8 @@ import java.util.*;
 
 
 public class GetMovies implements ICommand {
-    private final String INFO = "GET /movies - returns a list with all movies.";
-    private final String TITLE = "Lista de Filmes";
+    public static final String INFO = "GET /movies - returns a list with all movies.";
+    private final String TITLE = "Movies List";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -41,11 +41,6 @@ public class GetMovies implements ICommand {
 
     }
 
-    @Override
-    public String getInfo() {
-        return INFO;
-    }
-
     private String getQuery(Boolean topB, int top) {
         String query = "SELECT title, release_year FROM Movie ORDER BY title OFFSET ? ROWS";
         if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
@@ -54,8 +49,8 @@ public class GetMovies implements ICommand {
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
-        columns.add("Titulo");
-        columns.add("Ano de Lançamento");
+        columns.add("Title");
+        columns.add("Release Year");
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
