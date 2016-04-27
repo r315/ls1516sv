@@ -7,36 +7,37 @@ import utils.Utils;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 
 public class GetMoviesMid implements ICommand {
-    private final String INFO = "returns the detailed information for the movie identified by mid.";
+    private final String INFO = "GET /movies/{mid} - returns the detailed information for the movie identified by mid.";
+    private final String TITLE = "Informação do filme "; //Adicionar titulo ao retornar
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
         try(Connection conn = ConnectionFactory.getConn()) {
-            int mID;
+            int mid;
 
             try {
-                mID = Utils.getInt(data.get("mID"));
+                mid = Utils.getInt(data.get("mid"));
             } catch (NumberFormatException e) {
                 throw new InvalidCommandVariableException();
             }
 
             PreparedStatement pstmt = conn.prepareStatement(getQuery());
-            pstmt.setInt(1, mID);
+            pstmt.setInt(1, mid);
 
             ResultSet rs = pstmt.executeQuery();
 
-            printRS(rs);
+            ResultInfo result = createRI(rs);
 
             pstmt.close();
-        }
 
-        //Builderino stuff
-        ResultInfo stuff = new ResultInfo();
-        return stuff;
+            return result;
+        }
     }
 
     @Override
@@ -48,21 +49,25 @@ public class GetMoviesMid implements ICommand {
         return "SELECT * FROM Movie WHERE movie_id = ?";
     }
 
-    private void printRS(ResultSet rs) throws SQLException {
-        ResultSetMetaData rsMetaData = rs.getMetaData();
-        int columnNumber = rsMetaData.getColumnCount();
-        String columnName[] = new String[columnNumber];
-        for (int i = 0; i < columnNumber; i++) {
-            columnName[i] = rsMetaData.getColumnName(i + 1);
-        }
-        while (rs.next()) {
-            for (int i = 0; i < columnNumber; i++) {
-                if (i > 0)
-                    System.out.print("&");
-                System.out.print(columnName[i] + "=" + rs.getObject(i + 1));
-            }
-            System.out.println();
-        }
+    private ResultInfo createRI(ResultSet rs) throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("Titulo");
+        columns.add("Ano de Lançamento");
+
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
+        rs.next();
+
+        ArrayList<String> line = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(rs.getDate("release_year"));
+
+        line.add(rs.getString("title"));
+        line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+
+        data.add(line);
+
+        return new ResultInfo(TITLE + rs.getString("title"), columns, data);
 
     }
 

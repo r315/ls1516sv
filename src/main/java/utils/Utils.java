@@ -1,5 +1,9 @@
 package utils;
 
+import exceptions.InvalidCommandParameters;
+
+import java.util.HashMap;
+
 /**
  * Created by Luigi Sekuiya on 22/04/2016.
  */
@@ -18,6 +22,30 @@ public class Utils {
 
     public static String getString (Object value) {
         return value.toString();
+    }
+
+    public static HashMap<String, Integer> getSkipTop (String skip, String top) throws InvalidCommandParameters {
+        HashMap<String, Integer> map = new HashMap<>();
+        int skipI = 0,topI = 1;
+
+        try {
+            skipI = Utils.getInt(skip);
+        } catch (NumberFormatException | NullPointerException e) { //If not number OR null
+            if (skip != null) throw new InvalidCommandParameters();
+        }
+
+        try {
+            topI = Utils.getInt(top);
+        } catch (NumberFormatException | NullPointerException e) { //If not number OR null
+            if (top != null) throw new InvalidCommandParameters();
+        }
+
+        if (skipI < 0 || topI <= 0) throw new InvalidCommandParameters();
+
+        map.put("skip",skipI);
+        map.put("top",topI);
+
+        return map;
     }
 
 

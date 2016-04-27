@@ -12,6 +12,7 @@ import java.util.*;
 
 public class GetMoviesMidRatings implements ICommand {
     private final String INFO = "returns the rating information for the movie identified by mid.";
+    private final String TITLE = "Ratings do filme "; //Adicionar titulo ao retornar
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -19,7 +20,7 @@ public class GetMoviesMidRatings implements ICommand {
             int mID;
 
             try {
-                mID = Utils.getInt(data.get("mID"));
+                mID = Utils.getInt(data.get("mid"));
             } catch (NumberFormatException e) {
                 throw new InvalidCommandVariableException();
             }
@@ -29,14 +30,13 @@ public class GetMoviesMidRatings implements ICommand {
 
             ResultSet rs = pstmt.executeQuery();
 
-            printRS(rs);
+            ResultInfo result = createRI(rs);
 
             pstmt.close();
+
+            return result;
         }
 
-        //Builderino stuff
-        ResultInfo stuff = new ResultInfo();
-        return stuff;
     }
 
     @Override
@@ -45,24 +45,61 @@ public class GetMoviesMidRatings implements ICommand {
     }
 
     private String getQuery() {
-        return "SELECT title, release_year, COALESCE ((ratavg + revavg) / 2, ratavg, revavg) AS average " +
+        return "SELECT title, release_year, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five " +
                 "FROM " +
                 "(" +
-                    "SELECT Movie.title, Movie.release_year, ((Rating.one * 1 + Rating.two * 2 + Rating.three * 3 + Rating.four * 4 + Rating.five * 5) / (Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratavg, AVG(Review.rating) AS revavg " +
-                    "FROM Movie " +
-                    "LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
-                    "LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
-                    "WHERE Movie.movie_id = ? " +
-                    "GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five " +
+                "SELECT Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
+                "FROM Movie " +
+                "LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
+                "LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
+                "LEFT JOIN ( " +
+                        "SELECT movie_id, [1], [2], [3], [4], [5] " +
+                        "FROM " +
+                        "(SELECT movie_id, rating FROM Review GROUP BY rating, movie_ID) AS SourceTable " +
+                        "PIVOT " +
+                        "( " +
+                                "COUNT(SourceTable.rating) " +
+                                "FOR rating IN ([1], [2], [3], [4], [5]) " +
+                        ") AS SourceTable) AS reviewRatings ON reviewRatings.movie_id = Movie.movie_id " +
+                "WHERE Movie.movie_id = ? " +
+                "GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
                 ") AS average";
     }
 
-    private void printRS(ResultSet rs) throws SQLException {
+    private ResultInfo createRI(ResultSet rs) throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("Titulo");
+        columns.add("Ano de Lançamento");
+        columns.add("Average");
+        columns.add("One");
+        columns.add("Two");
+        columns.add("Three");
+        columns.add("Four");
+        columns.add("Five");
+
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
         rs.next();
 
+        ArrayList<String> line = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(rs.getDate("release_year"));
 
-        System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + "): " + rs.getInt("average"));
+        Float average = (float) (rs.getInt("one") + rs.getInt("two") * 2 + rs.getInt("three") * 3 + rs.getInt("four") * 4 + rs.getInt("five") * 5)
+                / (rs.getInt("one") + rs.getInt("two") + rs.getInt("three") + rs.getInt("four") + rs.getInt("five"));
+
+        line.add(rs.getString("title"));
+        line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+        line.add(String.format("%.2f", average));
+        line.add(rs.getString("one"));
+        line.add(rs.getString("two"));
+        line.add(rs.getString("three"));
+        line.add(rs.getString("four"));
+        line.add(rs.getString("five"));
+
+        data.add(line);
+
+        return new ResultInfo(TITLE + rs.getString("title"), columns, data);
+
     }
 }
