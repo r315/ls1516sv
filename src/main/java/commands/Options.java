@@ -20,15 +20,9 @@ public class Options implements ICommand{
         ArrayList<ArrayList<String>> rdata=new ArrayList<>();
         MainApp.createMap().getCommands().forEach(cmd->{
             ArrayList<String> aux=new ArrayList<>(1);
-            aux.add(cmd.getInfo());//TODO change to cmd.INFO after luigi pushes
+            aux.add(INFO);// TODO: Further test needed 
             rdata.add(aux);
         });
         return new ResultInfo(null,rtitle,rdata);
     }
-
-    @Override
-    public String getInfo() {
-        return INFO;
-    }
-
 }
