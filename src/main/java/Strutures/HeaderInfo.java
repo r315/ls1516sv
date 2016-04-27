@@ -1,7 +1,9 @@
 package Strutures;
 
+import decoders.DecodeHeaders;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class HeaderInfo {
@@ -10,7 +12,12 @@ public class HeaderInfo {
 
 	//TODO
 	public HeaderInfo(String[] h){
-		throw new NotImplementedException();
+		HashMap<String,String> map=DecodeHeaders.decode(h);
+		if(map==null){
+			headers.put("accept","text/plain");
+			return;
+		}
+		//TODO finish Ctor for other cases
 	}
 	
 	public Map<String,String> getHeaders(){

@@ -27,6 +27,11 @@ public class GetTopsRatingsHigherAverage implements ICommand {
         return stuff;
     }
 
+    @Override
+    public String getInfo() {
+
+    }
+
     private String getQuery() {
         return "SELECT TOP 1 title, release_year, COALESCE ((ratavg + revavg) / 2, ratavg, revavg) AS average " +
                 "FROM " +

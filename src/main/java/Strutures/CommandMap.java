@@ -6,11 +6,9 @@ import decoders.DecodePath;
 import exceptions.InvalidCommandMethodException;
 import exceptions.InvalidCommandPathException;
 import exceptions.InvalidCommandTableException;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Created by Red on 28/03/2016.
@@ -31,14 +29,18 @@ public class CommandMap {
 
         if(sCommand==null || iCommand==null) return false;
 
+        String table=null;
         String method= DecodeMethod.decode(sCommand);
         //HashMap<String,DataNode> methodMap= this.commandsMap.get(method);
         HashMap<String, DataNode> methodMap= this.commandsMap.putIfAbsent(method,new HashMap<String, DataNode>());
         if(methodMap==null)//in case it didn't exist before
             methodMap=this.commandsMap.get(method);
         Collection<String> path= DecodePath.decode(sCommand);
-        path.removeIf(s -> s.startsWith("{")&& s.endsWith("}"));
-        String table= path.iterator().next();
+        if(path!=null){
+            path.removeIf(s -> s.startsWith("{")&& s.endsWith("}"));
+            table= path.iterator().next();
+        }
+
         DataNode dataNode= methodMap.putIfAbsent(table, new DataNode(path));
         if(dataNode==null)//in case it didn't exist before
             dataNode=methodMap.get(table);
@@ -93,6 +95,11 @@ public class CommandMap {
         throw new InvalidCommandPathException();
     }
 
+    //TODO Return lists of ICommands
+    public Set<ICommand> getCommands(){
+        throw new NotImplementedException();
+    }
+
     public static CommandMap createMap() throws Exception{
         CommandMap map=new CommandMap();
         map.add("POST /movies",new PostMovies());
@@ -103,12 +110,13 @@ public class CommandMap {
         map.add("GET /movies/{mid}",new GetMoviesMid());
         map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());
         map.add("GET /movies/{mid}/reviews",new GetMoviesMidReviews());
+        map.add("GET /movies/{mid}/reviews/{rid}",new GetMoviesMidReviewsRid());
 
         map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
         map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());
         map.add("GET /tops/ratings/lower/average",new GetTopsRatingsLowerAverage());
         map.add("GET /tops/{n}/ratings/lower/average",new GetTopsNRatingsLowerAverage());
-        map.add("GET /tops/reviews/higher/count",new GetTopsNReviewsHigherCount());
+        map.add("GET /tops/reviews/higher/count",new GetTopsReviewsHigherCount());
         map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
 
         map.add("EXIT",new Exit());

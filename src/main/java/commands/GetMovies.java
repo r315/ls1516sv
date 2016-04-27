@@ -26,6 +26,11 @@ public class GetMovies implements ICommand {
 
     }
 
+    @Override
+    public String getInfo() {
+        return "GET /movies - returns a list with all movies.";
+    }
+
     private String getQuery() {
         return "SELECT title, release_year FROM Movie ORDER BY title";
     }

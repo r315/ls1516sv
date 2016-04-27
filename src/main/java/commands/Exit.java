@@ -16,4 +16,9 @@ public class Exit implements ICommand{
         System.exit(0);
         return null;
     }
+
+    @Override
+    public String getInfo(){
+        return "OPTION / - presents a list of available commands and their characteristics.";
+   }
 }
