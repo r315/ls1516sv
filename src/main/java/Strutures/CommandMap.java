@@ -95,11 +95,11 @@ public class CommandMap {
         throw new InvalidCommandPathException();
     }
 
-    public Set<ICommand> getCommands(){
+    public Set<ICommand> getCommands() {
         return new AbstractSet<ICommand>(){
             @Override
-            public Iterator<ICommand> iterator() {
-                return new Iterator<ICommand>() {
+            public Iterator<ICommand> iterator(){
+                return new Iterator<ICommand>(){
                     Iterator<HashMap<String,DataNode>> method_it=commandsMap.values().iterator();
                     Iterator<DataNode> dataNode_it= null;
                     CNode curr=null;
@@ -144,30 +144,6 @@ public class CommandMap {
                 throw new NotImplementedException();
             }
         };
-    }
-
-    public static CommandMap createMap() throws Exception{
-        CommandMap map=new CommandMap();
-        map.add("POST /movies",new PostMovies());
-        map.add("POST /movies/{mid}/ratings",new PostMoviesMidRatings());
-        map.add("POST /movies/{mid}/reviews",new PostMoviesMidReviews());
-
-        map.add("GET /movies",new GetMovies());
-        map.add("GET /movies/{mid}",new GetMoviesMid());
-        map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());
-        map.add("GET /movies/{mid}/reviews",new GetMoviesMidReviews());
-        map.add("GET /movies/{mid}/reviews/{rid}",new GetMoviesMidReviewsRid());
-
-        map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
-        map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());
-        map.add("GET /tops/ratings/lower/average",new GetTopsRatingsLowerAverage());
-        map.add("GET /tops/{n}/ratings/lower/average",new GetTopsNRatingsLowerAverage());
-        map.add("GET /tops/reviews/higher/count",new GetTopsReviewsHigherCount());
-        map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
-
-        map.add("EXIT /",new Exit());
-        map.add("OPTION /",new Options());
-        return map;
     }
 
     private static String trimBraces(String s){
