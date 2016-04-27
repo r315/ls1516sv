@@ -12,9 +12,8 @@ public class Options implements ICommand{
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
-        throw new NotImplementedException();
-        //CommandMap.createMap().
-        //return null;
+        CommandMap.createMap().getCommands().forEach(cmd->System.out.println(cmd.getInfo()));
+        return null;
     }
 
     @Override
