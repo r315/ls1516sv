@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsNReviewsHigherCount implements ICommand {
+	private final String INFO = "returns a list with the n movies with higher review count.";
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -39,6 +40,11 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 		//Builderino stuff
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
+	}
+
+	@Override
+	public String getInfo() {
+		return INFO;
 	}
 
 	private String getQuery() {

@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
+	private String INFO = "submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*
 		POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the following parameters
@@ -50,6 +51,11 @@ public class PostMoviesMidRatings implements ICommand {
 		//Builderino stuff
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
+	}
+
+	@Override
+	public String getInfo() {
+		return INFO;
 	}
 
 	private void printRS(ResultSet rs) throws SQLException {

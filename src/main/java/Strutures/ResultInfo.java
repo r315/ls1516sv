@@ -23,7 +23,7 @@ public class ResultInfo {
         this.title= titles;
     }
 
-    public void setValues(AbstractCollection<ArrayList<String>> data){this.data=data;}
+    public void setValues(Collection<ArrayList<String>> data){this.data=data;}
 
     public Collection<String> getTitles(){
         return this.title;

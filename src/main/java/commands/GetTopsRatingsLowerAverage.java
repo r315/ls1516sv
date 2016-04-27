@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsRatingsLowerAverage implements ICommand {
+	private final String INFO = "returns the detail for the movie with the lower average rating.";
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
@@ -25,6 +26,11 @@ public class GetTopsRatingsLowerAverage implements ICommand {
 		//Builderino stuff
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
+	}
+
+	@Override
+	public String getInfo() {
+		return INFO;
 	}
 
 	private String getQuery() {

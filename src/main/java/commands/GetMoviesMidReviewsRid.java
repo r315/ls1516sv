@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class GetMoviesMidReviewsRid implements ICommand {
+    private final String INFO = "returns the full information for the review rid of the movie identified by mid.";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -40,6 +41,11 @@ public class GetMoviesMidReviewsRid implements ICommand {
         //Builderino stuff
         ResultInfo stuff = new ResultInfo();
         return stuff;
+    }
+
+    @Override
+    public String getInfo() {
+        return INFO;
     }
 
     private String getQuery() {

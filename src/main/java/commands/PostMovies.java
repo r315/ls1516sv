@@ -12,6 +12,7 @@ import exceptions.InvalidCommandParameters;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
+	private final String INFO = "creates a new movie, given the parameters \"title\" and \"releaseYear\"";
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
 	
 	@Override
@@ -39,9 +40,14 @@ public class PostMovies implements ICommand {
 		//Builderino stuff
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
-    }   
+    }
 
-    private void printRS(ResultSet rs) throws SQLException {
+	@Override
+	public String getInfo() {
+		return INFO;
+	}
+
+	private void printRS(ResultSet rs) throws SQLException {
         while(rs.next()) {
         	System.out.println("Movie inserted with ID: "+ rs.getInt(1));
         }

@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsReviewsHigherCount implements ICommand {
+	private final String INFO = "returns the detail for the movie with most reviews.";
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
@@ -25,6 +26,11 @@ public class GetTopsReviewsHigherCount implements ICommand {
 		//Builderino stuff
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
+	}
+
+	@Override
+	public String getInfo() {
+		return INFO;
 	}
 
 	private String getQuery() {
