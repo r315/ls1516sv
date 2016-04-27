@@ -10,6 +10,7 @@ import java.util.HashMap;
  * Created by Red on 26/04/2016.
  */
 public class Exit implements ICommand{
+    private final String INFO = "ends the application.";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -18,7 +19,7 @@ public class Exit implements ICommand{
     }
 
     @Override
-    public String getInfo(){
-        return "OPTION / - presents a list of available commands and their characteristics.";
-   }
+    public String getInfo() {
+        return INFO;
+    }
 }

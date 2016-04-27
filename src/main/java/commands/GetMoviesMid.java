@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 
 public class GetMoviesMid implements ICommand {
+    private final String INFO = "returns the detailed information for the movie identified by mid.";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -40,7 +41,7 @@ public class GetMoviesMid implements ICommand {
 
     @Override
     public String getInfo() {
-        return "GET /movies/{mid} - returns the detailed information for the movie identified by mid.";
+        return INFO;
     }
 
     private String getQuery() {

@@ -23,6 +23,8 @@ rating - the review rating
 */
 
 public class PostMoviesMidReviews implements ICommand {
+	private final String INFO = " creates a new review for the movie identified by mid, given the parameters \"reviewerName\", \"reviewSummary\", \"review\" and \"rating\"";
+
 	private static final String INSERT = "insert into Review(movie_id,name,review,summary,rating) values(?,?,?,?,?)";
 	private static final int NPARAM = 4;
 	
@@ -61,8 +63,13 @@ public class PostMoviesMidReviews implements ICommand {
 		ResultInfo stuff = new ResultInfo();
 		return stuff;
 	}
-	
-	
+
+	@Override
+	public String getInfo() {
+		return INFO;
+	}
+
+
 	private void printRS(ResultSet rs) throws SQLException {
 		while(rs.next()) {
 			System.out.println("Review inserted with ID: "+ rs.getInt(1));

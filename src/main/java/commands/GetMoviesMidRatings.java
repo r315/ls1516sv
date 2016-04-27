@@ -11,6 +11,7 @@ import java.util.*;
 
 
 public class GetMoviesMidRatings implements ICommand {
+    private final String INFO = "returns the rating information for the movie identified by mid.";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -36,6 +37,11 @@ public class GetMoviesMidRatings implements ICommand {
         //Builderino stuff
         ResultInfo stuff = new ResultInfo();
         return stuff;
+    }
+
+    @Override
+    public String getInfo() {
+        return INFO;
     }
 
     private String getQuery() {

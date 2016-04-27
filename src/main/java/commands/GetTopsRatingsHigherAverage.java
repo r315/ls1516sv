@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsRatingsHigherAverage implements ICommand {
+    private final String INFO = "returns the detail for the movie with the higher average rating.";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws SQLException {
@@ -29,7 +30,7 @@ public class GetTopsRatingsHigherAverage implements ICommand {
 
     @Override
     public String getInfo() {
-
+        return INFO;
     }
 
     private String getQuery() {
