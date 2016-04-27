@@ -15,9 +15,14 @@ public class CommandMapTest {
 
 	@Before
 	public void before() throws Exception{
-		map=new CommandMap();
-		map.add("POST /movies",new PostMovies());
-		map.add("POST /movies/{mid}/ratings", new PostMoviesMidRatings());
+		map= CommandMap.createMap();
+	}
+
+	@Test
+	public void OptionsCommandTest() throws Exception{
+		CommandInfo command=new CommandInfo(new String[]{"OPTION","/"});
+		map.get(command).execute(command.getData());
+		//map.g
 	}
 
 	@Test

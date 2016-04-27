@@ -36,7 +36,7 @@ public class CommandMap {
         if(methodMap==null)//in case it didn't exist before
             methodMap=this.commandsMap.get(method);
         Collection<String> path= DecodePath.decode(sCommand);
-        if(path!=null){
+        if(path.size()!=0){
             path.removeIf(s -> s.startsWith("{")&& s.endsWith("}"));
             table= path.iterator().next();
         }
@@ -95,9 +95,55 @@ public class CommandMap {
         throw new InvalidCommandPathException();
     }
 
-    //TODO Return lists of ICommands
     public Set<ICommand> getCommands(){
-        throw new NotImplementedException();
+        return new AbstractSet<ICommand>(){
+            @Override
+            public Iterator<ICommand> iterator() {
+                return new Iterator<ICommand>() {
+                    Iterator<HashMap<String,DataNode>> method_it=commandsMap.values().iterator();
+                    Iterator<DataNode> dataNode_it= null;
+                    CNode curr=null;
+                    boolean checked=false;
+
+                    @Override
+                    public boolean hasNext() {
+                        if(checked) return  true;
+                        else {//check if hasNext
+                            if(dataNode_it==null && method_it.hasNext()) {//first time case
+                                dataNode_it = method_it.next().values().iterator();
+                                curr=dataNode_it.next().getNext();
+                            }
+                            if(curr.getNext()!=null){//has another CNode
+                                curr=curr.getNext();
+                            }else{//get next dataNode
+                                if(dataNode_it.hasNext()){
+                                    curr= dataNode_it.next().getNext();
+                                }else{//get next method_it
+                                    if(method_it.hasNext()){
+                                        dataNode_it=method_it.next().values().iterator();
+                                        curr=dataNode_it.next().getNext();
+                                    }else return false;
+                                }
+                            }
+                        }
+                        checked=true;
+                        return true;
+                    }
+
+                    @Override
+                    public ICommand next(){
+                        if (!hasNext()) throw new NoSuchElementException();
+                        checked=false;
+                        return curr.getCommand();
+                    }
+                };
+            }
+
+            @Override
+            public int size() {
+                throw new NotImplementedException();
+            }
+        };
     }
 
     public static CommandMap createMap() throws Exception{
@@ -119,8 +165,8 @@ public class CommandMap {
         map.add("GET /tops/reviews/higher/count",new GetTopsReviewsHigherCount());
         map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
 
-        map.add("EXIT",new Exit());
-        map.add("OPTION",new Options());
+        map.add("EXIT /",new Exit());
+        map.add("OPTION /",new Options());
         return map;
     }
 

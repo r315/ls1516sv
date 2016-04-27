@@ -2,6 +2,7 @@ package Strutures;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import decoders.DecodeMethod;
@@ -18,8 +19,10 @@ public class CommandInfo {
 	public CommandInfo(String[] command) throws Exception{
 		method = DecodeMethod.decode(command);
 		resources = DecodePath.decode(command);
-		parameters = DecodeParameters.decode(command);		
-		table = ((List<String>)resources).get(0);		
+		parameters = DecodeParameters.decode(command);
+		Collection<String> params= DecodePath.decode(command);
+		if(params.size()!=0)
+			table = DecodePath.decode(command).iterator().next();
 	}
 	
 	public String getMethod() { return method;}

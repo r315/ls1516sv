@@ -54,7 +54,7 @@ public class GetMovies implements ICommand {
             data.add(line);
         }
 
-        return new ResultInfo(columns, data);
+        return new ResultInfo("title",columns, data);
     }
 
 }

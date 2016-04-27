@@ -9,13 +9,14 @@ import java.util.Collection;
  */
 public class ResultInfo {
 
-    String titletitle;
+	private String displayTitle;
     private Collection<String> title;
     private Collection<ArrayList<String>> data;
 
     public ResultInfo(){}
 
-    public ResultInfo(String titletitle, Collection<String> title, Collection<ArrayList<String>> data){
+    public ResultInfo(String displayTitle, Collection<String> title, Collection<ArrayList<String>> data){
+    	this.displayTitle=displayTitle;
         this.title=title;
         this.data=data;
     }
