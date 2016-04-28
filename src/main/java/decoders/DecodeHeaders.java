@@ -11,7 +11,7 @@ public class DecodeHeaders {
     public static HashMap<String, String> decode (String [] args) {
         if (args.length > 3 && args[2] != "" && args[2] != null) return decodeParameters(args[2]);
         else if (args.length > 2 && args[2] != null && args[2].indexOf(':') >= 0) return decodeParameters(args[2]);
-        else return null;
+        else return new HashMap<>();
     }
 
     private static HashMap<String, String> decodeParameters(String param) {
