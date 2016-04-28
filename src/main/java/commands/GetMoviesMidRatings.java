@@ -39,6 +39,11 @@ public class GetMoviesMidRatings implements ICommand {
 
     }
 
+    @Override
+    public String getInfo() {
+        return INFO;
+    }
+
     private String getQuery() {
         return "SELECT title, release_year, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five " +
                 "FROM " +

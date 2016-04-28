@@ -10,7 +10,7 @@ import java.util.HashMap;
  * Created by Red on 26/04/2016.
  */
 public class Exit implements ICommand{
-    private final String INFO = "ends the application.";
+    private final String INFO = "EXIT / - ends the application.";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {

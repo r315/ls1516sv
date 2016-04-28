@@ -28,6 +28,11 @@ public class GetTopsReviewsHigherCount implements ICommand {
 		}
 	}
 
+	@Override
+	public String getInfo() {
+		return INFO;
+	}
+
 	private String getQuery() {
 		return "SELECT TOP 1 Movie.title, Movie.release_year, COUNT(Review.rating) AS revcount " +
 				"FROM Movie " +

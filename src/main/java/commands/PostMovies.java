@@ -44,6 +44,11 @@ public class PostMovies implements ICommand {
 		return stuff;
     }
 
+	@Override
+	public String getInfo() {
+		return INFO;
+	}
+
 	private void printRS(ResultSet rs) throws SQLException {
         while(rs.next()) {
         	System.out.println("Movie inserted with ID: "+ rs.getInt(1));

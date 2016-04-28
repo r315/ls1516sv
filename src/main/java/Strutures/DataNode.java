@@ -26,5 +26,8 @@ public class DataNode {
         return this.resources;
     }
 
+    public void addToResources(String s){
+        resources.add(s);
+    }
 
 }

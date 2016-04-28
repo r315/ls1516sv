@@ -54,6 +54,11 @@ public class GetMoviesMidReviews implements ICommand {
 
     }
 
+    @Override
+    public String getInfo() {
+        return INFO;
+    }
+
     private String getQuery(Boolean topB, int top) {
         String query = "SELECT Movie.title, Review.review_id, Review.name, Review.summary, Review.rating " +
                         "FROM Review " +

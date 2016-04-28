@@ -14,8 +14,6 @@ import java.util.*;
  * Created by Red on 28/03/2016.
  */
 
-
-
 public class CommandMap {
 
     private HashMap<String, HashMap<String,DataNode>> commandsMap;
@@ -43,7 +41,13 @@ public class CommandMap {
 
         DataNode dataNode= methodMap.putIfAbsent(table, new DataNode(path));
         if(dataNode==null)//in case it didn't exist before
-            dataNode=methodMap.get(table);
+            dataNode=new DataNode(path);
+        else{//in case it exists, add more
+            Collection<String> col=dataNode.resources();
+            for (String s:path)
+                if(!col.contains(s))dataNode.addToResources(s);
+        }
+        //path.iterator().forEachRemaining(s->dataNode.);
         path=DecodePath.decode(sCommand);
         CNode curr= new CNode(path, iCommand);
         curr.setNext(dataNode.getNext());
@@ -112,8 +116,7 @@ public class CommandMap {
                             if(dataNode_it==null && method_it.hasNext()) {//first time case
                                 dataNode_it = method_it.next().values().iterator();
                                 curr=dataNode_it.next().getNext();
-                            }
-                            if(curr.getNext()!=null){//has another CNode
+                            }else if(curr.getNext()!=null){//has another CNode
                                 curr=curr.getNext();
                             }else{//get next dataNode
                                 if(dataNode_it.hasNext()){

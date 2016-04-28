@@ -9,7 +9,7 @@ public class HeaderMap {
 
     HashMap<String, IResult> headersMap;
 
-    public HeaderMap(){}
+    public HeaderMap(){headersMap=new HashMap<>();}
 
     public HeaderMap(HashMap<String, IResult> headersMap){
         this.headersMap=headersMap;

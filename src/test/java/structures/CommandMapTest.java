@@ -10,6 +10,9 @@ import org.junit.Test;
 import commands.*;
 import Strutures.CNode;
 
+import java.util.AbstractSet;
+import java.util.Set;
+
 public class CommandMapTest {
 
 	CommandMap map;
@@ -17,6 +20,22 @@ public class CommandMapTest {
 	@Before
 	public void before() throws Exception{
 		map= MainApp.createMap();
+	}
+
+	@Test
+	public void GetCommandsTest() throws Exception{
+		CommandInfo command=new CommandInfo(new String[]{"OPTION","/"});
+		int i =0;
+		for (ICommand cmd : map.getCommands())
+			++i;
+		Assert.assertEquals(16,i);
+	}
+
+	@Test
+	public void GetMoviesMidTest()throws Exception{
+		CommandInfo command=new CommandInfo(new String[]{"GET","/movies/1"});
+		ICommand cmd=map.get(command);
+		Assert.assertTrue(cmd instanceof GetMoviesMid);
 	}
 
 	@Test

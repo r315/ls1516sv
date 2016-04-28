@@ -40,6 +40,11 @@ public class GetMoviesMid implements ICommand {
         }
     }
 
+    @Override
+    public String getInfo() {
+        return INFO;
+    }
+
     private String getQuery() {
         return "SELECT * FROM Movie WHERE movie_id = ?";
     }

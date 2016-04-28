@@ -41,6 +41,11 @@ public class GetMovies implements ICommand {
 
     }
 
+    @Override
+    public String getInfo() {
+        return INFO;
+    }
+
     private String getQuery(Boolean topB, int top) {
         String query = "SELECT title, release_year FROM Movie ORDER BY title OFFSET ? ROWS";
         if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";

@@ -55,6 +55,11 @@ public class PostMoviesMidRatings implements ICommand {
 		return stuff;
 	}
 
+	@Override
+	public String getInfo() {
+		return INFO;
+	}
+
 	private void printRS(ResultSet rs) throws SQLException {
 		while(rs.next()) {
 			System.out.println("Review inserted with ID: "+ rs.getInt(1));
