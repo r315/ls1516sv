@@ -11,12 +11,11 @@ public class HeaderInfo {
 
 	//TODO
 	public HeaderInfo(String[] h){
-		HashMap<String,String> map=DecodeHeaders.decode(h);
-		if(map==null){
+		headers=DecodeHeaders.decode(h);
+		if(headers==null){
+			headers=new HashMap<>(1);
 			headers.put("accept","text/plain");
-			return;
 		}
-		//TODO finish Ctor for other cases
 	}
 	
 	public Map<String,String> getHeaders(){

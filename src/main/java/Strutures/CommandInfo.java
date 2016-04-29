@@ -13,7 +13,7 @@ public class CommandInfo {
 	private String method;			//GET
 	private String table;			//movie
 	private HashMap<String, String> parameters;		// name=filme&release_year=2016
-	private Collection<String> resources;	
+	private Collection<String> resources;	//path
 
 	
 	public CommandInfo(String[] command) throws Exception{

@@ -5,11 +5,13 @@ import Strutures.ResultInfo;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsReviewsHigherCount implements ICommand {
-	private final String INFO = "returns the detail for the movie with most reviews.";
+	private static final String INFO = "GET /tops/reviews/higher/count - returns the detail for the movie with most reviews.";
+	private final String TITLE = "Movie with most reviews";
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
@@ -18,14 +20,12 @@ public class GetTopsReviewsHigherCount implements ICommand {
 
 			ResultSet rs = stmt.executeQuery(getQuery());
 
-			printRS(rs);
+			ResultInfo result = createRI(rs);
 
 			stmt.close();
-		}
 
-		//Builderino stuff
-		ResultInfo stuff = new ResultInfo();
-		return stuff;
+			return result;
+		}
 	}
 
 	@Override
@@ -34,26 +34,34 @@ public class GetTopsReviewsHigherCount implements ICommand {
 	}
 
 	private String getQuery() {
-		return "SELECT TOP 1 title, release_year, COALESCE (ratcount + revcount, ratcount, revcount) AS total " +
-				"FROM " +
-				"(" +
-				"SELECT Movie.title, Movie.release_year, ((Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratcount, COUNT(Review.rating) AS revcount " +
+		return "SELECT TOP 1 Movie.title, Movie.release_year, COUNT(Review.rating) AS revcount " +
 				"FROM Movie " +
-				"LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
 				"LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
-				"GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five " +
-				") AS total " +
-				"ORDER BY total DESC";
+				"GROUP BY Movie.title, Movie.release_year " +
+				"ORDER BY revcount DESC " +
+				"OFFSET ? ROWS";
 	}
 
-	private void printRS(ResultSet rs) throws SQLException {
-		while(rs.next()) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(rs.getDate("release_year"));
+	private ResultInfo createRI(ResultSet rs) throws SQLException {
+		ArrayList<String> columns = new ArrayList<>();
+		columns.add("Title");
+		columns.add("Release Year");
+		columns.add("Review Count");
 
-			System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + ")");
-		}
+		ArrayList<ArrayList<String>> data = new ArrayList<>();
 
+		rs.next();
+		ArrayList<String> line = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(rs.getDate("release_year"));
+
+		line.add(rs.getString("title"));
+		line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+		line.add(rs.getString("revcount"));
+
+		data.add(line);
+
+		return new ResultInfo(TITLE, columns, data);
 	}
 
 }

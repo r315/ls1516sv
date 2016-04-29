@@ -1,6 +1,6 @@
 package decoders;
 
-import exceptions.InvalidCommandPathException;
+import exceptions.InvalidCommandMethodException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -25,13 +25,13 @@ public class DecodeMethodTest {
         assertEquals("GET",method);
     }
 
-    @Test(expected=InvalidCommandPathException.class)
+    @Test(expected=InvalidCommandMethodException.class)
     public void MethodExecute_isEmpty() throws Exception {
         String [] aux = new String[]{"",""};
         DecodeMethod.decode(aux);
     }
 
-    @Test(expected=InvalidCommandPathException.class)
+    @Test(expected= InvalidCommandMethodException.class)
     public void MethodExecute_isNull() throws Exception {
         String [] aux = new String[]{null,null};
         DecodeMethod.decode(aux);

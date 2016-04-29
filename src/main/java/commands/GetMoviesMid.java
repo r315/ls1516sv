@@ -13,8 +13,8 @@ import java.util.HashMap;
 
 
 public class GetMoviesMid implements ICommand {
-    private final String INFO = "GET /movies/{mid} - returns the detailed information for the movie identified by mid.";
-    private final String TITLE = "Informação do filme "; //Adicionar titulo ao retornar
+    private static final String INFO = "GET /movies/{mid} - returns the detailed information for the movie identified by mid.";
+    private final String TITLE = " Information"; //Adicionar titulo ao retornar
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -56,7 +56,7 @@ public class GetMoviesMid implements ICommand {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        rs.next();
+        if (!rs.next()) return new ResultInfo(null, columns, data);
 
         ArrayList<String> line = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -67,7 +67,7 @@ public class GetMoviesMid implements ICommand {
 
         data.add(line);
 
-        return new ResultInfo(TITLE + rs.getString("title"), columns, data);
+        return new ResultInfo(rs.getString("title") + TITLE, columns, data);
 
     }
 

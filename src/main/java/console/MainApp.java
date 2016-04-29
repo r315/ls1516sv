@@ -11,11 +11,8 @@ public class MainApp {
 		String[] userArgs=args;
 		boolean interactive_mode=false;
 		Scanner scanner = new Scanner(System.in);
-
-
 		if(args.length==0)
 			interactive_mode=true;
-
 		do {
 			try {
 				if(interactive_mode)
@@ -24,10 +21,13 @@ public class MainApp {
 				CommandInfo command = new CommandInfo(userArgs);
 				ResultInfo result = createMap().get(command).execute(command.getData());
 				HeaderMap.createMap().getResponseMethod(headerInfo).display(result);
-			} catch (Exception e) {
+			} catch(Exception e){
+				scanner.close();
 				System.out.println(e.getMessage());
+				return;
 			}
 		}while(interactive_mode);
+		scanner.close();
 	}
 
 	public static CommandMap createMap() throws Exception{

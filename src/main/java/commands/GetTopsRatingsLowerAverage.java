@@ -5,11 +5,13 @@ import Strutures.ResultInfo;
 import sqlserver.ConnectionFactory;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsRatingsLowerAverage implements ICommand {
-	private final String INFO = "returns the detail for the movie with the lower average rating.";
+	private static final String INFO = "GET /tops/ratings/lower/average - returns the detail for the movie with the lower average rating.";
+	private final String TITLE = "Movie with lowest average rating";
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
@@ -18,14 +20,12 @@ public class GetTopsRatingsLowerAverage implements ICommand {
 
 			ResultSet rs = stmt.executeQuery(getQuery());
 
-			printRS(rs);
+			ResultInfo result = createRI(rs);
 
 			stmt.close();
-		}
 
-		//Builderino stuff
-		ResultInfo stuff = new ResultInfo();
-		return stuff;
+			return result;
+		}
 	}
 
 	@Override
@@ -34,26 +34,51 @@ public class GetTopsRatingsLowerAverage implements ICommand {
 	}
 
 	private String getQuery() {
-		return "SELECT TOP 1 title, release_year, COALESCE ((ratavg + revavg) / 2, ratavg, revavg) AS average " +
+		return "SELECT TOP 1 title, release_year, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five " +
 				"FROM " +
 				"(" +
-				"SELECT Movie.title, Movie.release_year, ((Rating.one * 1 + Rating.two * 2 + Rating.three * 3 + Rating.four * 4 + Rating.five * 5) / (Rating.one + Rating.two + Rating.three + Rating.four + Rating.five)) AS ratavg, AVG(Review.rating) AS revavg " +
+				"SELECT Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
 				"FROM Movie " +
 				"LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
 				"LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
-				"GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five " +
+				"LEFT JOIN ( " +
+				"SELECT movie_id, [1], [2], [3], [4], [5] " +
+				"FROM " +
+				"(SELECT movie_id, rating FROM Review GROUP BY rating, movie_ID) AS SourceTable " +
+				"PIVOT " +
+				"( " +
+				"COUNT(SourceTable.rating) " +
+				"FOR rating IN ([1], [2], [3], [4], [5]) " +
+				") AS SourceTable) AS reviewRatings ON reviewRatings.movie_id = Movie.movie_id " +
+				"WHERE Movie.movie_id = ? " +
+				"GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
 				") AS average " +
 				"ORDER BY average";
 	}
 
-	private void printRS(ResultSet rs) throws SQLException {
-		while(rs.next()) {
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(rs.getDate("release_year"));
+	private ResultInfo createRI(ResultSet rs) throws SQLException {
+		ArrayList<String> columns = new ArrayList<>();
+		columns.add("Title");
+		columns.add("Release Year");
+		columns.add("Rating");
 
-			System.out.println(rs.getString("title") + " (" + calendar.get(Calendar.YEAR) + ")");
-		}
+		ArrayList<ArrayList<String>> data = new ArrayList<>();
 
+		rs.next();
+		ArrayList<String> line = new ArrayList<>();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(rs.getDate("release_year"));
+
+		Float average = (float) (rs.getInt("one") + rs.getInt("two") * 2 + rs.getInt("three") * 3 + rs.getInt("four") * 4 + rs.getInt("five") * 5)
+				/ (rs.getInt("one") + rs.getInt("two") + rs.getInt("three") + rs.getInt("four") + rs.getInt("five"));
+
+		line.add(rs.getString("title"));
+		line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+		line.add(String.format("%.2f", average));
+
+		data.add(line);
+
+		return new ResultInfo(TITLE, columns, data);
 	}
 
 }

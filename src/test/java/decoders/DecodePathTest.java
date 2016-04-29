@@ -27,10 +27,9 @@ public class DecodePathTest {
         assertEquals(resources,path);
     }
 
-    @Test
+    @Test(expected=InvalidCommandPathException.class)
     public void PathExecute_Method() throws Exception {
         Collection<String> path = DecodePath.decode("EXIT");
-        assertEquals(null,path);
     }
 
     @Test
@@ -40,17 +39,15 @@ public class DecodePathTest {
         assertEquals(resources,path);
     }
 
-    @Test
+    @Test(expected=InvalidCommandPathException.class)
     public void PathExecute_isEmpty() throws Exception {
         String [] aux = new String[]{"GET",""};
         Collection<String> path = DecodePath.decode(aux);
-        assertEquals(null,path);
     }
 
-    @Test
+    @Test(expected=InvalidCommandPathException.class)
     public void PathExecute_isNull() throws Exception {
         String [] aux = new String[]{null,null};
         Collection<String> path = DecodePath.decode(aux);
-        assertEquals(null,path);
     }
 }

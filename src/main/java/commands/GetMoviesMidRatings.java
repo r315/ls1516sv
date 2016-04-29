@@ -11,8 +11,8 @@ import java.util.*;
 
 
 public class GetMoviesMidRatings implements ICommand {
-    private final String INFO = "returns the rating information for the movie identified by mid.";
-    private final String TITLE = "Ratings do filme "; //Adicionar titulo ao retornar
+    private static final String INFO = "GET /movies/{mid}/ratings - returns the rating information for the movie identified by mid.";
+    private final String TITLE = "'s Ratings"; //Adicionar titulo ao retornar
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -51,7 +51,6 @@ public class GetMoviesMidRatings implements ICommand {
                 "SELECT Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
                 "FROM Movie " +
                 "LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
-                "LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
                 "LEFT JOIN ( " +
                         "SELECT movie_id, [1], [2], [3], [4], [5] " +
                         "FROM " +
@@ -70,7 +69,7 @@ public class GetMoviesMidRatings implements ICommand {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Titulo");
         columns.add("Ano de Lançamento");
-        columns.add("Average");
+        columns.add("Average Rating");
         columns.add("One");
         columns.add("Two");
         columns.add("Three");
@@ -99,7 +98,7 @@ public class GetMoviesMidRatings implements ICommand {
 
         data.add(line);
 
-        return new ResultInfo(TITLE + rs.getString("title"), columns, data);
+        return new ResultInfo(rs.getString("title") + TITLE, columns, data);
 
     }
 }
