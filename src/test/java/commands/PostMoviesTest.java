@@ -1,10 +1,17 @@
 package commands;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 
 import Strutures.CommandInfo;
+import Strutures.ResultInfo;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,19 +19,26 @@ import sqlserver.ConnectionFactory;
 
 public class PostMoviesTest {
 	CommandInfo cmdInf;
-	@Before
-	public void removeIfExists() throws SQLException{		
-			Connection conn = ConnectionFactory.getConn();
-			Statement stmt= conn.createStatement();
-	        stmt.executeUpdate("delete from Movie where title='filme' and release_year='2016-01-01 00:00:00'");
-	        stmt.close();		
-	}
 	
 	@Test
 	public void shouldPostMovieOnDataBase() throws Exception{
-		PostMovies pm = new PostMovies();
-		cmdInf = new CommandInfo("POST","/movies","title=filme&release_year=2016");		
-		pm.execute(cmdInf.getResources(),cmdInf.getParameters());		
+		HashMap<String,String> data = new HashMap<String,String>();    	
+    	data.put("title", "Speed");    	
+    	data.put("release_year", "2000");
+    	
+    	PostMovies pm = new PostMovies();
+    	ResultInfo ri = pm.execute(data);
+    	
+    	assertNotNull(ri);    	
+    	assertEquals(1,ri.getValues().size());    	
 	}
 
+	 @After
+	    public void clean() throws SQLException{
+	    	try (Connection conn = ConnectionFactory.getConn()) {
+	            Statement stmt = conn.createStatement();
+	            stmt.execute("delete from Movie where title = 'Speed'");
+	            stmt.close();
+	        }
+	    }
 }

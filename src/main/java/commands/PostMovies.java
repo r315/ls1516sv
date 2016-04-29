@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import Strutures.ICommand;
@@ -14,9 +16,11 @@ import sqlserver.ConnectionFactory;
 public class PostMovies implements ICommand {
 	private final String INFO = "creates a new movie, given the parameters \"title\" and \"releaseYear\"";
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
+	private static final String TITLE = "Movie inserted with ID: ";
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
+		ResultInfo ri = null;
 		try(Connection conn = ConnectionFactory.getConn())
 		{			
 			String title = data.get("title");
@@ -32,26 +36,25 @@ public class PostMovies implements ICommand {
 
 			if(res != 0){
 				ResultSet rs = pstmt.getGeneratedKeys();
-				printRS(rs);
+				ri = new ResultInfo();
+				ArrayList<ArrayList<String>> rdata=new ArrayList<>();
+				 while(rs.next()) {
+					 ri.setTitles(Arrays.asList(TITLE));
+					 ArrayList<String> line = new ArrayList<String>();
+					 line.add(Integer.toString(rs.getInt(1)));
+					 rdata.add(line);
+					 ri.setValues(rdata);			        	
+			        }
 			}			
 			pstmt.close();			
-		}
-
-		//Builderino stuff
-		ResultInfo stuff = new ResultInfo();
-		return stuff;
+		}		
+		return ri;
     }
 
 	@Override
 	public String getInfo() {
 		return INFO;
 	}
-
-	private void printRS(ResultSet rs) throws SQLException {
-        while(rs.next()) {
-        	System.out.println("Movie inserted with ID: "+ rs.getInt(1));
-        }
-    }
     
     private String dateParser(String year){
     	return "01-01-"+year+" 00:00:00";

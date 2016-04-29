@@ -2,15 +2,13 @@ package structures;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import Strutures.HtmlResult;
 import Strutures.ResultInfo;
 
+//TODO: improve tests
 public class HtmlResultTest {
 	public static HtmlResult hr;
 	
@@ -29,17 +27,19 @@ public class HtmlResultTest {
 		createHtml();
 		hr.writeToFile("HtmlOut.html");		
 	}
-	
-	
-	private ResultInfo createResultInfo(){
 		
+	private ResultInfo createResultInfo(){
+		int rows = 4;
+		int cols = 4;
 		 ArrayList<String> columns = new ArrayList<>();
 		 ArrayList<ArrayList<String>> data = new ArrayList<>();
 		 
-		 for(int i = 0; i<4;i++){
+		 for(int i = 0; i<rows;i++){
 			 columns.add("Column Title "+(i+1));
 			 ArrayList<String> line = new ArrayList<String>();
-			 line.add("Line "+i);
+			 for(int j = 0; j < cols ;j++){
+				 line.add("Data "+j);
+			 }
 			 data.add(line);
 		 }
 		 return new ResultInfo("Teste",columns,data);
