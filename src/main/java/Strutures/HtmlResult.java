@@ -1,17 +1,21 @@
 package Strutures;
 
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import exceptions.HtmlTreeNotCreatedException;
+
 /**
- * Created by Red on 24/04/2016.
+ * Created hugo reis on 27/04/2016 
  */
 public class HtmlResult implements IResult {
-	private String html;
+	private String html = null;
 	
-    public void display(ResultInfo resultInfo){
+    public void display(ResultInfo resultInfo){    	
+    	if(resultInfo == null) 
+    		return;
+    	
     	HtmlNode root = new HtmlNode("html");  
     	HtmlNode node = new HtmlNode("head");     	
     	
@@ -20,7 +24,8 @@ public class HtmlResult implements IResult {
     	node.addChild(new HtmlNode("style","table, th, td { border: 1px solid black; border-collapse: collapse;}"));
     	root.addChild(node);
     	
-    	HtmlNode table = new HtmlNode("table style=\"width:100%\"");
+    	HtmlNode table = new HtmlNode("table");
+    	table.addAttributes("style=\"width:100%\"");
     	table.addChild(addDataToRow(new HtmlNode("tr"),"th",resultInfo.getTitles()));
     	for(ArrayList<String> line: resultInfo.getValues()){
     		table.addChild(addDataToRow(new HtmlNode("tr"),"td",line));
@@ -30,8 +35,7 @@ public class HtmlResult implements IResult {
     	node.addChild(table);    	
     	root.addChild(node); 
     	
-    	html = "<!DOCTYPE html>" + root.getHtml();
-    	System.out.println(html);
+    	html = "<!DOCTYPE html>\n" + root.getHtml(0);    	
     }
     
     
@@ -42,15 +46,22 @@ public class HtmlResult implements IResult {
     	return row;
     }
     
-    public void writeToFile(String filename) throws FileNotFoundException{    	
+    public void writeToFile(String filename) throws Exception{ 
+    	if(html == null)
+    		throw new HtmlTreeNotCreatedException();
+    	if(filename == null){
+    		System.out.println(html);
+    	}else{
     	try(  PrintWriter file = new PrintWriter(filename)) {
     	    file.println(html);
+    	}
     	}
     }    
     
     class HtmlNode{
     	private String tag = "";
-    	private String content ="";    	
+    	private String content =""; 
+    	private String attributes = "";
     	private Collection<HtmlNode> childs;
     	
     	public HtmlNode(String tag){
@@ -63,20 +74,36 @@ public class HtmlResult implements IResult {
     		this.content = content;
     	}
     	
+    	
     	public void addContent(String content){
     		this.content = content;
+    	}
+    	
+    	public void addAttributes(String attributes){
+    		this.attributes = " " + attributes;
     	}
     	
     	public void addChild(HtmlNode node){
     		childs.add(node);
     	}
     	
-    	public String getHtml(){    		
-    		StringBuffer sb = new StringBuffer("<" + tag +">");    		
+    	public String getHtml(int level){    		
+    		StringBuffer sb = new StringBuffer();
+    		StringBuffer tabs = new StringBuffer("\n");
+    		
+    		for(int i = 0; i < level; i++) tabs.append("\t");    		
+    		
+    		sb.append(tabs + "<" + tag + attributes + ">");
+    		
     		for(HtmlNode child : childs){
-    			sb.append(child.getHtml());
-    		} 
-    		sb.append(content + "</" + tag + ">");
+    			sb.append(child.getHtml(level+1));
+    		}
+    		
+    		if(content.length()!=0)
+    			sb.append(content + "</" + tag + ">");
+    		else
+    			sb.append(tabs + "</" + tag + ">");
+    		
     		return  sb.toString();
     	}
     	
