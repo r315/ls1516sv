@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GetMoviesMidReviewsRid implements ICommand {
-    public static final String INFO = "GET /movies/{mid}/reviews/{rid} - returns the full information for the review rid of the movie identified by mid.";
+    private static final String INFO = "GET /movies/{mid}/reviews/{rid} - returns the full information for the review rid of the movie identified by mid.";
     private final String TITLE = "'s Review by "; //Movie title before, Username after
 
     @Override
@@ -71,7 +71,7 @@ public class GetMoviesMidReviewsRid implements ICommand {
 
         line.add(rs.getString("review_id"));
         line.add(rs.getString("name"));
-        line.add(rs.getString("ratings"));
+        line.add(rs.getString("rating"));
         line.add(rs.getString("summary"));
         line.add(rs.getString("review"));
 

@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
-	public static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
+	private static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*
 		POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the following parameters

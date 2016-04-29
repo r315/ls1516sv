@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsRatingsLowerAverage implements ICommand {
-	public static final String INFO = "GET /tops/ratings/lower/average - returns the detail for the movie with the lower average rating.";
+	private static final String INFO = "GET /tops/ratings/lower/average - returns the detail for the movie with the lower average rating.";
 	private final String TITLE = "Movie with lowest average rating";
 
 	@Override

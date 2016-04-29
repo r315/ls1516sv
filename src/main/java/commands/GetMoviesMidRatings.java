@@ -11,7 +11,7 @@ import java.util.*;
 
 
 public class GetMoviesMidRatings implements ICommand {
-    public static final String INFO = "GET /movies/{mid}/ratings - returns the rating information for the movie identified by mid.";
+    private static final String INFO = "GET /movies/{mid}/ratings - returns the rating information for the movie identified by mid.";
     private final String TITLE = "'s Ratings"; //Adicionar titulo ao retornar
 
     @Override
@@ -51,7 +51,6 @@ public class GetMoviesMidRatings implements ICommand {
                 "SELECT Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
                 "FROM Movie " +
                 "LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
-                "LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
                 "LEFT JOIN ( " +
                         "SELECT movie_id, [1], [2], [3], [4], [5] " +
                         "FROM " +

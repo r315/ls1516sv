@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsNRatingsHigherAverage implements ICommand {
-	public static final String INFO = "GET /tops/{n}/ratings/higher/average - returns a list with the n movies with higher average ratings, sorted decreasingly.";
+	private static final String INFO = "GET /tops/{n}/ratings/higher/average - returns a list with the n movies with higher average ratings, sorted decreasingly.";
 	private final String TITLE = " Movies with higher average ratings"; //Add n before
 
 	@Override

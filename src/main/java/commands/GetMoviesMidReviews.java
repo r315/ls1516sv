@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GetMoviesMidReviews implements ICommand {
-    public static final String INFO = "GET /movies/{mid}/reviews - returns all the reviews for the movie identified by mid.";
+    private static final String INFO = "GET /movies/{mid}/reviews - returns all the reviews for the movie identified by mid.";
     private final String TITLE = "'s Reviews"; //Adicionar titulo ao retornar
 
     @Override
@@ -79,16 +79,19 @@ public class GetMoviesMidReviews implements ICommand {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        while(rs.next()) {
+        rs.next();
+        String title = rs.getString("title");
+
+        do {
             ArrayList<String> line = new ArrayList<>();
 
             line.add(rs.getString("review_id"));
             line.add(rs.getString("name"));
-            line.add(rs.getString("ratings"));
+            line.add(rs.getString("rating"));
             line.add(rs.getString("summary"));
 
             data.add(line);
-        }
-        return new ResultInfo(rs.getString("title") + TITLE, columns, data);
+        } while(rs.next());
+        return new ResultInfo(title + TITLE, columns, data);
     }
 }

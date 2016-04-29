@@ -1,9 +1,6 @@
 package commands;
 
-import Strutures.CNode;
-import Strutures.CommandInfo;
 import Strutures.ResultInfo;
-import logic.MapManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,7 +52,7 @@ public class GetMoviesMidRatingsTest {
     }
 
     @Test
-    public void GetMoviesMidExecute()throws Exception{
+    public void GetMoviesMidRatingsExecute()throws Exception{
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 

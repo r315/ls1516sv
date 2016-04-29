@@ -1,6 +1,7 @@
 package commands;
 
 import Strutures.ResultInfo;
+import exceptions.InvalidCommandVariableException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,5 +62,33 @@ public class GetMoviesMidTest {
         GetMoviesMid stuff = new GetMoviesMid();
         ResultInfo rs = stuff.execute(param);
         assertEquals(result.getValues(),rs.getValues());
+    }
+
+    @Test
+    public void GetMoviesMidExecute_InvalidMid()throws Exception{
+        Collection<String> title = new ArrayList<>();
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
+        ResultInfo result = new ResultInfo(null,title,data);
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("mid","10");
+
+        /* --- */
+
+        GetMoviesMid stuff = new GetMoviesMid();
+        ResultInfo rs = stuff.execute(param);
+        assertEquals(result.getValues(),rs.getValues());
+    }
+
+    @Test(expected=InvalidCommandVariableException.class)
+    public void GetMoviesMidExecute_MidIsntNumber()throws Exception{
+        HashMap<String, String> param = new HashMap<>();
+        param.put("mid","one");
+
+        /* --- */
+
+        GetMoviesMid stuff = new GetMoviesMid();
+        ResultInfo rs = stuff.execute(param);
     }
 }

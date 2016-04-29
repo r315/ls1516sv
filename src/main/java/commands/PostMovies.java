@@ -12,7 +12,7 @@ import exceptions.InvalidCommandParameters;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
-	public static final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
+	private static final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
 
 	// TODO: Rollback

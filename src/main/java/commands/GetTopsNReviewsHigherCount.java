@@ -15,7 +15,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsNReviewsHigherCount implements ICommand {
-	public static final String INFO = "GET /tops/{n}/reviews/higher/count - returns a list with the n movies with higher review count.";
+	private static final String INFO = "GET /tops/{n}/reviews/higher/count - returns a list with the n movies with higher review count.";
 	private final String TITLE = " Movies with higher review count"; //Add n before
 
 	@Override

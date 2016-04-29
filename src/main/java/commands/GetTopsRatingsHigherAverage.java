@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsRatingsHigherAverage implements ICommand {
-    public static final String INFO = "GET /tops/ratings/higher/average - returns the detail for the movie with the higher average rating.";
+    private static final String INFO = "GET /tops/ratings/higher/average - returns the detail for the movie with the higher average rating.";
     private final String TITLE = "Movie with higher average rating";
 
     @Override

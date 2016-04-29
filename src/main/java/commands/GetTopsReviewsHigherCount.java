@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 public class GetTopsReviewsHigherCount implements ICommand {
-	public static final String INFO = "GET /tops/reviews/higher/count - returns the detail for the movie with most reviews.";
+	private static final String INFO = "GET /tops/reviews/higher/count - returns the detail for the movie with most reviews.";
 	private final String TITLE = "Movie with most reviews";
 
 	@Override

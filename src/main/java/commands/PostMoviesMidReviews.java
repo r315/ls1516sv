@@ -23,7 +23,7 @@ rating - the review rating
 */
 
 public class PostMoviesMidReviews implements ICommand {
-	public static final String INFO = "POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the parameters \"reviewerName\", \"reviewSummary\", \"review\" and \"rating\"";
+	private static final String INFO = "POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the parameters \"reviewerName\", \"reviewSummary\", \"review\" and \"rating\"";
 
 	private static final String INSERT = "insert into Review(movie_id,name,review,summary,rating) values(?,?,?,?,?)";
 	private static final int NPARAM = 4;
