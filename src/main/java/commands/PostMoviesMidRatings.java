@@ -11,9 +11,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
+	private static final String TITLE = "Movie inserted with ID: ";
 	private static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*
@@ -25,6 +28,7 @@ public class PostMoviesMidRatings implements ICommand {
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws Exception {
+		ResultInfo ri = null;
 		try(Connection conn = ConnectionFactory.getConn())
 		{
 			String rID= getRating(data.get("rating"));
@@ -43,28 +47,19 @@ public class PostMoviesMidRatings implements ICommand {
 			int res = pstmt.executeUpdate();
 
 			if(res != 0){
-				ResultSet rs = pstmt.getGeneratedKeys();
-				printRS(rs);
+				ri = createResultInfo(pstmt.getGeneratedKeys());
+				
 			}
 			pstmt.close();
 
-		}
-
-		//Builderino stuff
-		ResultInfo stuff = new ResultInfo();
-		return stuff;
+		}		
+		return ri;
 	}
 
 	@Override
 	public String getInfo() {
 		return INFO;
-	}
-
-	private void printRS(ResultSet rs) throws SQLException {
-		while(rs.next()) {
-			System.out.println("Review inserted with ID: "+ rs.getInt(1));
-		}
-	}
+	}	
 
 	private String getQuery(String rID){
 		return 	"update Rating " +
@@ -82,5 +77,19 @@ public class PostMoviesMidRatings implements ICommand {
 		m.put("5","five");
 		return m.get(r);
 	}
+	
+	//this could be on ResultInfo
+    private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
+    	ResultInfo ri = new ResultInfo();
+		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
+		 while(rs.next()) {
+			 ri.setTitles(Arrays.asList(TITLE));
+			 ArrayList<String> line = new ArrayList<String>();
+			 line.add(Integer.toString(rs.getInt(1)));
+			 rdata.add(line);
+			 ri.setValues(rdata);			        	
+	        }
+		 return ri;
+    }
 
 }

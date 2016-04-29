@@ -12,7 +12,6 @@ import Strutures.CommandInfo;
 import Strutures.ResultInfo;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;

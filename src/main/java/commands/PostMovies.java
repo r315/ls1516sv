@@ -34,17 +34,8 @@ public class PostMovies implements ICommand {
 			pstmt.setString(2,date);        
 			int res = pstmt.executeUpdate();
 
-			if(res != 0){
-				ResultSet rs = pstmt.getGeneratedKeys();
-				ri = new ResultInfo();
-				ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-				 while(rs.next()) {
-					 ri.setTitles(Arrays.asList(TITLE));
-					 ArrayList<String> line = new ArrayList<String>();
-					 line.add(Integer.toString(rs.getInt(1)));
-					 rdata.add(line);
-					 ri.setValues(rdata);			        	
-			        }
+			if(res != 0){				
+				ri = createResultInfo(pstmt.getGeneratedKeys());
 			}			
 			pstmt.close();			
 		}		
@@ -58,6 +49,20 @@ public class PostMovies implements ICommand {
     
     private String dateParser(String year){
     	return "01-01-"+year+" 00:00:00";
+    }
+    
+    //this could be on ResultInfo
+    private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
+    	ResultInfo ri = new ResultInfo();
+		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
+		 while(rs.next()) {
+			 ri.setTitles(Arrays.asList(TITLE));
+			 ArrayList<String> line = new ArrayList<String>();
+			 line.add(Integer.toString(rs.getInt(1)));
+			 rdata.add(line);
+			 ri.setValues(rdata);			        	
+	        }
+		 return ri;
     }
 
 }

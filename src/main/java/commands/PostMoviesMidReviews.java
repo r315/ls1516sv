@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -23,6 +24,7 @@ rating - the review rating
 */
 
 public class PostMoviesMidReviews implements ICommand {
+	private static final String TITLE = "Movie inserted with ID: ";
 	private static final String INFO = "POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the parameters \"reviewerName\", \"reviewSummary\", \"review\" and \"rating\"";
 
 	private static final String INSERT = "insert into Review(movie_id,name,review,summary,rating) values(?,?,?,?,?)";
@@ -32,6 +34,8 @@ public class PostMoviesMidReviews implements ICommand {
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws Exception{
+		ResultInfo ri = null;
+		
 		try(Connection conn = ConnectionFactory.getConn())
 		{
 			Collection<String> values = new ArrayList<String>(); 
@@ -54,16 +58,12 @@ public class PostMoviesMidReviews implements ICommand {
 			int res = pstmt.executeUpdate();
 
 			if(res != 0){
-				ResultSet rs = pstmt.getGeneratedKeys();
-				printRS(rs);
+				ri = createResultInfo( pstmt.getGeneratedKeys());
+			
 			}			
 			pstmt.close();
-
-		}
-
-		//Builderino stuff
-		ResultInfo stuff = new ResultInfo();
-		return stuff;
+		}		
+		return ri;
 	}
 
 	@Override
@@ -71,10 +71,18 @@ public class PostMoviesMidReviews implements ICommand {
 		return INFO;
 	}
 
-	private void printRS(ResultSet rs) throws SQLException {
-		while(rs.next()) {
-			System.out.println("Review inserted with ID: "+ rs.getInt(1));
-		}
-	}
+	//this could be on ResultInfo
+    private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
+    	ResultInfo ri = new ResultInfo();
+		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
+		 while(rs.next()) {
+			 ri.setTitles(Arrays.asList(TITLE));
+			 ArrayList<String> line = new ArrayList<String>();
+			 line.add(Integer.toString(rs.getInt(1)));
+			 rdata.add(line);
+			 ri.setValues(rdata);			        	
+	        }
+		 return ri;
+    }
 
 }
