@@ -47,24 +47,26 @@ public class GetMoviesMidRatings implements ICommand {
     }
 
     private String getQuery() {
-        return "SELECT title, release_year, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five " +
-                "FROM " +
-                "(" +
-                "SELECT Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
-                "FROM Movie " +
-                "LEFT JOIN Rating ON Movie.movie_id = Rating.movie_id " +
-                "LEFT JOIN ( " +
-                        "SELECT movie_id, [1], [2], [3], [4], [5] " +
-                        "FROM " +
-                        "(SELECT movie_id, rating FROM Review GROUP BY rating, movie_ID) AS SourceTable " +
-                        "PIVOT " +
-                        "( " +
-                                "COUNT(SourceTable.rating) " +
-                                "FOR rating IN ([1], [2], [3], [4], [5]) " +
-                        ") AS SourceTable) AS reviewRatings ON reviewRatings.movie_id = Movie.movie_id " +
-                "WHERE Movie.movie_id = ? " +
-                "GROUP BY Movie.title, Movie.release_year, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5] " +
-                ") AS average";
+        return "SELECT Movie.*, ((one * 1. + two * 2 + three * 3 + four * 4 + five * 5) / nullif((one + two + three + four + five),0) ) as rating, one, two, three, four, five\n" +
+                "FROM Movie\n" +
+                "LEFT JOIN (\n" +
+                "SELECT movie_id, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five\n" +
+                "FROM\n" +
+                "(\n" +
+                "SELECT Rating.movie_id, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5]\n" +
+                "FROM Rating\n" +
+                "FULL JOIN (\n" +
+                "SELECT movie_id, [1], [2], [3], [4], [5]\n" +
+                "FROM\n" +
+                "(SELECT movie_id, rating FROM Review GROUP BY rating, movie_ID) AS SourceTable\n" +
+                "PIVOT\n" +
+                "(\n" +
+                "COUNT(SourceTable.rating)\n" +
+                "FOR rating IN ([1], [2], [3], [4], [5])\n" +
+                ") AS SourceTable) AS reviewRatings ON reviewRatings.movie_id = Rating.movie_id\n" +
+                "GROUP BY Rating.movie_id, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5]\n" +
+                ") AS average) AS ratings ON ratings.movie_id = Movie.movie_id\n" +
+                "WHERE Movie.movie_id = ?";
     }
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
@@ -86,12 +88,9 @@ public class GetMoviesMidRatings implements ICommand {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(rs.getDate("release_year"));
 
-        Float average = (float) (rs.getInt("one") + rs.getInt("two") * 2 + rs.getInt("three") * 3 + rs.getInt("four") * 4 + rs.getInt("five") * 5)
-                / (rs.getInt("one") + rs.getInt("two") + rs.getInt("three") + rs.getInt("four") + rs.getInt("five"));
-
         line.add(rs.getString("title"));
         line.add(Integer.toString(calendar.get(Calendar.YEAR)));
-        line.add(String.format(Locale.FRENCH,"%.2f", average));
+        line.add(String.format(Locale.FRENCH,"%.2f", rs.getFloat("rating")));
         line.add(rs.getString("one"));
         line.add(rs.getString("two"));
         line.add(rs.getString("three"));
