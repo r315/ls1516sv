@@ -2,7 +2,7 @@ package commands;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
@@ -23,7 +23,7 @@ public class PostCollections implements ICommand {
         String desc = data.get("description");
 
         if(name == null || desc == null)
-            throw new InvalidCommandParameters();
+            throw new InvalidCommandParametersException();
 
         try(Connection conn = ConnectionFactory.getConn()) {
             PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);

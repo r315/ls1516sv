@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
@@ -27,7 +27,7 @@ public class PostMovies implements ICommand {
 			String date = data.get("releaseYear");
 
 			if(title == null || date == null)
-				throw new InvalidCommandParameters();
+				throw new InvalidCommandParametersException();
 			
 			PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setString(1,title);			

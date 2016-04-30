@@ -2,7 +2,7 @@ package commands;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 
@@ -29,7 +29,7 @@ public class PostCollectionsCidMovies implements ICommand {
             cid = Utils.getInt(data.get("cid"));
             mid = Utils.getInt(data.get("mid"));
         } catch (NumberFormatException e) {
-            throw new InvalidCommandParameters();
+            throw new InvalidCommandParametersException();
         }
 
         try(Connection conn = ConnectionFactory.getConn()) {
