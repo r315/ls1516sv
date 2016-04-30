@@ -76,17 +76,16 @@ public class PostMoviesMidRatings implements ICommand {
 	}
 	
 	//this could be on ResultInfo
-    private static ResultInfo createResultInfo(ResultSet rs) throws SQLException{
-    	ResultInfo ri = new ResultInfo();
-		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-		 while(rs.next()) {
-			 ri.setTitles(Arrays.asList(TITLE));
-			 ArrayList<String> line = new ArrayList<String>();
-			 line.add(Integer.toString(rs.getInt(1)));
-			 rdata.add(line);
-			 ri.setValues(rdata);			        	
-	        }
-		 return ri;
-    }
+	private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
+		ArrayList<String> columns = new ArrayList<>();
+		columns.add("Rating ID");
+		ArrayList<ArrayList<String>> rdata = new ArrayList<>();
+		while(rs.next()) {
+			ArrayList<String> line = new ArrayList<String>();
+			line.add(Integer.toString(rs.getInt(1)));
+			rdata.add(line);
+		}
+		return new ResultInfo(TITLE,columns,rdata);
+	}
 
 }

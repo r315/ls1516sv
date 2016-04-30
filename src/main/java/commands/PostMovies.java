@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import Strutures.ICommand;
@@ -16,7 +15,7 @@ import sqlserver.ConnectionFactory;
 public class PostMovies implements ICommand {
 	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
-	private static final String TITLE = "Movie ID";
+	private static final String TITLE = "Movie Insertion";
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -49,16 +48,15 @@ public class PostMovies implements ICommand {
     
     //this could be on ResultInfo
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
-    	ResultInfo ri = new ResultInfo();
-		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-		 while(rs.next()) {
-			 ri.setTitles(Arrays.asList(TITLE));
-			 ArrayList<String> line = new ArrayList<String>();
-			 line.add(Integer.toString(rs.getInt(1)));
-			 rdata.add(line);
-			 ri.setValues(rdata);			        	
-	        }
-		 return ri;
+    	ArrayList<String> columns = new ArrayList<>();
+    	columns.add("Movie ID");
+    	ArrayList<ArrayList<String>> rdata=new ArrayList<>();
+    	while(rs.next()) {			
+    		ArrayList<String> line = new ArrayList<String>();
+    		line.add(Integer.toString(rs.getInt(1)));
+    		rdata.add(line);						        	
+    	}
+    	return new ResultInfo(TITLE,columns,rdata);
     }
 
 }

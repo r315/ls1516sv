@@ -1,5 +1,6 @@
 package Strutures;
 
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +54,7 @@ public class HtmlResult implements IResult {
     	return row;
     }
     
-    public void writeToFile(String filename) throws Exception{ 
+    public void writeToFile(String filename) throws HtmlTreeNotCreatedException, FileNotFoundException{ 
     	if(html == null)
     		throw new HtmlTreeNotCreatedException();
     	if(filename == null){
