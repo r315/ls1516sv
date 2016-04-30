@@ -24,13 +24,18 @@ public class PostMovies implements ICommand {
 		ResultInfo ri = null;		
 		String title = data.get("title");
 		String date = data.get("releaseYear");
+		PreparedStatement movieinsert = null;
+		PreparedStatement ratinginsert = null;
+		Connection conn = null;
 
 		if(title == null || date == null)
 			throw new InvalidCommandParametersException();
 		
-		try(Connection conn = ConnectionFactory.getConn()){			
-			PreparedStatement movieinsert = conn.prepareStatement(INSERT_MOVIE,PreparedStatement.RETURN_GENERATED_KEYS);
-			PreparedStatement ratinginsert = conn.prepareStatement(INSERT_RATING);
+		try{
+			conn = ConnectionFactory.getConn();
+			conn.setAutoCommit(false);
+			movieinsert = conn.prepareStatement(INSERT_MOVIE,PreparedStatement.RETURN_GENERATED_KEYS);
+			ratinginsert = conn.prepareStatement(INSERT_RATING);
 			
 			movieinsert.setString(1,title);			
 			movieinsert.setString(2,date+"0101");        
@@ -40,10 +45,29 @@ public class PostMovies implements ICommand {
 				ri = createResultInfo(movieinsert.getGeneratedKeys());				
 				ratinginsert.setInt(1,mid);
 				ratinginsert.executeUpdate();			
-			}			
-			movieinsert.close();	
-			ratinginsert.close();
-		}		
+			}	
+			conn.commit();
+			
+		}catch(SQLException e){
+			if (conn != null) {
+	            try {	                
+	                conn.rollback();
+	            } catch(SQLException excep) {
+	                throw e;
+	            }
+	        }
+			
+		}finally{
+			if(movieinsert != null)
+				movieinsert.close();
+			if(ratinginsert != null)
+				ratinginsert.close();
+		}
+		
+		
+		
+		
+		
 		return ri;
     }
 
