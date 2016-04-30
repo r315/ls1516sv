@@ -60,6 +60,8 @@ public class PostCollections implements ICommand {
 
         ArrayList<String> line = new ArrayList<>();
 
+        rs.next();
+
         line.add(Long.toString(rs.getLong(1)));
 
         data.add(line);
