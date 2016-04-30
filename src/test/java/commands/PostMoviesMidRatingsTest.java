@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Created by Red on 09/04/2016.
  */
@@ -34,7 +36,7 @@ public class PostMoviesMidRatingsTest {
 
 			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('x','20000101')");
 
-			stmt.executeUpdate("DELETE Movie");
+			stmt.executeUpdate("DELETE FROM Movie WHERE title='x'");
 
 			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
 
@@ -70,13 +72,18 @@ public class PostMoviesMidRatingsTest {
     	data.put("rating", "5");
 		data.put("mid", "1");
 
+		ArrayList<ArrayList<String>> resdata = new ArrayList<>();
+
+		ResultInfo result = new ResultInfo(null,new ArrayList<>(1),resdata);
+
+		ArrayList<String> line1 = new ArrayList<>(); line1.add("Success");
+
+		resdata.add(line1);
+
     	ResultInfo ri = new PostMoviesMidRatings().execute(data);
-    	Iterator<ArrayList<String>> it = ri.getValues().iterator();
-    	while(it.hasNext()){
-    		List<String> s = it.next();
-    		movieid = Integer.parseInt(s.get(0));
-    	}
-    	
+
+		assertEquals(ri.getValues(),result.getValues());
+
 	}
 
 }

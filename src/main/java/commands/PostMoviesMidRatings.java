@@ -84,8 +84,8 @@ public class PostMoviesMidRatings implements ICommand {
 		columns.add("Rating updated");
 		ArrayList<ArrayList<String>> rdata = new ArrayList<>();
 		while(rs.next()) {
-			ArrayList<String> line = new ArrayList<String>();
-			line.add("");
+			ArrayList<String> line = new ArrayList<>();
+			line.add("Success");
 			rdata.add(line);
 		}
 		return new ResultInfo(TITLE,columns,rdata);
