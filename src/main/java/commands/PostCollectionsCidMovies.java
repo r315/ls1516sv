@@ -25,7 +25,7 @@ public class PostCollectionsCidMovies implements ICommand {
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
         int cid, mid;
 
-        if (data == null) throw new InvalidCommandParameters();
+        if (data == null) throw new InvalidCommandParametersException();
 
         try {
             cid = Utils.getInt(data.get("cid"));
