@@ -14,28 +14,35 @@ import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
 	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
-	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
+	private static final String INSERT_MOVIE = "insert into Movie(title,release_year) values(?,?)";
+	private static final String INSERT_RATING = "insert into Rating(movie_id,one,two,three,four,five) values(?,0,0,0,0,0)";
 	private static final String TITLE = "Movie Insertion";
+	int mid;
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
-		ResultInfo ri = null;
-		try(Connection conn = ConnectionFactory.getConn())
-		{			
-			String title = data.get("title");
-			String date = data.get("releaseYear");
+		ResultInfo ri = null;		
+		String title = data.get("title");
+		String date = data.get("releaseYear");
 
-			if(title == null || date == null)
-				throw new InvalidCommandParametersException();
+		if(title == null || date == null)
+			throw new InvalidCommandParametersException();
+		
+		try(Connection conn = ConnectionFactory.getConn()){			
+			PreparedStatement movieinsert = conn.prepareStatement(INSERT_MOVIE,PreparedStatement.RETURN_GENERATED_KEYS);
+			PreparedStatement ratinginsert = conn.prepareStatement(INSERT_RATING);
 			
-			PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1,title);			
-			pstmt.setString(2,date+"0101");        
-			int res = pstmt.executeUpdate();
-			if(res != 0){				
-				ri = createResultInfo(pstmt.getGeneratedKeys());
+			movieinsert.setString(1,title);			
+			movieinsert.setString(2,date+"0101");        
+			mid = movieinsert.executeUpdate();		
+
+			if(mid != 0){				
+				ri = createResultInfo(movieinsert.getGeneratedKeys());				
+				ratinginsert.setInt(1,mid);
+				ratinginsert.executeUpdate();			
 			}			
-			pstmt.close();			
+			movieinsert.close()	
+			ratinginsert.close();
 		}		
 		return ri;
     }
@@ -43,7 +50,7 @@ public class PostMovies implements ICommand {
 	@Override
 	public String getInfo() {
 		return INFO;
-	}    
+	}
     
     //this could be on ResultInfo
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
@@ -52,7 +59,8 @@ public class PostMovies implements ICommand {
     	ArrayList<ArrayList<String>> rdata=new ArrayList<>();
     	while(rs.next()) {			
     		ArrayList<String> line = new ArrayList<String>();
-    		line.add(Integer.toString(rs.getInt(1)));
+    		mid = rs.getInt(1);
+    		line.add(Integer.toString(mid));
     		rdata.add(line);						        	
     	}
     	return new ResultInfo(TITLE,columns,rdata);
