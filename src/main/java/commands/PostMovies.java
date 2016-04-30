@@ -32,7 +32,6 @@ public class PostMovies implements ICommand {
 			pstmt.setString(1,title);			
 			pstmt.setString(2,date+"0101");        
 			int res = pstmt.executeUpdate();
-
 			if(res != 0){				
 				ri = createResultInfo(pstmt.getGeneratedKeys());
 			}			
