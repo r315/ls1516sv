@@ -91,7 +91,7 @@ public class GetMoviesMidRatings implements ICommand {
 
         line.add(rs.getString("title"));
         line.add(Integer.toString(calendar.get(Calendar.YEAR)));
-        line.add(String.format("%.2f", average));
+        line.add(String.format(Locale.FRENCH,"%.2f", average));
         line.add(rs.getString("one"));
         line.add(rs.getString("two"));
         line.add(rs.getString("three"));
