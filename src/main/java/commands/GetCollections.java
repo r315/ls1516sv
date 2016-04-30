@@ -23,7 +23,6 @@ public class GetCollections implements ICommand {
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
         Boolean topB = false;
         int skip = 0, top = 1;
-        String orderBy = "title";
 
         if (data != null) {
             topB = (data.get("top") != null);

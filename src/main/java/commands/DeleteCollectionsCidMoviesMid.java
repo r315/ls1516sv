@@ -6,10 +6,7 @@ import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,14 +30,23 @@ public class DeleteCollectionsCidMoviesMid implements ICommand {
             }
 
             // TODO: cid & mid doesn't exist
+
+            PreparedStatement pstmt = conn.prepareStatement("SELECT Movie.title, Collection.name FROM Has " +
+                    "INNER JOIN Movie ON Movie.movie_id = Has.movie_id " +
+                    "INNER JOIN Collection ON Collection.collection_id = Has.collection_id " +
+                    "WHERE Collection.collection_id = ? AND Movie.movie_id = ?");
+            pstmt.setInt(1,cid);
+            pstmt.setInt(2,mid);
+
+            ResultSet rs = pstmt.executeQuery();
             
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Has WHERE movie_id = ? AND collection_id = ?");
+            pstmt = conn.prepareStatement("DELETE FROM Has WHERE movie_id = ? AND collection_id = ?");
             pstmt.setInt(1,mid);
             pstmt.setInt(2,cid);
 
             pstmt.executeUpdate();
 
-            ResultInfo result = createRI();
+            ResultInfo result = createRI(rs);
 
             pstmt.close();
 
@@ -54,9 +60,12 @@ public class DeleteCollectionsCidMoviesMid implements ICommand {
         return INFO;
     }
 
-    private ResultInfo createRI() throws SQLException {
+    private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
-        columns.add("Movie removed");
+
+        rs.next();
+
+        columns.add(rs.getString("title") + " removed from collection " + rs.getString("name"));
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
