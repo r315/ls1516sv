@@ -10,6 +10,7 @@ import java.util.HashMap;
 import Strutures.ICommand;
 import Strutures.ResultInfo;
 import exceptions.InvalidCommandParametersException;
+import exceptions.SqlInsertionException;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
@@ -21,16 +22,24 @@ public class PostMovies implements ICommand {
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
-		ResultInfo ri = null;		
+		ResultInfo ri = null;	
+		if(data == null)
+			throw new InvalidCommandParametersException("Data is null");
+		
 		String title = data.get("title");
 		String date = data.get("releaseYear");
+		PreparedStatement movieinsert = null;
+		PreparedStatement ratinginsert = null;
+		Connection conn = null;
 
 		if(title == null || date == null)
 			throw new InvalidCommandParametersException();
 		
-		try(Connection conn = ConnectionFactory.getConn()){			
-			PreparedStatement movieinsert = conn.prepareStatement(INSERT_MOVIE,PreparedStatement.RETURN_GENERATED_KEYS);
-			PreparedStatement ratinginsert = conn.prepareStatement(INSERT_RATING);
+		try{
+			conn = ConnectionFactory.getConn();
+			conn.setAutoCommit(false);
+			movieinsert = conn.prepareStatement(INSERT_MOVIE,PreparedStatement.RETURN_GENERATED_KEYS);
+			ratinginsert = conn.prepareStatement(INSERT_RATING);
 			
 			movieinsert.setString(1,title);			
 			movieinsert.setString(2,date+"0101");        
@@ -39,11 +48,29 @@ public class PostMovies implements ICommand {
 			if(mid != 0){				
 				ri = createResultInfo(movieinsert.getGeneratedKeys());				
 				ratinginsert.setInt(1,mid);
-				ratinginsert.executeUpdate();			
+				ratinginsert.executeUpdate();	
+				conn.commit();
+			}else{
+				conn.rollback();
 			}			
-			movieinsert.close();
-			ratinginsert.close();
-		}		
+		}catch(SQLException e){
+			if (conn != null) {
+	            try {	                
+	                conn.rollback();
+	            } catch(SQLException excep) {
+	                throw e;
+	            }
+	        }
+			
+		}finally{
+			if(movieinsert != null)
+				movieinsert.close();
+			if(ratinginsert != null)
+				ratinginsert.close();
+		}
+		
+		if(ri == null)
+			throw new SqlInsertionException("Movie insertion Fail");		
 		return ri;
     }
 
@@ -52,7 +79,6 @@ public class PostMovies implements ICommand {
 		return INFO;
 	}
     
-    //this could be on ResultInfo
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
     	ArrayList<String> columns = new ArrayList<>();
     	columns.add("Movie ID");
@@ -65,5 +91,4 @@ public class PostMovies implements ICommand {
     	}
     	return new ResultInfo(TITLE,columns,rdata);
     }
-
 }

@@ -16,7 +16,7 @@ public class HeaderInfo {
 			headers.put("accept","text/plain");
 	}
 	
-	public Map<String,String> getHeaders(){
+	public Map<String,String> getHeadersMap(){
 		return headers;
 	}
 }

@@ -14,6 +14,7 @@ import Strutures.ResultInfo;
 import utils.Utils;
 import sqlserver.ConnectionFactory;
 import exceptions.InvalidCommandParametersException;
+import exceptions.SqlInsertionException;
 
 /*
 POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the following parameters
@@ -24,9 +25,8 @@ rating - the review rating
 */
 
 public class PostMoviesMidReviews implements ICommand {
-	private static final String TITLE = "Movie Review by ID";
+	private static final String TITLE = "Review insertion";
 	private static final String INFO = "POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the parameters \"reviewerName\", \"reviewSummary\", \"review\" and \"rating\"";
-
 	private static final String INSERT = "insert into Review(movie_id,name,review,summary,rating) values(?,?,?,?,?)";
 	private static final int NPARAM = 4;
 
@@ -35,6 +35,9 @@ public class PostMoviesMidReviews implements ICommand {
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws Exception{
 		ResultInfo ri = null;
+		
+		if(data == null)
+			throw new InvalidCommandParametersException("Data is null");
 		
 		try(Connection conn = ConnectionFactory.getConn())
 		{
@@ -62,7 +65,11 @@ public class PostMoviesMidReviews implements ICommand {
 			
 			}			
 			pstmt.close();
-		}		
+		}	
+		
+		if(ri == null)
+			throw new SqlInsertionException("Rating insertion Fail");
+		
 		return ri;
 	}
 
@@ -70,7 +77,6 @@ public class PostMoviesMidReviews implements ICommand {
 	public String getInfo() {
 		return INFO;
 	}
-
 	
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
     	ArrayList<String> columns = new ArrayList<>();
