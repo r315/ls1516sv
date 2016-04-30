@@ -13,8 +13,10 @@ public class HtmlResult implements IResult {
 	private String html = null;
 	
     public void display(ResultInfo resultInfo){    	
-    	if(resultInfo == null) 
+    	if(resultInfo == null){
+    		html = null;
     		return;
+    	}    		
     	
     	HtmlNode root = new HtmlNode("html");  
     	HtmlNode node = new HtmlNode("head");     	
@@ -27,8 +29,14 @@ public class HtmlResult implements IResult {
     	HtmlNode table = new HtmlNode("table");
     	table.addAttributes("style=\"width:100%\"");
     	table.addChild(addDataToRow(new HtmlNode("tr"),"th",resultInfo.getTitles()));
-    	for(ArrayList<String> line: resultInfo.getValues()){
-    		table.addChild(addDataToRow(new HtmlNode("tr"),"td",line));
+    	if(resultInfo.getValues().isEmpty()){
+    		ArrayList<String> ndata = new ArrayList<String>();
+    		ndata.add("No results found.");
+    		table.addChild(addDataToRow(new HtmlNode("tr"),"td",ndata));
+    	}else{
+    		for(ArrayList<String> line: resultInfo.getValues()){
+    			table.addChild(addDataToRow(new HtmlNode("tr"),"td",line));
+    		}
     	}
     	
     	node = new HtmlNode("body");
@@ -36,8 +44,7 @@ public class HtmlResult implements IResult {
     	root.addChild(node); 
     	
     	html = "<!DOCTYPE html>\n" + root.getHtml(0);    	
-    }
-    
+    }    
     
     private HtmlNode addDataToRow(HtmlNode row, String tag, Collection<String> vals){    		
     	for(String s : vals){
@@ -52,9 +59,9 @@ public class HtmlResult implements IResult {
     	if(filename == null){
     		System.out.println(html);
     	}else{
-    	try(  PrintWriter file = new PrintWriter(filename)) {
-    	    file.println(html);
-    	}
+    		try(  PrintWriter file = new PrintWriter(filename)) {
+    			file.println(html);
+    		}
     	}
     }    
     
@@ -63,50 +70,50 @@ public class HtmlResult implements IResult {
     	private String content =""; 
     	private String attributes = "";
     	private Collection<HtmlNode> childs;
-    	
+
     	public HtmlNode(String tag){
     		this.tag = tag;
     		childs = new ArrayList<HtmlNode>();
     	}
-    	
+
     	public HtmlNode(String tag, String content){
     		this(tag);
     		this.content = content;
     	}
-    	
-    	
+
+
     	public void addContent(String content){
     		this.content = content;
     	}
-    	
+
     	public void addAttributes(String attributes){
     		this.attributes = " " + attributes;
     	}
-    	
+
     	public void addChild(HtmlNode node){
     		childs.add(node);
     	}
-    	
+
     	public String getHtml(int level){    		
     		StringBuffer sb = new StringBuffer();
     		StringBuffer tabs = new StringBuffer("\n");
-    		
+
     		for(int i = 0; i < level; i++) tabs.append("\t");    		
-    		
+
     		sb.append(tabs + "<" + tag + attributes + ">");
-    		
+
     		for(HtmlNode child : childs){
     			sb.append(child.getHtml(level+1));
     		}
-    		
+
     		if(content.length()!=0)
     			sb.append(content + "</" + tag + ">");
     		else
     			sb.append(tabs + "</" + tag + ">");
-    		
+
     		return  sb.toString();
     	}
-    	
+
     	public HtmlNode findNode(String tag){
     		if(this.tag == tag) return this;
     		for(HtmlNode child : childs){
@@ -116,7 +123,6 @@ public class HtmlResult implements IResult {
     	}
     }     
 }
-
 
 /*
 <!DOCTYPE html>

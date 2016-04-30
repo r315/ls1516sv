@@ -1,10 +1,13 @@
 package structures;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import exceptions.HtmlTreeNotCreatedException;
 import Strutures.HtmlResult;
 import Strutures.ResultInfo;
 
@@ -18,19 +21,32 @@ public class HtmlResultTest {
 	}
 	
 	@Test
-	public void createHtml(){		
-		hr.display(createResultInfo());
+	public void shouldGetExceptionIfHasNoTree(){	
+		try {
+			hr.writeToFile("HtmlOut.html");
+			fail();
+		} catch (Exception e) {
+			// Exception expected
+			if(!(e instanceof HtmlTreeNotCreatedException))
+				fail();
+		}	
+	}	
+	
+	@Test
+	public void saveHtmlToFile() throws Exception{	
+		hr.display(createResultInfo(4,4));		
+		hr.writeToFile("HtmlOut.html");		
 	}
 	
 	@Test
-	public void saveHtmlToFile() throws Exception{		
-		createHtml();
+	public void saveHtmlToFileNodata() throws Exception{
+		hr.display(createResultInfo(0,0));		
 		hr.writeToFile("HtmlOut.html");		
 	}
 		
-	private ResultInfo createResultInfo(){
-		int rows = 4;
-		int cols = 4;
+	private ResultInfo createResultInfo(int r, int c){
+		int rows = r;
+		int cols = c;
 		 ArrayList<String> columns = new ArrayList<>();
 		 ArrayList<ArrayList<String>> data = new ArrayList<>();
 		 
