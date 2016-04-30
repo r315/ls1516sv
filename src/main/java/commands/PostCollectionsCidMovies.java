@@ -46,7 +46,7 @@ public class PostCollectionsCidMovies implements ICommand {
 
             ResultSet rs = pstmt.getGeneratedKeys();
 
-            ResultInfo result = createRI(rs);
+            ResultInfo result = createRI();
 
             pstmt.close();
 
@@ -64,7 +64,7 @@ public class PostCollectionsCidMovies implements ICommand {
         return "INSERT INTO Has (collection_id, movie_id) VALUES (?,?)";
     }
 
-    private ResultInfo createRI(ResultSet rs) throws SQLException {
+    private ResultInfo createRI() throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Movie inserted");
 
@@ -72,7 +72,7 @@ public class PostCollectionsCidMovies implements ICommand {
 
         ArrayList<String> line = new ArrayList<>();
 
-        line.add(Long.toString(rs.getLong(1)));
+        line.add("Success");
 
         data.add(line);
 

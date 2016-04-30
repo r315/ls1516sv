@@ -22,6 +22,13 @@ public class GetMoviesMidReviewsRidTest {
     public void init() throws Exception {
         try (Connection conn = ConnectionFactory.getConn()) {
             Statement stmt = conn.createStatement();
+
+            stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars IV','19770525')");
+            stmt.executeUpdate("INSERT INTO Review (movie_id,name,review,summary,rating) VALUES ('1','Luis','Muito Bom','Gostei','5')");
+
+            stmt.executeUpdate("DELETE FROM Review");
+            stmt.executeUpdate("DELETE FROM Movie");
+
             stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
             stmt.executeUpdate("DBCC CHECKIDENT (Review, RESEED, 0)");
 
@@ -41,6 +48,9 @@ public class GetMoviesMidReviewsRidTest {
             stmt.executeUpdate("DELETE FROM Review WHERE movie_id=1");
 
             stmt.executeUpdate("DELETE FROM Movie WHERE title='Star Wars IV'");
+
+            stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
+            stmt.executeUpdate("DBCC CHECKIDENT (Review, RESEED, 0)");
 
             stmt.close();
         }

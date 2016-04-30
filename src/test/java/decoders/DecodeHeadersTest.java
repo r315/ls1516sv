@@ -46,20 +46,20 @@ public class DecodeHeadersTest {
     @Test
     public void HeaderExecute_OnlyParam() throws Exception {
         HashMap<String, String> headers = DecodeHeaders.decode("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
-        assertEquals(null,headers);
+        assertEquals(new HashMap<String, String>(),headers);
     }
 
     @Test
     public void HeadersExecute_isEmpty() throws Exception {
         String [] aux = new String[]{"GET","","",""};
         HashMap<String, String> headers = DecodeHeaders.decode(aux);
-        assertEquals(null,headers);
+        assertEquals(new HashMap<String, String>(),headers);
     }
 
     @Test
     public void HeadersExecute_isNull() throws Exception {
         String [] aux = new String[]{null,null,null,null};
         HashMap<String, String> param = DecodeHeaders.decode(aux);
-        assertEquals(null,param);
+        assertEquals(new HashMap<String, String>(),param);
     }
 }

@@ -59,20 +59,20 @@ public class DecodeParametersTest {
     @Test
     public void ParametersExecute_OnlyHeader() throws Exception {
         HashMap<String, String> param = DecodeParameters.decode("POST /movies/1/reviews accept:text/plain|accept-language:en-gb");
-        assertEquals(null,param);
+        assertEquals(new HashMap<String, String>(),param);
     }
 
     @Test
     public void ParametersExecute_isEmpty() throws Exception {
         String [] aux = new String[]{"GET","","",""};
         HashMap<String, String> param = DecodeParameters.decode(aux);
-        assertEquals(null,param);
+        assertEquals(new HashMap<String, String>(),param);
     }
 
     @Test
     public void ParametersExecute_isNull() throws Exception {
         String [] aux = new String[]{null,null,null,null};
         HashMap<String, String> param = DecodeParameters.decode(aux);
-        assertEquals(null,param);
+        assertEquals(new HashMap<String, String>(),param);
     }
 }
