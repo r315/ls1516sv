@@ -49,7 +49,7 @@ public class PostMoviesMidReviews implements ICommand {
 				throw new InvalidCommandParametersException();
 
 			PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);			
-			pstmt.setInt(1, Utils.getInt(data.get("mID")));
+			pstmt.setInt(1, Utils.getInt(data.get("mid")));
 			pstmt.setString(2,(String) values.toArray()[0]);
 			pstmt.setString(3,(String) values.toArray()[1]);
 			pstmt.setString(4,(String) values.toArray()[2]);			

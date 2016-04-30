@@ -27,29 +27,26 @@ public class PostMoviesMidRatings implements ICommand {
 	// TODO: Rollback
 
 	@Override
-	public ResultInfo execute(HashMap<String, String> data) throws Exception {
+	public ResultInfo execute(HashMap<String, String> data) throws SQLException, InvalidCommandParametersException {
 		ResultInfo ri = null;
 		try(Connection conn = ConnectionFactory.getConn())
 		{
-			String rID= getRating(data.get("rating"));
-			if(rID==null)
-				throw new InvalidCommandParametersException();
-
+			String rID;
 			int mID;
-			try {
-				mID = Utils.getInt(data.get("mID"));
-			} catch (NumberFormatException e) {
-				throw new InvalidCommandVariableException();
+			try{
+				rID= getRating(data.get("rating"));
+				mID = Utils.getInt(data.get("mid"));
+			}catch(NumberFormatException| NullPointerException e){
+				throw new InvalidCommandParametersException();
 			}
 
 			PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1,mID);
 			int res = pstmt.executeUpdate();
 
-			if(res != 0){
+			if(res != 0)
 				ri = createResultInfo(pstmt.getGeneratedKeys());
-				
-			}
+
 			pstmt.close();
 
 		}		
@@ -67,7 +64,7 @@ public class PostMoviesMidRatings implements ICommand {
 				"where movie_id=?";
 	}
 
-	private String getRating(String r){
+	private static String getRating(String r){
 		//r="1" -> "one"
 		HashMap<String, String> m=new HashMap<String,String>();
 		m.put("1","one");
@@ -79,7 +76,7 @@ public class PostMoviesMidRatings implements ICommand {
 	}
 	
 	//this could be on ResultInfo
-    private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
+    private static ResultInfo createResultInfo(ResultSet rs) throws SQLException{
     	ResultInfo ri = new ResultInfo();
 		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
 		 while(rs.next()) {

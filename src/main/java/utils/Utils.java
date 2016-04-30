@@ -9,18 +9,11 @@ import java.util.HashMap;
  */
 public class Utils {
 
-    public static int getInt (Object value) {
-        int i;
-        try{
-            i = Integer.parseInt(getString(value));
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException();
-        }
-
-        return i;
+    public static int getInt (Object value) throws NumberFormatException, NullPointerException{
+        return Integer.parseInt(getString(value));
     }
 
-    public static String getString (Object value) {
+    public static String getString (Object value) throws NullPointerException{
         return value.toString();
     }
 
