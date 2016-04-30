@@ -1,14 +1,10 @@
 package structures;
 
 import Strutures.*;
-import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
 import console.MainApp;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by Red on 30/04/2016.

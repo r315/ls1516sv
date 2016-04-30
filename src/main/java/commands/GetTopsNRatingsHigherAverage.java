@@ -2,7 +2,6 @@ package commands;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import com.sun.istack.internal.Nullable;
 import exceptions.InvalidCommandVariableException;
 import utils.Utils;
 import sqlserver.ConnectionFactory;

@@ -2,17 +2,10 @@ package structures;
 
 import Strutures.*;
 import console.MainApp;
-import decoders.DecodeMethod;
-import exceptions.InvalidCommandMethodException;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import commands.*;
-
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.AbstractSet;
-import java.util.Set;
 
 public class CommandMapTest {
 
