@@ -49,14 +49,14 @@ public class PostMovies implements ICommand {
     //this could be on ResultInfo
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
     	ArrayList<String> columns = new ArrayList<>();
-        columns.add("Movie ID");
-		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-		 while(rs.next()) {			
-			 ArrayList<String> line = new ArrayList<String>();
-			 line.add(Integer.toString(rs.getInt(1)));
-			 rdata.add(line);						        	
-	        }
-		 return new ResultInfo(TITLE,columns,rdata);
+    	columns.add("Movie ID");
+    	ArrayList<ArrayList<String>> rdata=new ArrayList<>();
+    	while(rs.next()) {			
+    		ArrayList<String> line = new ArrayList<String>();
+    		line.add(Integer.toString(rs.getInt(1)));
+    		rdata.add(line);						        	
+    	}
+    	return new ResultInfo(TITLE,columns,rdata);
     }
 
 }

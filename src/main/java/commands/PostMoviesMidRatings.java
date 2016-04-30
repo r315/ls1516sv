@@ -12,11 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
-	private static final String TITLE = "Movie inserted with ID: ";
+	private static final String TITLE = "Movie Review by ID";
 	private static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*
@@ -37,7 +36,7 @@ public class PostMoviesMidRatings implements ICommand {
 
 			int mID;
 			try {
-				mID = Utils.getInt(data.get("mID"));
+				mID = Utils.getInt(data.get("mid"));
 			} catch (NumberFormatException e) {
 				throw new InvalidCommandVariableException();
 			}
@@ -77,19 +76,17 @@ public class PostMoviesMidRatings implements ICommand {
 		m.put("5","five");
 		return m.get(r);
 	}
-	
-	//this could be on ResultInfo
+
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
-    	ResultInfo ri = new ResultInfo();
-		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-		 while(rs.next()) {
-			 ri.setTitles(Arrays.asList(TITLE));
-			 ArrayList<String> line = new ArrayList<String>();
-			 line.add(Integer.toString(rs.getInt(1)));
-			 rdata.add(line);
-			 ri.setValues(rdata);			        	
-	        }
-		 return ri;
+    	ArrayList<String> columns = new ArrayList<>();
+    	columns.add("Rating ID");
+    	ArrayList<ArrayList<String>> rdata = new ArrayList<>();		
+    	while(rs.next()) {
+    		ArrayList<String> line = new ArrayList<String>();
+    		line.add(Integer.toString(rs.getInt(1)));
+    		rdata.add(line);		        	
+    	}
+    	return new ResultInfo(TITLE,columns,rdata);
     }
 
 }
