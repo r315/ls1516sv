@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class GetTopsNRatingsHigherAverage implements ICommand {
 	private static final String INFO = "GET /tops/{n}/ratings/higher/average - returns a list with the n movies with higher average ratings, sorted decreasingly.";
@@ -107,7 +108,7 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 
 			line.add(rs.getString("title"));
 			line.add(Integer.toString(calendar.get(Calendar.YEAR)));
-			line.add(String.format("%.2f", rs.getFloat("rating")));
+			line.add(String.format(Locale.FRENCH,"%.2f", rs.getFloat("rating")));
 
 			data.add(line);
 		}

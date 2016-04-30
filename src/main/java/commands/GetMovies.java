@@ -92,7 +92,7 @@ public class GetMovies implements ICommand {
 
             line.add(rs.getString("title"));
             line.add(Integer.toString(calendar.get(Calendar.YEAR)));
-            line.add(String.format("%.2f", rs.getFloat("rating")));
+            line.add(String.format(Locale.FRENCH,"%.2f", rs.getFloat("rating")));
 
             data.add(line);
         }

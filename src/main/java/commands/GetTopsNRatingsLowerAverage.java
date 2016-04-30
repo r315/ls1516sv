@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class GetTopsNRatingsLowerAverage implements ICommand {
 	private static final String INFO = "GET /tops/{n}/ratings/lower/average - returns a list with the n movies with the lower average ratings, sorted decreasingly.";
@@ -103,7 +104,7 @@ public class GetTopsNRatingsLowerAverage implements ICommand {
 
 			line.add(rs.getString("title"));
 			line.add(Integer.toString(calendar.get(Calendar.YEAR)));
-			line.add(String.format("%.2f", rs.getFloat("rating")));
+			line.add(String.format(Locale.FRENCH,"%.2f", rs.getFloat("rating")));
 
 			data.add(line);
 		}
