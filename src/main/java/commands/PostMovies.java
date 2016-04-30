@@ -41,7 +41,7 @@ public class PostMovies implements ICommand {
 				ratinginsert.setInt(1,mid);
 				ratinginsert.executeUpdate();			
 			}			
-			movieinsert.close()	
+			movieinsert.close();
 			ratinginsert.close();
 		}		
 		return ri;
