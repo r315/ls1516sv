@@ -35,7 +35,7 @@ public class GetTopsRatingsLowerAverage implements ICommand {
 	}
 
 	private String getQuery() {
-		return "SELECT TOP 1 Movie.*, ((one * 1. + two * 2 + three * 3 + four * 4 + five * 5) / (one + two + three + four + five)) as rating FROM Movie\n" +
+		return "SELECT TOP 1 Movie.*, ((one * 1. + two * 2 + three * 3 + four * 4 + five * 5) / nullif((one + two + three + four + five),0)) as rating FROM Movie\n" +
 				"LEFT JOIN (\n" +
 				"SELECT movie_id, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five\n" +
 				"FROM\n" +
