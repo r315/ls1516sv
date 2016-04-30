@@ -1,14 +1,13 @@
 package structures;
 
-import Strutures.CommandInfo;
-import Strutures.CommandMap;
-import Strutures.ICommand;
+import Strutures.*;
 import console.MainApp;
+import decoders.DecodeMethod;
+import exceptions.InvalidCommandMethodException;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import commands.*;
-import Strutures.CNode;
 
 import java.util.AbstractSet;
 import java.util.Set;
@@ -16,26 +15,47 @@ import java.util.Set;
 public class CommandMapTest {
 
 	CommandMap map;
+	HeaderMap hMap;
 
 	@Before
 	public void before() throws Exception{
-		map= MainApp.createMap();
+		//map= MainApp.createMap();
+		//hMap= MainApp.createHeadersMap();
 	}
 
 	@Test
 	public void GetCommandsTest() throws Exception{
-		CommandInfo command=new CommandInfo(new String[]{"OPTION","/"});
 		int i =0;
-		for (ICommand cmd : map.getCommands())
-			++i;
+		for (ICommand cmd : map.getCommands()) ++i;
 		Assert.assertEquals(16,i);
 	}
 
 	@Test
-	public void GetMoviesMidTest()throws Exception{
+	public void should_Get_GetMoviesMid_ICommand_Test()throws Exception{
 		CommandInfo command=new CommandInfo(new String[]{"GET","/movies/1"});
 		ICommand cmd=map.get(command);
 		Assert.assertTrue(cmd instanceof GetMoviesMid);
+	}
+
+	@Test
+	public void should_Get_ResultInfo_GetMoviesMid_Test() throws Exception{
+		CommandInfo command=new CommandInfo(new String[]{"GET","/movies/1"});
+		ICommand cmd=map.get(command);
+		Assert.assertTrue(cmd instanceof GetMoviesMid);
+		ResultInfo result = cmd.execute(command.getData());
+		int a=0;
+	}
+
+	@Test
+	public void should_Get_HeaderInfo_GetMoviesMid_Test() throws Exception{
+		String[] userArgs= new String[]{"GET","/movies/1"};
+		CommandInfo command=new CommandInfo(userArgs);
+		ICommand cmd=map.get(command);
+		Assert.assertTrue(cmd instanceof GetMoviesMid);
+		ResultInfo result = cmd.execute(command.getData());
+		HeaderInfo headerInfo = new HeaderInfo(userArgs);
+		IResult res= hMap.getResponseMethod(headerInfo);
+		res.display(result);
 	}
 
 	@Test
@@ -45,7 +65,7 @@ public class CommandMapTest {
 	}
 
 	@Test
-	public void shouldBeAbleToGetCnodePostMovies()throws Exception{
+	public void shouldBeAbleToGetICommandPostMovies()throws Exception{
 		CommandInfo cmdInfo = new CommandInfo(new String[]{"POST","/movies","title=filme1&release_year=2014"});
 		Assert.assertTrue(map.get(cmdInfo) instanceof PostMovies);
 	}

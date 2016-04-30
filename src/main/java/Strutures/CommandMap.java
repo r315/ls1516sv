@@ -41,7 +41,7 @@ public class CommandMap {
 
         DataNode dataNode= methodMap.putIfAbsent(table, new DataNode(path));
         if(dataNode==null)//in case it didn't exist before
-            dataNode=new DataNode(path);
+            dataNode=methodMap.get(table);
         else{//in case it exists, add more
             Collection<String> col=dataNode.resources();
             for (String s:path)
@@ -62,8 +62,9 @@ public class CommandMap {
         HashMap<String, DataNode> tablesMap = commandsMap.get(cmdInfo.getMethod());
 
         //Iterator<String> commandIterator = cmdInfo.getResources().iterator();
-        if(tablesMap==null)throw new InvalidCommandTableException();
+        if(tablesMap==null)throw new InvalidCommandMethodException();
         DataNode dataNode = tablesMap.get(cmdInfo.getTable());
+        if(dataNode==null)throw new InvalidCommandTableException();
 
         Collection<String> dataNodeSegmentList= dataNode.resources();
         CNode curr = dataNode.getNext();
@@ -143,9 +144,7 @@ public class CommandMap {
             }
 
             @Override
-            public int size() {
-                throw new NotImplementedException();
-            }
+            public int size() {throw new NotImplementedException();}
         };
     }
 

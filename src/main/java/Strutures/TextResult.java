@@ -8,8 +8,12 @@ import java.util.Iterator;
  */
 public class TextResult implements IResult{
 
-    //TODO
     public void display(ResultInfo resultInfo){
+        if(resultInfo.getValues().isEmpty()){
+            System.out.println("No results found.");
+            return;
+        }
+
         System.out.println(resultInfo.getDisplayTitle()+":");
         resultInfo.getValues().forEach( dataList-> {
             Iterator<String> dataList_it= dataList.iterator();
@@ -23,5 +27,10 @@ public class TextResult implements IResult{
                 System.out.println("---------------------------");
             }
         });
+    }
+
+    @Override
+    public void writeToFile(String filename) throws Exception {
+        throw new UnsupportedOperationException();
     }
 }

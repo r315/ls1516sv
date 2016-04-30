@@ -20,9 +20,8 @@ public class CommandInfo {
 		method = DecodeMethod.decode(command);
 		resources = DecodePath.decode(command);
 		parameters = DecodeParameters.decode(command);
-		Collection<String> params= DecodePath.decode(command);
-		if(params.size()!=0)
-			table = DecodePath.decode(command).iterator().next();
+		if(resources.size()!=0)
+			table = resources.iterator().next();
 	}
 	
 	public String getMethod() { return method;}

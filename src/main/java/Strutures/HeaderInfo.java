@@ -12,10 +12,8 @@ public class HeaderInfo {
 	//TODO
 	public HeaderInfo(String[] h){
 		headers=DecodeHeaders.decode(h);
-		if(headers==null){
-			headers=new HashMap<>(1);
+		if(headers.size()==0)
 			headers.put("accept","text/plain");
-		}
 	}
 	
 	public Map<String,String> getHeaders(){

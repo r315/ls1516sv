@@ -22,13 +22,4 @@ public class HeaderMap {
     public IResult getResponseMethod(HeaderInfo headerInfo){
        return headersMap.get(headerInfo.getHeaders().get("accept"));
     }
-
-    public static HeaderMap createMap(){
-        HeaderMap map=new HeaderMap();
-
-        map.addResponseMethod("text/html",new HtmlResult());
-        map.addResponseMethod("text/plain",new TextResult());
-
-        return map;
-    }
 }
