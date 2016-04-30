@@ -21,7 +21,15 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws Exception {
 		Boolean topB = false;
-		int skip = 0, top = 1;
+		int skip = 0, top = 1, n;
+
+		try {
+			n = Utils.getInt(data.get("n"));
+		} catch (NumberFormatException e) {
+			throw new InvalidCommandVariableException();
+		}
+
+		if (n < 0) throw new InvalidCommandVariableException();
 
 		if (data != null) {
 			topB = (data.get("top") != null);
@@ -31,18 +39,14 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 			top = skiptop.get("top");
 		}
 
-		try(Connection conn = ConnectionFactory.getConn()) {
-			int n;
+		n -= skip;
+		if (n < 1) n=1;
 
-			try {
-				n = Utils.getInt(data.get("n"));
-			} catch (NumberFormatException e) {
-				throw new InvalidCommandVariableException();
-			}
+		try(Connection conn = ConnectionFactory.getConn()) {
 
 			PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
-			pstmt.setInt(1, n);
-			pstmt.setInt(2, skip);
+			pstmt.setInt(1, skip);
+			pstmt.setInt(2, n);
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -66,8 +70,11 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 				"LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
 				"GROUP BY Movie.title, Movie.release_year " +
 				"ORDER BY revcount DESC " +
-				"OFFSET ? ROWS";
-		if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
+				"OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+		if (topB) {
+			query += ") AS tudo ORDER BY revcount DESC OFFSET 0 ROWS FETCH NEXT " + top + " ROWS ONLY";
+			query = "SELECT * FROM ( " + query;
+		}
 		return query;
 	}
 

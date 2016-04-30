@@ -2,6 +2,7 @@ package commands;
 
 import Strutures.CNode;
 import Strutures.ResultInfo;
+import exceptions.InvalidCommandVariableException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,6 +66,66 @@ public class GetMoviesMidReviewsRidTest {
         HashMap<String, String> param = new HashMap<>();
         param.put("mid","1");
         param.put("rid","1");
+
+        /* --- */
+
+        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
+        ResultInfo rs = stuff.execute(param);
+        assertEquals(result.getValues(),rs.getValues());
+    }
+
+    @Test(expected= InvalidCommandVariableException.class)
+    public void GetMoviesMidReviewRidExecute_midIsntNumber()throws Exception{
+        HashMap<String, String> param = new HashMap<>();
+        param.put("mid","one");
+        param.put("rid","1");
+
+        /* --- */
+
+        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
+        stuff.execute(param);
+    }
+
+    @Test
+    public void GetMoviesMidReviewRidExecute_invalidMid()throws Exception{
+        Collection<String> title = new ArrayList<>();
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
+        ResultInfo result = new ResultInfo(null,title,data);
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("mid","10");
+        param.put("rid","1");
+
+        /* --- */
+
+        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
+        ResultInfo rs = stuff.execute(param);
+        assertEquals(result.getValues(),rs.getValues());
+    }
+
+    @Test(expected= InvalidCommandVariableException.class)
+    public void GetMoviesMidReviewRidExecute_ridIsntNumber()throws Exception{
+        HashMap<String, String> param = new HashMap<>();
+        param.put("mid","1");
+        param.put("rid","one");
+
+        /* --- */
+
+        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
+        stuff.execute(param);
+    }
+
+    @Test
+    public void GetMoviesMidReviewRidExecute_invalidRid()throws Exception{
+        Collection<String> title = new ArrayList<>();
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
+        ResultInfo result = new ResultInfo(null,title,data);
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("mid","1");
+        param.put("rid","10");
 
         /* --- */
 

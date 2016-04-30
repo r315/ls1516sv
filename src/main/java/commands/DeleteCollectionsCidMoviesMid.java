@@ -8,7 +8,9 @@ import utils.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -16,7 +18,7 @@ import java.util.HashMap;
  */
 public class DeleteCollectionsCidMoviesMid implements ICommand {
     private static final String INFO = "DELETE /collections/{cid}/movies/{mid} - removes the movie mid from the collections cid.";
-    //private final String TITLE = "Movies List";
+    private final String TITLE = "Movie deleted from Collection";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -30,22 +32,42 @@ public class DeleteCollectionsCidMoviesMid implements ICommand {
                 throw new InvalidCommandVariableException();
             }
 
-            // TODO: cid doesn't exist 
+            // TODO: cid & mid doesn't exist
             
-            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM ? WHERE movie_id=? AND collection_id=?");
-            pstmt.setString(1,"Has");
-            pstmt.setInt(2,mid);
-            pstmt.setInt(3,cid);
+            PreparedStatement pstmt = conn.prepareStatement("DELETE FROM Has WHERE movie_id = ? AND collection_id = ?");
+            pstmt.setInt(1,mid);
+            pstmt.setInt(2,cid);
 
-            pstmt.executeQuery();
+            pstmt.executeUpdate();
+
+            ResultInfo result = createRI();
+
+            pstmt.close();
+
+            return result;
             
         }
-        return null;
     }
 
     @Override
     public String getInfo() {
         return INFO;
+    }
+
+    private ResultInfo createRI() throws SQLException {
+        ArrayList<String> columns = new ArrayList<>();
+        columns.add("Movie removed");
+
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
+        ArrayList<String> line = new ArrayList<>();
+
+        line.add("Success");
+
+        data.add(line);
+
+        return new ResultInfo(TITLE, columns, data);
+
     }
 
 }

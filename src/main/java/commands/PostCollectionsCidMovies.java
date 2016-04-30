@@ -25,6 +25,8 @@ public class PostCollectionsCidMovies implements ICommand {
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
         int cid, mid;
 
+        if (data == null) throw new InvalidCommandParameters();
+
         try {
             cid = Utils.getInt(data.get("cid"));
             mid = Utils.getInt(data.get("mid"));
@@ -33,17 +35,15 @@ public class PostCollectionsCidMovies implements ICommand {
         }
 
         try(Connection conn = ConnectionFactory.getConn()) {
-            PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement pstmt = conn.prepareStatement(getQuery());
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
 
-            // TODO: Handle is cid or mid don't exist
+            // TODO: Handle if cid or mid don't exist
+            // TODO: Handle if adding the same movie again to a collection
             pstmt.executeUpdate();
 
-
-            ResultSet rs = pstmt.getGeneratedKeys();
-
-            ResultInfo result = createRI(rs);
+            ResultInfo result = createRI();
 
             pstmt.close();
 
@@ -61,7 +61,7 @@ public class PostCollectionsCidMovies implements ICommand {
         return "INSERT INTO Has (collection_id, movie_id) VALUES (?,?)";
     }
 
-    private ResultInfo createRI(ResultSet rs) throws SQLException {
+    private ResultInfo createRI() throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Movie inserted");
 
@@ -69,7 +69,7 @@ public class PostCollectionsCidMovies implements ICommand {
 
         ArrayList<String> line = new ArrayList<>();
 
-        line.add(Long.toString(rs.getLong(1)));
+        line.add("Success");
 
         data.add(line);
 

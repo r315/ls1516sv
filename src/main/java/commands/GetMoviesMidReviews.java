@@ -79,8 +79,7 @@ public class GetMoviesMidReviews implements ICommand {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        // TODO: mid doesn't exist 
-        rs.next();
+        if (!rs.next()) return new ResultInfo(TITLE, columns, data);
         String title = rs.getString("title");
 
         do {

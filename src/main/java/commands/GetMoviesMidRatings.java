@@ -16,6 +16,8 @@ public class GetMoviesMidRatings implements ICommand {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
+        // TODO: data doesn't exist (nullpointerexception) 
+        
         try(Connection conn = ConnectionFactory.getConn()) {
             int mID;
 
@@ -78,8 +80,7 @@ public class GetMoviesMidRatings implements ICommand {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        // TODO: mid doesn't exist 
-        rs.next();
+        if (!rs.next()) return new ResultInfo(TITLE, columns, data);
 
         ArrayList<String> line = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();

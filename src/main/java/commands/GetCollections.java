@@ -52,7 +52,7 @@ public class GetCollections implements ICommand {
 
     @Override
     public String getInfo() {
-        return null;
+        return INFO;
     }
 
     private String getQuery(Boolean topB, int top) {

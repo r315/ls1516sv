@@ -38,8 +38,7 @@ public class GetTopsReviewsHigherCount implements ICommand {
 				"FROM Movie " +
 				"LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
 				"GROUP BY Movie.title, Movie.release_year " +
-				"ORDER BY revcount DESC " +
-				"OFFSET ? ROWS";
+				"ORDER BY revcount DESC, Movie.title";
 	}
 
 	private ResultInfo createRI(ResultSet rs) throws SQLException {

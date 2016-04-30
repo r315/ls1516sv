@@ -69,6 +69,7 @@ public class GetCollectionsCid implements ICommand {
                 "INNER JOIN Has ON Has.movie_id = Movie.movie_id " +
                 "INNER JOIN Collection ON Collection.collection_id = Has.collection_id " +
                 "WHERE Collection.collection_id = ? " +
+                "ORDER BY Movie.title " +
                 "OFFSET ? ROWS";
         if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
         return query;
