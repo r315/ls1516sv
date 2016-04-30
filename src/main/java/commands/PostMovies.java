@@ -58,10 +58,9 @@ public class PostMovies implements ICommand {
 	            try {	                
 	                conn.rollback();
 	            } catch(SQLException excep) {
-	                throw e;
+	                throw excep;
 	            }
 	        }
-			
 		}finally{
 			if(movieinsert != null)
 				movieinsert.close();
@@ -83,12 +82,12 @@ public class PostMovies implements ICommand {
     	ArrayList<String> columns = new ArrayList<>();
     	columns.add("Movie ID");
     	ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-    	while(rs.next()) {			
-    		ArrayList<String> line = new ArrayList<String>();
-    		mid = rs.getInt(1);
-    		line.add(Integer.toString(mid));
-    		rdata.add(line);						        	
-    	}
+    	rs.next();
+		ArrayList<String> line = new ArrayList<String>();
+		mid = rs.getInt(1);
+		line.add(Integer.toString(mid));
+		rdata.add(line);
+
     	return new ResultInfo(TITLE,columns,rdata);
     }
 }

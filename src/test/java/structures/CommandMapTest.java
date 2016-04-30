@@ -27,7 +27,7 @@ public class CommandMapTest {
 	public void GetCommandsTest() throws Exception{
 		int i =0;
 		for (ICommand cmd : map.getCommands()) ++i;
-		Assert.assertEquals(16,i);
+		Assert.assertEquals(21,i);
 	}
 
 	@Test

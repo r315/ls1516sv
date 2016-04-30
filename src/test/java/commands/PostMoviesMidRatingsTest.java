@@ -11,7 +11,7 @@ import java.util.List;
 import Strutures.ResultInfo;
 
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
@@ -19,18 +19,17 @@ import sqlserver.ConnectionFactory;
 /**
  * Created by Red on 09/04/2016.
  */
-public class PostMoviesMidRatingsTest {  
-	
+public class PostMoviesMidRatingsTest {
+	// TODO: 30/04/2016
 	private static int movieid;
 
-	@BeforeClass
-	public static void postMovie() throws Exception{
+	@Before
+	public static void PostMoviesMidRatingsTest0() throws Exception{
 		HashMap<String,String> data = new HashMap<String,String>();    	
     	data.put("title", "Speed");    	
     	data.put("release_year", "2000");
-    	
-    	PostMovies pm = new PostMovies();
-    	ResultInfo ri = pm.execute(data);
+
+    	ResultInfo ri = new PostMoviesMidRatings().execute(data);
     	Iterator<ArrayList<String>> it = ri.getValues().iterator();
     	while(it.hasNext()){
     		List<String> s = (List<String>) it.next();

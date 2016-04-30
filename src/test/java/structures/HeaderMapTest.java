@@ -30,24 +30,24 @@ public class HeaderMapTest {
     }
 
     @Test
-    public void GetResultTextTest() throws Exception{
+    public void GetHtmlResultFromMap(){
+        HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies","accept:text/html"});
+        IResult r=map.getResponseMethod(hi);
+        Assert.assertTrue(r instanceof HtmlResult);
+    }
+
+    @Test
+    public void GetTextResultFromMap(){
+        HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies","accept:text/plain"});
+        IResult r=map.getResponseMethod(hi);
+        Assert.assertTrue(r instanceof TextResult);
+    }
+
+    @Test
+    public void GetTextResultFromMapWithoutParams(){
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies"});
-        String accept = hi.getHeadersMap().get("accept");
-        Assert.assertEquals("text/plain",accept);
-    }
-
-    @Test
-    public void GetResultTextTestWithHeaderParams() throws Exception{
-        HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies accept:text/plain"});
-        String accept = hi.getHeadersMap().get("accept");
-        Assert.assertEquals("text/plain",accept);
-    }
-
-    @Test
-    public void GetResultHtmlTest() throws Exception{
-        HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies accept:text/html"});
-        String accept = hi.getHeadersMap().get("accept");
-        Assert.assertEquals("text/html",accept);
+        IResult r=map.getResponseMethod(hi);
+        Assert.assertTrue(r instanceof TextResult);
     }
 
 }

@@ -5,6 +5,6 @@ package exceptions;
  */
 public class InvalidCommandVariableException extends Exception {
     public InvalidCommandVariableException(){
-        super("InvalidCommandVariableException");
+        super("Invalid variable in command");
     }
 }
