@@ -81,11 +81,11 @@ public class PostMoviesMidRatings implements ICommand {
 	
 	private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
 		ArrayList<String> columns = new ArrayList<>();
-		columns.add("Rating ID");
+		columns.add("Rating updated");
 		ArrayList<ArrayList<String>> rdata = new ArrayList<>();
 		while(rs.next()) {
 			ArrayList<String> line = new ArrayList<String>();
-			line.add(Integer.toString(rs.getInt(1)));
+			line.add("");
 			rdata.add(line);
 		}
 		return new ResultInfo(TITLE,columns,rdata);

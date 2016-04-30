@@ -22,8 +22,9 @@ public class HtmlResultTest {
 	
 	@Test
 	public void shouldGetExceptionIfHasNoTree(){	
+			HtmlResult thr = new HtmlResult();
 		try {
-			hr.writeToFile("HtmlOut.html");
+			thr.writeToFile("HtmlOut.html");
 			fail();
 		} catch (Exception e) {
 			// Exception expected
