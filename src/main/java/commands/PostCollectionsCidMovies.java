@@ -2,7 +2,7 @@ package commands;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 
@@ -31,11 +31,11 @@ public class PostCollectionsCidMovies implements ICommand {
             cid = Utils.getInt(data.get("cid"));
             mid = Utils.getInt(data.get("mid"));
         } catch (NumberFormatException e) {
-            throw new InvalidCommandParameters();
+            throw new InvalidCommandParametersException();
         }
 
         try(Connection conn = ConnectionFactory.getConn()) {
-            PreparedStatement pstmt = conn.prepareStatement(getQuery());
+            PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
 
@@ -43,7 +43,10 @@ public class PostCollectionsCidMovies implements ICommand {
             // TODO: Handle if adding the same movie again to a collection
             pstmt.executeUpdate();
 
-            ResultInfo result = createRI();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+
+            ResultInfo result = createRI(rs);
 
             pstmt.close();
 
@@ -61,7 +64,7 @@ public class PostCollectionsCidMovies implements ICommand {
         return "INSERT INTO Has (collection_id, movie_id) VALUES (?,?)";
     }
 
-    private ResultInfo createRI() throws SQLException {
+    private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Movie inserted");
 
@@ -69,7 +72,7 @@ public class PostCollectionsCidMovies implements ICommand {
 
         ArrayList<String> line = new ArrayList<>();
 
-        line.add("Success");
+        line.add(Long.toString(rs.getLong(1)));
 
         data.add(line);
 

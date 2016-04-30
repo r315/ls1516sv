@@ -13,7 +13,6 @@ public class TextResult implements IResult{
             System.out.println("No results found.");
             return;
         }
-
         System.out.println(resultInfo.getDisplayTitle()+":");
         resultInfo.getValues().forEach( dataList-> {
             Iterator<String> dataList_it= dataList.iterator();

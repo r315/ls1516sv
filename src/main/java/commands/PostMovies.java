@@ -5,40 +5,72 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
+import exceptions.SqlInsertionException;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
 	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
-	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
-	private static final String TITLE = "Movie inserted with ID: ";
+	private static final String INSERT_MOVIE = "insert into Movie(title,release_year) values(?,?)";
+	private static final String INSERT_RATING = "insert into Rating(movie_id,one,two,three,four,five) values(?,0,0,0,0,0)";
+	private static final String TITLE = "Movie Insertion";
+	int mid;
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
-		ResultInfo ri = null;
-		try(Connection conn = ConnectionFactory.getConn())
-		{			
-			String title = data.get("title");
-			String date = dateParser(data.get("release_year"));
+		ResultInfo ri = null;	
+		if(data == null)
+			throw new InvalidCommandParametersException("Data is null");
+		
+		String title = data.get("title");
+		String date = data.get("releaseYear");
+		PreparedStatement movieinsert = null;
+		PreparedStatement ratinginsert = null;
+		Connection conn = null;
 
-			if(title == null || date == null)
-				throw new InvalidCommandParameters();
+		if(title == null || date == null)
+			throw new InvalidCommandParametersException();
+		
+		try{
+			conn = ConnectionFactory.getConn();
+			conn.setAutoCommit(false);
+			movieinsert = conn.prepareStatement(INSERT_MOVIE,PreparedStatement.RETURN_GENERATED_KEYS);
+			ratinginsert = conn.prepareStatement(INSERT_RATING);
 			
-			PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1,title);			
-			pstmt.setString(2,date);        
-			int res = pstmt.executeUpdate();
+			movieinsert.setString(1,title);			
+			movieinsert.setString(2,date+"0101");        
+			mid = movieinsert.executeUpdate();		
 
-			if(res != 0){				
-				ri = createResultInfo(pstmt.getGeneratedKeys());
+			if(mid != 0){				
+				ri = createResultInfo(movieinsert.getGeneratedKeys());				
+				ratinginsert.setInt(1,mid);
+				ratinginsert.executeUpdate();	
+				conn.commit();
+			}else{
+				conn.rollback();
 			}			
-			pstmt.close();			
-		}		
+		}catch(SQLException e){
+			if (conn != null) {
+	            try {	                
+	                conn.rollback();
+	            } catch(SQLException excep) {
+	                throw e;
+	            }
+	        }
+			
+		}finally{
+			if(movieinsert != null)
+				movieinsert.close();
+			if(ratinginsert != null)
+				ratinginsert.close();
+		}
+		
+		if(ri == null)
+			throw new SqlInsertionException("Movie insertion Fail");		
 		return ri;
     }
 
@@ -47,22 +79,16 @@ public class PostMovies implements ICommand {
 		return INFO;
 	}
     
-    private String dateParser(String year){
-    	return "01-01-"+year+" 00:00:00";
-    }
-    
-    //this could be on ResultInfo
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
-    	ResultInfo ri = new ResultInfo();
-		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-		 while(rs.next()) {
-			 ri.setTitles(Arrays.asList(TITLE));
-			 ArrayList<String> line = new ArrayList<String>();
-			 line.add(Integer.toString(rs.getInt(1)));
-			 rdata.add(line);
-			 ri.setValues(rdata);			        	
-	        }
-		 return ri;
+    	ArrayList<String> columns = new ArrayList<>();
+    	columns.add("Movie ID");
+    	ArrayList<ArrayList<String>> rdata=new ArrayList<>();
+    	while(rs.next()) {			
+    		ArrayList<String> line = new ArrayList<String>();
+    		mid = rs.getInt(1);
+    		line.add(Integer.toString(mid));
+    		rdata.add(line);						        	
+    	}
+    	return new ResultInfo(TITLE,columns,rdata);
     }
-
 }

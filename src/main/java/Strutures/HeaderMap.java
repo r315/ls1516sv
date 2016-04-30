@@ -1,5 +1,6 @@
 package Strutures;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -19,7 +20,11 @@ public class HeaderMap {
         headersMap.put(resultMethod,result);
 }
 
+    public Collection<IResult> getResults(){
+        return this.headersMap.values();
+    }
+
     public IResult getResponseMethod(HeaderInfo headerInfo){
-       return headersMap.get(headerInfo.getHeaders().get("accept"));
+       return headersMap.get(headerInfo.getHeadersMap().get("accept"));
     }
 }

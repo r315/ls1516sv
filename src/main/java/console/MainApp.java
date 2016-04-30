@@ -15,8 +15,10 @@ public class MainApp {
 			interactive_mode=true;
 		do {
 			try {
-				if(interactive_mode)
+				if(interactive_mode){
+					System.out.println("[Interactive mode] Insert a command:");
 					userArgs= scanner.nextLine().split(" ");
+				}
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
 				ResultInfo result = createMap().get(command).execute(command.getData());

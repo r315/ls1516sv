@@ -2,8 +2,8 @@ package commands;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
+import exceptions.SqlInsertionException;
 import utils.Utils;
 import sqlserver.ConnectionFactory;
 
@@ -12,11 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
-	private static final String TITLE = "Movie inserted with ID: ";
+	private static final String TITLE = "Rating insertion";
 	private static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*
@@ -27,32 +26,34 @@ public class PostMoviesMidRatings implements ICommand {
 	// TODO: Rollback
 
 	@Override
-	public ResultInfo execute(HashMap<String, String> data) throws Exception {
+	public ResultInfo execute(HashMap<String, String> data) throws SQLException, InvalidCommandParametersException {
 		ResultInfo ri = null;
+		if(data == null)
+			throw new InvalidCommandParametersException("Data is null");
+		
 		try(Connection conn = ConnectionFactory.getConn())
 		{
-			String rID= getRating(data.get("rating"));
-			if(rID==null)
-				throw new InvalidCommandParameters();
-
+			String rID;
 			int mID;
-			try {
-				mID = Utils.getInt(data.get("mID"));
-			} catch (NumberFormatException e) {
-				throw new InvalidCommandVariableException();
+			try{
+				rID= getRating(data.get("rating"));
+				mID = Utils.getInt(data.get("mid"));
+			}catch(NumberFormatException| NullPointerException e){
+				throw new InvalidCommandParametersException();
 			}
 
 			PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);
 			pstmt.setInt(1,mID);
 			int res = pstmt.executeUpdate();
 
-			if(res != 0){
+			if(res != 0)
 				ri = createResultInfo(pstmt.getGeneratedKeys());
-				
-			}
 			pstmt.close();
-
-		}		
+		}	
+		
+		if(ri == null)
+			throw new SqlInsertionException("Rating insertion Fail");
+		
 		return ri;
 	}
 
@@ -67,7 +68,7 @@ public class PostMoviesMidRatings implements ICommand {
 				"where movie_id=?";
 	}
 
-	private String getRating(String r){
+	private static String getRating(String r){
 		//r="1" -> "one"
 		HashMap<String, String> m=new HashMap<String,String>();
 		m.put("1","one");
@@ -78,18 +79,16 @@ public class PostMoviesMidRatings implements ICommand {
 		return m.get(r);
 	}
 	
-	//this could be on ResultInfo
-    private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
-    	ResultInfo ri = new ResultInfo();
-		ArrayList<ArrayList<String>> rdata=new ArrayList<>();
-		 while(rs.next()) {
-			 ri.setTitles(Arrays.asList(TITLE));
-			 ArrayList<String> line = new ArrayList<String>();
-			 line.add(Integer.toString(rs.getInt(1)));
-			 rdata.add(line);
-			 ri.setValues(rdata);			        	
-	        }
-		 return ri;
-    }
+	private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
+		ArrayList<String> columns = new ArrayList<>();
+		columns.add("Rating ID");
+		ArrayList<ArrayList<String>> rdata = new ArrayList<>();
+		while(rs.next()) {
+			ArrayList<String> line = new ArrayList<String>();
+			line.add(Integer.toString(rs.getInt(1)));
+			rdata.add(line);
+		}
+		return new ResultInfo(TITLE,columns,rdata);
+	}
 
 }
