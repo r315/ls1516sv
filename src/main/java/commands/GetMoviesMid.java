@@ -56,7 +56,7 @@ public class GetMoviesMid implements ICommand {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        if (!rs.next()) return new ResultInfo(null, columns, data);
+        if (!rs.next()) return new ResultInfo(TITLE, columns, data);
 
         ArrayList<String> line = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();

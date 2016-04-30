@@ -68,7 +68,6 @@ public class GetMovies implements ICommand {
                 "COUNT(SourceTable.rating)\n" +
                 "FOR rating IN ([1], [2], [3], [4], [5])\n" +
                 ") AS SourceTable) AS reviewRatings ON reviewRatings.movie_id = Rating.movie_id\n" +
-                "/*WHERE Movie.movie_id = 1*/\n" +
                 "GROUP BY Rating.movie_id, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5]\n" +
                 ") AS average) AS ratings ON ratings.movie_id = Movie.movie_id\n" +
                 "ORDER BY " + orderBy + " OFFSET ? ROWS";

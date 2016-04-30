@@ -37,4 +37,10 @@ public class DecodeMethodTest {
         DecodeMethod.decode(aux);
     }
 
+    /*@Test
+    public void MethodExecute_space() throws Exception {
+        String aux = null;
+        DecodeMethod.decode(aux);
+    }*/
+
 }

@@ -31,3 +31,14 @@ CREATE TABLE Rating(
 	CHECK (one>=0 AND two>=0 AND three>=0 AND four>=0 AND five>=0)
 )
 
+CREATE TABLE Collection(
+	collection_id int IDENTITY(1,1) PRIMARY KEY,
+	name varchar(50) NOT NULL,
+	description varchar(200) NOT NULL
+)
+
+CREATE TABLE Has(
+	collection_id int NOT NULL FOREIGN KEY REFERENCES Collection(collection_id),
+	movie_id int NOT NULL FOREIGN KEY REFERENCES Movie(movie_id),
+	PRIMARY KEY (collection_id,movie_id)
+)
