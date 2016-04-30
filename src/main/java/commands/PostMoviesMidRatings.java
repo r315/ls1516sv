@@ -3,7 +3,7 @@ package commands;
 import Strutures.ICommand;
 import Strutures.ResultInfo;
 import exceptions.InvalidCommandVariableException;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
 import utils.Utils;
 import sqlserver.ConnectionFactory;
 
@@ -33,7 +33,7 @@ public class PostMoviesMidRatings implements ICommand {
 		{
 			String rID= getRating(data.get("rating"));
 			if(rID==null)
-				throw new InvalidCommandParameters();
+				throw new InvalidCommandParametersException();
 
 			int mID;
 			try {

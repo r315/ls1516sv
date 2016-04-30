@@ -24,6 +24,12 @@ public class DecodeParametersTest {
     }
 
     @Test
+    public void spaceBetweenParameterValues(){
+        String test="Even+More+Stuff+Than+More+Stuff";
+        assertEquals("Even More Stuff Than More Stuff",test.replace('+',' '));
+    }
+
+    @Test
     public void ParametersExecute_Parameters() throws Exception {
         HashMap<String, String> param = DecodeParameters.decode("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
         assertEquals(parameters,param);

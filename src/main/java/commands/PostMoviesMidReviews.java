@@ -13,7 +13,7 @@ import Strutures.ICommand;
 import Strutures.ResultInfo;
 import utils.Utils;
 import sqlserver.ConnectionFactory;
-import exceptions.InvalidCommandParameters;
+import exceptions.InvalidCommandParametersException;
 
 /*
 POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the following parameters
@@ -46,7 +46,7 @@ public class PostMoviesMidReviews implements ICommand {
 			
 			// all parameters are NOTNULL in database
 			if(values.size() != NPARAM)
-				throw new InvalidCommandParameters();			
+				throw new InvalidCommandParametersException();
 
 			PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);			
 			pstmt.setInt(1, Utils.getInt(data.get("mID")));
