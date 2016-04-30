@@ -1,7 +1,7 @@
 package structures;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -23,7 +23,7 @@ public class HtmlResultTest {
 	}
 	
 	@Test
-	public void saveHtmlToFile() throws FileNotFoundException{		
+	public void saveHtmlToFile() throws Exception{		
 		createHtml();
 		hr.writeToFile("HtmlOut.html");		
 	}

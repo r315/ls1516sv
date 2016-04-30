@@ -14,7 +14,7 @@ import exceptions.InvalidCommandParameters;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
-	private final String INFO = "creates a new movie, given the parameters \"title\" and \"releaseYear\"";
+	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
 	private static final String INSERT = "insert into Movie(title,release_year) values(?,?)";
 	private static final String TITLE = "Movie inserted with ID: ";
 	
