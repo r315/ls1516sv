@@ -2,8 +2,8 @@ package commands;
 
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import exceptions.InvalidCommandVariableException;
 import exceptions.InvalidCommandParametersException;
+import exceptions.SqlInsertionException;
 import utils.Utils;
 import sqlserver.ConnectionFactory;
 
@@ -12,11 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
-	private static final String TITLE = "Movie inserted with ID: ";
+	private static final String TITLE = "Rating insertion";
 	private static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*
@@ -29,6 +28,9 @@ public class PostMoviesMidRatings implements ICommand {
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException, InvalidCommandParametersException {
 		ResultInfo ri = null;
+		if(data == null)
+			throw new InvalidCommandParametersException("Data is null");
+		
 		try(Connection conn = ConnectionFactory.getConn())
 		{
 			String rID;
@@ -46,10 +48,12 @@ public class PostMoviesMidRatings implements ICommand {
 
 			if(res != 0)
 				ri = createResultInfo(pstmt.getGeneratedKeys());
-
 			pstmt.close();
-
-		}		
+		}	
+		
+		if(ri == null)
+			throw new SqlInsertionException("Rating insertion Fail");
+		
 		return ri;
 	}
 
@@ -75,7 +79,6 @@ public class PostMoviesMidRatings implements ICommand {
 		return m.get(r);
 	}
 	
-	//this could be on ResultInfo
 	private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
 		ArrayList<String> columns = new ArrayList<>();
 		columns.add("Rating ID");

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import Strutures.ICommand;
 import Strutures.ResultInfo;
 import exceptions.InvalidCommandParametersException;
+import exceptions.SqlInsertionException;
 import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
@@ -21,7 +22,10 @@ public class PostMovies implements ICommand {
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
-		ResultInfo ri = null;		
+		ResultInfo ri = null;	
+		if(data == null)
+			throw new InvalidCommandParametersException("Data is null");
+		
 		String title = data.get("title");
 		String date = data.get("releaseYear");
 		PreparedStatement movieinsert = null;
@@ -44,10 +48,11 @@ public class PostMovies implements ICommand {
 			if(mid != 0){				
 				ri = createResultInfo(movieinsert.getGeneratedKeys());				
 				ratinginsert.setInt(1,mid);
-				ratinginsert.executeUpdate();			
-			}	
-			conn.commit();
-			
+				ratinginsert.executeUpdate();	
+				conn.commit();
+			}else{
+				conn.rollback();
+			}			
 		}catch(SQLException e){
 			if (conn != null) {
 	            try {	                
@@ -64,10 +69,8 @@ public class PostMovies implements ICommand {
 				ratinginsert.close();
 		}
 		
-		
-		
-		
-		
+		if(ri == null)
+			throw new SqlInsertionException("Movie insertion Fail");		
 		return ri;
     }
 
@@ -76,7 +79,6 @@ public class PostMovies implements ICommand {
 		return INFO;
 	}
     
-    //this could be on ResultInfo
     private ResultInfo createResultInfo(ResultSet rs) throws SQLException{
     	ArrayList<String> columns = new ArrayList<>();
     	columns.add("Movie ID");
@@ -89,5 +91,4 @@ public class PostMovies implements ICommand {
     	}
     	return new ResultInfo(TITLE,columns,rdata);
     }
-
 }
