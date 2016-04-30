@@ -20,39 +20,63 @@ import sqlserver.ConnectionFactory;
  * Created by Red on 09/04/2016.
  */
 public class PostMoviesMidRatingsTest {
-	// TODO: 30/04/2016
+
 	private static int movieid;
 
+//	POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the following parameters
+//
+//	rating - integer between 1 and 5.
+
 	@Before
-	public static void PostMoviesMidRatingsTest0() throws Exception{
+	public void init() throws SQLException {
+		try (Connection conn = ConnectionFactory.getConn()) {
+			Statement stmt = conn.createStatement();
+
+			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('x','20000101')");
+
+			stmt.executeUpdate("DELETE Movie");
+
+			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
+
+			stmt.executeUpdate("DBCC CHECKIDENT (Rating, RESEED, 0)");
+
+			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('awesomeJack','20000101')");
+
+			stmt.executeUpdate("INSERT INTO Rating (movie_id,one,two,three,four,five) VALUES ('1','0','0','0','0','0')");
+
+			stmt.close();
+		}
+	}
+
+	@After
+	public void removeInserts() throws Exception {
+		try (Connection conn = ConnectionFactory.getConn()) {
+			Statement stmt = conn.createStatement();
+
+			stmt.executeUpdate("DELETE Rating");
+
+			stmt.executeUpdate("DELETE Movie");
+
+			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
+
+			stmt.executeUpdate("DBCC CHECKIDENT (Rating, RESEED, 0)");
+
+		}
+	}
+
+	@Test
+	public void PostMoviesMidRatingsTest0() throws Exception{
 		HashMap<String,String> data = new HashMap<String,String>();    	
-    	data.put("title", "Speed");    	
-    	data.put("release_year", "2000");
+    	data.put("rating", "5");
+		data.put("mid", "1");
 
     	ResultInfo ri = new PostMoviesMidRatings().execute(data);
     	Iterator<ArrayList<String>> it = ri.getValues().iterator();
     	while(it.hasNext()){
-    		List<String> s = (List<String>) it.next();
+    		List<String> s = it.next();
     		movieid = Integer.parseInt(s.get(0));
     	}
     	
 	}
-	
-   
-    @Test
-    public void GetMoviesMidConsoleOutputTest()throws Exception{
-    	
-    	
-    	
-    }
-    
-    @After
-    public void clean() throws SQLException{
-    	try (Connection conn = ConnectionFactory.getConn()) {
-            Statement stmt = conn.createStatement();
-            stmt.execute("delete from Movie where title = 'Speed'");
-            stmt.close();
-        }
-    }
 
 }

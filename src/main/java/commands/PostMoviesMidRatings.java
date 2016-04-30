@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PostMoviesMidRatings implements ICommand {
-	private static final String TITLE = "Rating insertion";
+	private static final String TITLE = "Rating of a movie";
 	private static final String INFO = "POST /movies/{mid}/ratings - submits a new rating for the movie identified by mid, given the parameters \"rating\"";
 
 	/*

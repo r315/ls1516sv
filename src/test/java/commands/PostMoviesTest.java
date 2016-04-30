@@ -28,6 +28,8 @@ public class PostMoviesTest {
 
 			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('x','20000101')");
 
+			stmt.executeUpdate("DELETE Rating");
+
 			stmt.executeUpdate("DELETE Movie");
 
 			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
@@ -41,7 +43,11 @@ public class PostMoviesTest {
 		try (Connection conn = ConnectionFactory.getConn()) {
 			Statement stmt = conn.createStatement();
 
+			stmt.executeUpdate("DELETE Rating");
+
 			stmt.executeUpdate("DELETE Movie");
+
+
 
 			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
 
@@ -57,16 +63,6 @@ public class PostMoviesTest {
     	ResultInfo ri = new PostMovies().execute(data);
     	
     	assertNotNull(ri);    	
-    	assertEquals(1,ri.getValues().size());
-	}
-
-	@After
-	public void clean() throws SQLException{
-		try (Connection conn = ConnectionFactory.getConn()) {
-			Statement stmt = conn.createStatement();
-			stmt.execute("delete Rating");
-			stmt.execute("delete Movie");
-			stmt.close();
-		}
+    	assertEquals(1,Integer.parseInt(ri.getValues().iterator().next().iterator().next()));
 	}
 }
