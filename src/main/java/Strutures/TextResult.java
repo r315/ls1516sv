@@ -2,13 +2,14 @@ package Strutures;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by Red on 24/04/2016.
  */
 public class TextResult implements IResult{
 
-    public void display(ResultInfo resultInfo){
+    public void display(ResultInfo resultInfo, Map<String,String> headersMap){
         if(resultInfo.getValues().isEmpty()){
             System.out.println("No results found.");
             return;

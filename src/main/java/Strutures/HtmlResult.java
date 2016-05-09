@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import exceptions.HtmlTreeNotCreatedException;
 
@@ -13,7 +14,7 @@ import exceptions.HtmlTreeNotCreatedException;
 public class HtmlResult implements IResult {
 	private String html = null;
 	
-    public void display(ResultInfo resultInfo){    	
+    public void display(ResultInfo resultInfo, Map<String,String> headers){
     	if(resultInfo == null){
     		html = null;
     		return;

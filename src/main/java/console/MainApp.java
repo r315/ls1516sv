@@ -22,7 +22,7 @@ public class MainApp {
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
 				ResultInfo result = createMap().get(command).execute(command.getData());
-				createHeadersMap().getResponseMethod(headerInfo).display(result);
+				createHeadersMap().getResponseMethod(headerInfo).display(result,headerInfo.getHeadersMap());
 			} catch(Exception e){
  				if(interactive_mode){
 					System.out.println(e.getMessage());
@@ -71,7 +71,6 @@ public class MainApp {
 		HeaderMap map=new HeaderMap();
 		map.addResponseMethod("text/html",new HtmlResult());
 		map.addResponseMethod("text/plain",new TextResult());
-
 		return map;
 	}
 }
