@@ -1,10 +1,16 @@
 package structures;
 
-import Strutures.*;
-import console.MainApp;
 import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import Strutures.HeaderInfo;
+import Strutures.HeaderMap;
+import Strutures.HtmlResult;
+import Strutures.IResult;
+import Strutures.TextResult;
+import console.MainApp;
 
 /**
  * Created by Red on 30/04/2016.
@@ -40,10 +46,10 @@ public class HeaderMapTest {
     }
 
     @Test
-    public void GetTextResultFromMapWithoutParams(){
+    public void GetDefaultResultFromMapWithoutParams(){
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies"});
         IResult r=map.getResponseMethod(hi);
-        Assert.assertTrue(r instanceof TextResult);
+        Assert.assertTrue(r instanceof HtmlResult);
     }
 
 }

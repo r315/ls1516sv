@@ -1,22 +1,19 @@
 package commands;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
-import Strutures.ResultInfo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
-
-import static org.junit.Assert.assertEquals;
+import Strutures.ResultInfo;
 
 /**
  * Created by Red on 09/04/2016.

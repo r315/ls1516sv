@@ -1,48 +1,58 @@
 package structures;
 
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import exceptions.HtmlTreeNotCreatedException;
 import Strutures.HtmlResult;
 import Strutures.ResultInfo;
 
 //TODO: improve tests
 public class HtmlResultTest {
 	public static HtmlResult hr;
-	
+	public static Map<String,String> hmap;
 	@BeforeClass
 	public static void createHtmlResultInstance(){
 		hr = new HtmlResult();
+		hmap = new HashMap<String,String>();
+		hmap.put("file-name","HtmlOut.html");
 	}
 	
 	@Test
-	public void shouldGetExceptionIfHasNoTree(){	
-			HtmlResult thr = new HtmlResult();
-		try {
-			thr.writeToFile("HtmlOut.html");
-			fail();
-		} catch (Exception e) {
-			// Exception expected
-			if(!(e instanceof HtmlTreeNotCreatedException))
-				fail();
-		}	
+	public void shoudNotThrowExceptions()
+	{
+		hr.display(null, null);		
+	}
+	
+	@Test
+	public void shoudPrintOnConsole()
+	{		
+		hr.display(createResultInfo(4,4),null);		
+		
 	}	
 	
 	@Test
-	public void saveHtmlToFile() throws Exception{	
-		hr.display(createResultInfo(4,4));		
-		hr.writeToFile("HtmlOut.html");		
+	public void shoudWriteToFile()
+	{		
+		hr.display(createResultInfo(4,4),hmap);		
+		//TODO: check file
 	}
+	@Test
+	public void shoudPrintToConsoleAndWriteToFile()
+	{	
+		hmap.put("accept","text/html");
+		hr.display(createResultInfo(4,4),hmap);		
+		
+	}	
 	
 	@Test
-	public void saveHtmlToFileNodata() throws Exception{
-		hr.display(createResultInfo(0,0));		
-		hr.writeToFile("HtmlOut.html");		
+	public void shouldSaveHtmlToFileNodata() 
+	{
+		hr.display(createResultInfo(0,0),hmap);		
 	}
 		
 	private ResultInfo createResultInfo(int r, int c){

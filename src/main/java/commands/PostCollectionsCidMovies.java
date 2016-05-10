@@ -1,17 +1,17 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
-import exceptions.InvalidCommandParametersException;
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
+import exceptions.InvalidCommandParametersException;
 
 /**
  * Created by Luigi Sekuiya on 29/04/2016.

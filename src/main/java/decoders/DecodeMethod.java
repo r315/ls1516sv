@@ -1,7 +1,6 @@
 package decoders;
 
 import exceptions.InvalidCommandMethodException;
-import exceptions.InvalidCommandPathException;
 
 /**
  * Created by Luigi Sekuiya on 23/04/2016.

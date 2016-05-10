@@ -1,12 +1,10 @@
 package sqlserver;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-
 import java.sql.Connection;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.ResultSet;
 import java.util.Map;
+
+import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 public class ConnectionFactory {
 

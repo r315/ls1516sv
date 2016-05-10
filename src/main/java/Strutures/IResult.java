@@ -1,6 +1,5 @@
 package Strutures;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**

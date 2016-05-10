@@ -1,18 +1,18 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
-import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
-import utils.Utils;
-import sqlserver.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
+import exceptions.InvalidCommandParametersException;
+import exceptions.SqlInsertionException;
 
 public class PostMoviesMidRatings implements ICommand {
 	private static final String TITLE = "Rating of a movie";

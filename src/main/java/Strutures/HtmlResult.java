@@ -12,6 +12,8 @@ import exceptions.HtmlTreeNotCreatedException;
  * Created hugo reis on 27/04/2016 
  */
 public class HtmlResult implements IResult {
+	private static final Object FILENAME_KEY = "file-name";
+	private static final Object ACCEPT_KEY = "accept";
 	private String html = null;
 	
     public void display(ResultInfo resultInfo, Map<String,String> headers){
@@ -45,13 +47,25 @@ public class HtmlResult implements IResult {
     	node.addChild(table);    	
     	root.addChild(node); 
     	
-    	html = "<!DOCTYPE html>\n" + root.getHtml(0);    	
+    	html = "<!DOCTYPE html>\n" + root.getHtml(0);   
+    	try {
+    		if(headers == null)
+    			writeToFile(null);
+    		else
+    			writeToFile(headers.get(FILENAME_KEY));
+    		
+		} catch (FileNotFoundException e) {
+			// TODO Discuss Exceptions
+			System.out.println("File name given Not Found!");
+			
+		} catch (HtmlTreeNotCreatedException e) {
+			System.out.println("HTML Tree not created!");
+		}
     }    
     
     private HtmlNode addDataToRow(HtmlNode row, String tag, Collection<String> vals){    		
-    	for(String s : vals){
-    		row.addChild(new HtmlNode(tag,s));
-    	}  
+    	for(String s : vals)
+    		row.addChild(new HtmlNode(tag,s)); 
     	return row;
     }
     

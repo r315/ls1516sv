@@ -1,11 +1,19 @@
 package structures;
 
-import Strutures.*;
-import console.MainApp;
 import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
-import commands.*;
+
+import Strutures.CommandInfo;
+import Strutures.CommandMap;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
+
+import commands.GetMoviesMid;
+import commands.PostMovies;
+
+import console.MainApp;
 
 public class CommandMapTest {
 

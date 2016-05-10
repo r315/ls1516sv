@@ -1,9 +1,8 @@
 package Strutures;
 
-import decoders.DecodeHeaders;
-
-import java.util.HashMap;
 import java.util.Map;
+
+import decoders.DecodeHeaders;
 
 public class HeaderInfo {
 

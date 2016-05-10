@@ -1,9 +1,36 @@
 package console;
 
-import Strutures.*;
-import commands.*;
-
 import java.util.Scanner;
+
+import Strutures.CommandInfo;
+import Strutures.CommandMap;
+import Strutures.HeaderInfo;
+import Strutures.HeaderMap;
+import Strutures.HtmlResult;
+import Strutures.ResultInfo;
+import Strutures.TextResult;
+
+import commands.DeleteCollectionsCidMoviesMid;
+import commands.Exit;
+import commands.GetCollections;
+import commands.GetCollectionsCid;
+import commands.GetMovies;
+import commands.GetMoviesMid;
+import commands.GetMoviesMidRatings;
+import commands.GetMoviesMidReviews;
+import commands.GetMoviesMidReviewsRid;
+import commands.GetTopsNRatingsHigherAverage;
+import commands.GetTopsNRatingsLowerAverage;
+import commands.GetTopsNReviewsHigherCount;
+import commands.GetTopsRatingsHigherAverage;
+import commands.GetTopsRatingsLowerAverage;
+import commands.GetTopsReviewsHigherCount;
+import commands.Options;
+import commands.PostCollections;
+import commands.PostCollectionsCidMovies;
+import commands.PostMovies;
+import commands.PostMoviesMidRatings;
+import commands.PostMoviesMidReviews;
 
 public class MainApp {
 

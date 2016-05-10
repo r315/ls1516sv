@@ -1,11 +1,5 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-import utils.Utils;
-import sqlserver.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
+import exceptions.InvalidCommandVariableException;
 
 public class GetTopsNReviewsHigherCount implements ICommand {
 	private static final String INFO = "GET /tops/{n}/reviews/higher/count - returns a list with the n movies with higher review count.";

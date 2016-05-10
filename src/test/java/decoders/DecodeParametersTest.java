@@ -1,12 +1,11 @@
 package decoders;
 
-import exceptions.InvalidCommandPathException;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Created by Luigi Sekuiya on 23/04/2016.

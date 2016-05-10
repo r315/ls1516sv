@@ -1,8 +1,8 @@
 package utils;
 
-import exceptions.InvalidCommandParametersException;
-
 import java.util.HashMap;
+
+import exceptions.InvalidCommandParametersException;
 
 /**
  * Created by Luigi Sekuiya on 22/04/2016.

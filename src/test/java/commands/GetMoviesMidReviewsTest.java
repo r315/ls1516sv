@@ -1,11 +1,6 @@
 package commands;
 
-import Strutures.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import sqlserver.ConnectionFactory;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -13,7 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sqlserver.ConnectionFactory;
+import Strutures.ResultInfo;
+import exceptions.InvalidCommandVariableException;
 
 public class GetMoviesMidReviewsTest {
 

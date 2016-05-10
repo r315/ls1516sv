@@ -5,14 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
+import sqlserver.ConnectionFactory;
+import utils.Utils;
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-import utils.Utils;
-import sqlserver.ConnectionFactory;
 import exceptions.InvalidCommandParametersException;
 import exceptions.SqlInsertionException;
 

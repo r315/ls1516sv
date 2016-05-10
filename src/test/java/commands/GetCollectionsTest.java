@@ -1,10 +1,6 @@
 package commands;
 
-import Strutures.ResultInfo;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import sqlserver.ConnectionFactory;
+import static org.junit.Assert.assertEquals;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -13,7 +9,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sqlserver.ConnectionFactory;
+import Strutures.ResultInfo;
 
 /**
  * Created by Luigi Sekuiya on 30/04/2016.

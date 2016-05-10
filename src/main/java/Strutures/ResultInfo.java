@@ -1,6 +1,5 @@
 package Strutures;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 
