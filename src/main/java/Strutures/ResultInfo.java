@@ -6,6 +6,8 @@ import java.util.Collection;
 /**
  * Created by Red on 25/04/2016.
  */
+
+//TODO HR: avoid handling exceptions by return empty collections insted null 
 public class ResultInfo {
 
     private String diplayTitle;

@@ -10,7 +10,9 @@ public class DecodeHeaders {
     public static HashMap<String, String> decode(String line) {
         return decode(line.split(" "));
     }
-    //TODO implement on other decoders??
+    //TODO HR: implement on other decoders??
+    // this decoder is immune to double spaces between path and headers
+    // also order of parameters and headers is not important
     public static HashMap<String,String> decode(String [] args){
 		HashMap<String,String> map = new HashMap<String,String>();
 		try{
@@ -24,7 +26,7 @@ public class DecodeHeaders {
 				}
 			);
 		}catch(Exception e){
-			
+			//returns empty map on null args			
 		}
 		return map;
 	}

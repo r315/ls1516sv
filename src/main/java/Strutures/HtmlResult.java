@@ -6,14 +6,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-import exceptions.HtmlTreeNotCreatedException;
-
 /**
  * Created hugo reis on 27/04/2016 
  */
 public class HtmlResult implements IResult {
-	private static final Object FILENAME_KEY = "file-name";
-	private static final Object ACCEPT_KEY = "accept";
+	private static final Object FILENAME_KEY = "file-name";	
 	private String html = null;
 	
     public void display(ResultInfo resultInfo, Map<String,String> headers){
@@ -32,6 +29,7 @@ public class HtmlResult implements IResult {
     	
     	HtmlNode table = new HtmlNode("table");
     	table.addAttributes("style=\"width:100%\"");
+    	//TODO HR: Fix resultinfo null Titles
     	table.addChild(addDataToRow(new HtmlNode("tr"),"th",resultInfo.getTitles()));
     	if(resultInfo.getValues().isEmpty()){
     		ArrayList<String> ndata = new ArrayList<String>();
@@ -55,11 +53,9 @@ public class HtmlResult implements IResult {
     			writeToFile(headers.get(FILENAME_KEY));
     		
 		} catch (FileNotFoundException e) {
-			// TODO Discuss Exceptions
+			// TODO HR: Discuss Exceptions!!
 			System.out.println("File name given Not Found!");
 			
-		} catch (HtmlTreeNotCreatedException e) {
-			System.out.println("HTML Tree not created!");
 		}
     }    
     
@@ -69,9 +65,7 @@ public class HtmlResult implements IResult {
     	return row;
     }
     
-    public void writeToFile(String filename) throws HtmlTreeNotCreatedException, FileNotFoundException{ 
-    	if(html == null)
-    		throw new HtmlTreeNotCreatedException();
+    public void writeToFile(String filename) throws FileNotFoundException{ 
     	if(filename == null){
     		System.out.println(html);
     	}else{
