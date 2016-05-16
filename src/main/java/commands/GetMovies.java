@@ -105,10 +105,10 @@ public class GetMovies implements ICommand {
         String orderBy = null;
 
         switch(sortBy){
-            case "addedData":
+            case "addedDate":
                 orderBy = "movie_id";
                 break;
-            case "addedDataDesc":
+            case "addedDateDesc":
                 orderBy = "movie_id DESC";
                 break;
             case "year":

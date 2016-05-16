@@ -16,7 +16,7 @@ CREATE TABLE Review(
 	summary varchar(200) NOT NULL,
 	rating int NOT NULL,
 	PRIMARY KEY(review_id, movie_id),
-	CHECK (rating>=0 AND rating<=5)
+	CHECK (rating>=1 AND rating<=5)
 )
 
 CREATE TABLE Rating(
