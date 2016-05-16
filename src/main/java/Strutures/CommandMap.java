@@ -1,14 +1,18 @@
 package Strutures;
 
-import commands.*;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import decoders.DecodeMethod;
 import decoders.DecodePath;
 import exceptions.InvalidCommandMethodException;
 import exceptions.InvalidCommandPathException;
 import exceptions.InvalidCommandTableException;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.*;
 
 /**
  * Created by Red on 28/03/2016.

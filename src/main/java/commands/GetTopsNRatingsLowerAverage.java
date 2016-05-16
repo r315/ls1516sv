@@ -1,11 +1,5 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-import utils.Utils;
-import sqlserver.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +8,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
+import exceptions.InvalidCommandVariableException;
 
 public class GetTopsNRatingsLowerAverage implements ICommand {
 	private static final String INFO = "GET /tops/{n}/ratings/lower/average - returns a list with the n movies with the lower average ratings, sorted decreasingly.";

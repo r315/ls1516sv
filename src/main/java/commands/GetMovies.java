@@ -1,12 +1,18 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+
 import sqlserver.ConnectionFactory;
 import utils.Utils;
-
-import java.sql.*;
-import java.util.*;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
 
 
 public class GetMovies implements ICommand {

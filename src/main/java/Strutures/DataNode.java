@@ -1,7 +1,6 @@
 package Strutures;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Created by Red on 29/03/2016.

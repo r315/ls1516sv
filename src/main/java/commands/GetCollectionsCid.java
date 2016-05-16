@@ -1,12 +1,5 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-import sqlserver.ConnectionFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import utils.Utils;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
+import exceptions.InvalidCommandVariableException;
 
 /**
  * Created by Luigi Sekuiya on 29/04/2016.

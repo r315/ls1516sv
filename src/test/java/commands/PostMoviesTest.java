@@ -6,18 +6,14 @@ import static org.junit.Assert.assertNotNull;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-
-import Strutures.CommandInfo;
-import Strutures.ResultInfo;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
+import Strutures.ResultInfo;
 
 public class PostMoviesTest {
 

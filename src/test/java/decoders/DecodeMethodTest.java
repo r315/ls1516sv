@@ -1,8 +1,10 @@
 package decoders;
 
-import exceptions.InvalidCommandMethodException;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import exceptions.InvalidCommandMethodException;
 
 public class DecodeMethodTest {
 

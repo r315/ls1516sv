@@ -4,16 +4,16 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import exceptions.HtmlTreeNotCreatedException;
+import java.util.Map;
 
 /**
  * Created hugo reis on 27/04/2016 
  */
 public class HtmlResult implements IResult {
+	private static final Object FILENAME_KEY = "file-name";	
 	private String html = null;
 	
-    public void display(ResultInfo resultInfo){    	
+    public void display(ResultInfo resultInfo, Map<String,String> headers){
     	if(resultInfo == null){
     		html = null;
     		return;
@@ -29,6 +29,7 @@ public class HtmlResult implements IResult {
     	
     	HtmlNode table = new HtmlNode("table");
     	table.addAttributes("style=\"width:100%\"");
+    	//TODO HR: Fix resultinfo null Titles
     	table.addChild(addDataToRow(new HtmlNode("tr"),"th",resultInfo.getTitles()));
     	if(resultInfo.getValues().isEmpty()){
     		ArrayList<String> ndata = new ArrayList<String>();
@@ -44,19 +45,27 @@ public class HtmlResult implements IResult {
     	node.addChild(table);    	
     	root.addChild(node); 
     	
-    	html = "<!DOCTYPE html>\n" + root.getHtml(0);    	
+    	html = "<!DOCTYPE html>\n" + root.getHtml(0);   
+    	try {
+    		if(headers == null)
+    			writeToFile(null);
+    		else
+    			writeToFile(headers.get(FILENAME_KEY));
+    		
+		} catch (FileNotFoundException e) {
+			// TODO HR: Discuss Exceptions!!
+			System.out.println("File name given Not Found!");
+			
+		}
     }    
     
     private HtmlNode addDataToRow(HtmlNode row, String tag, Collection<String> vals){    		
-    	for(String s : vals){
-    		row.addChild(new HtmlNode(tag,s));
-    	}  
+    	for(String s : vals)
+    		row.addChild(new HtmlNode(tag,s)); 
     	return row;
     }
     
-    public void writeToFile(String filename) throws HtmlTreeNotCreatedException, FileNotFoundException{ 
-    	if(html == null)
-    		throw new HtmlTreeNotCreatedException();
+    public void writeToFile(String filename) throws FileNotFoundException{ 
     	if(filename == null){
     		System.out.println(html);
     	}else{

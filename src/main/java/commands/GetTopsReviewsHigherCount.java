@@ -1,13 +1,16 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
-import sqlserver.ConnectionFactory;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+
+import sqlserver.ConnectionFactory;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
 
 public class GetTopsReviewsHigherCount implements ICommand {
 	private static final String INFO = "GET /tops/reviews/higher/count - returns the detail for the movie with most reviews.";

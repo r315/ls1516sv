@@ -1,9 +1,36 @@
 package console;
 
-import Strutures.*;
-import commands.*;
-
 import java.util.Scanner;
+
+import Strutures.CommandInfo;
+import Strutures.CommandMap;
+import Strutures.HeaderInfo;
+import Strutures.HeaderMap;
+import Strutures.HtmlResult;
+import Strutures.ResultInfo;
+import Strutures.TextResult;
+
+import commands.DeleteCollectionsCidMoviesMid;
+import commands.Exit;
+import commands.GetCollections;
+import commands.GetCollectionsCid;
+import commands.GetMovies;
+import commands.GetMoviesMid;
+import commands.GetMoviesMidRatings;
+import commands.GetMoviesMidReviews;
+import commands.GetMoviesMidReviewsRid;
+import commands.GetTopsNRatingsHigherAverage;
+import commands.GetTopsNRatingsLowerAverage;
+import commands.GetTopsNReviewsHigherCount;
+import commands.GetTopsRatingsHigherAverage;
+import commands.GetTopsRatingsLowerAverage;
+import commands.GetTopsReviewsHigherCount;
+import commands.Options;
+import commands.PostCollections;
+import commands.PostCollectionsCidMovies;
+import commands.PostMovies;
+import commands.PostMoviesMidRatings;
+import commands.PostMoviesMidReviews;
 
 public class MainApp {
 
@@ -22,7 +49,7 @@ public class MainApp {
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
 				ResultInfo result = createMap().get(command).execute(command.getData());
-				createHeadersMap().getResponseMethod(headerInfo).display(result);
+				createHeadersMap().getResponseMethod(headerInfo).display(result,headerInfo.getHeadersMap());
 			} catch(Exception e){
  				if(interactive_mode){
 					System.out.println(e.getMessage());
@@ -71,7 +98,6 @@ public class MainApp {
 		HeaderMap map=new HeaderMap();
 		map.addResponseMethod("text/html",new HtmlResult());
 		map.addResponseMethod("text/plain",new TextResult());
-
 		return map;
 	}
 }

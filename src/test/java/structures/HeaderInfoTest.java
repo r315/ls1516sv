@@ -1,8 +1,10 @@
 package structures;
 
-import Strutures.HeaderInfo;
 import junit.framework.Assert;
+
 import org.junit.Test;
+
+import Strutures.HeaderInfo;
 
 /**
  * Created by Red on 30/04/2016.
@@ -11,10 +13,10 @@ import org.junit.Test;
 public class HeaderInfoTest {
 
     @Test
-    public void GetResultTextTest() throws Exception{
+    public void GetDefaultFormat() throws Exception{
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies"});
         String accept = hi.getHeadersMap().get("accept");
-        Assert.assertEquals("text/plain",accept);
+        Assert.assertEquals("text/html",accept);
     }
 
     @Test

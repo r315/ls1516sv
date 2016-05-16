@@ -1,9 +1,9 @@
 package decoders;
 
-import exceptions.InvalidCommandPathException;
-
 import java.util.ArrayList;
 import java.util.Collection;
+
+import exceptions.InvalidCommandPathException;
 
 /**
  * Created by Luigi Sekuiya on 23/04/2016.

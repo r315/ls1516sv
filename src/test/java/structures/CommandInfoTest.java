@@ -1,12 +1,17 @@
 package structures;
 
-import Strutures.CommandInfo;
-import org.junit.Test;
-
-import java.util.*;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.junit.Test;
+
+import Strutures.CommandInfo;
 
 /**
  * Created by Red on 30/04/2016.

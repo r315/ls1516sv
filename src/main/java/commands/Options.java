@@ -1,15 +1,11 @@
 package commands;
 
-import Strutures.CommandMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import Strutures.ICommand;
 import Strutures.ResultInfo;
 import console.MainApp;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 public class Options implements ICommand{
     public final String INFO = "OPTION / - presents a list of available commands and their characteristics.";

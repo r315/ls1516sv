@@ -1,9 +1,8 @@
 package Strutures;
 
-import decoders.DecodeHeaders;
-
-import java.util.HashMap;
 import java.util.Map;
+
+import decoders.DecodeHeaders;
 
 public class HeaderInfo {
 
@@ -13,7 +12,7 @@ public class HeaderInfo {
 	public HeaderInfo(String[] h){
 		headers=DecodeHeaders.decode(h);
 		if(headers.size()==0)
-			headers.put("accept","text/plain");
+			headers.put("accept","text/html");
 	}
 	
 	public Map<String,String> getHeadersMap(){

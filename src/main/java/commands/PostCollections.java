@@ -1,16 +1,16 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
-import exceptions.InvalidCommandParametersException;
-import sqlserver.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import sqlserver.ConnectionFactory;
+import Strutures.ICommand;
+import Strutures.ResultInfo;
+import exceptions.InvalidCommandParametersException;
 
 public class PostCollections implements ICommand {
     private static final String INFO = "POST /collections - creates a new collection and returns its identifier, given the parameters \"name\" and \"description\".";

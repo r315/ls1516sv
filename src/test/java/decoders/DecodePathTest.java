@@ -1,13 +1,14 @@
 package decoders;
 
-import exceptions.InvalidCommandPathException;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+
+import exceptions.InvalidCommandPathException;
 
 public class DecodePathTest {
     Collection<String> resources;

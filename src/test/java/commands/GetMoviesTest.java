@@ -1,17 +1,19 @@
 package commands;
 
-import Strutures.*;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import sqlserver.ConnectionFactory;
+import static org.junit.Assert.assertEquals;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import sqlserver.ConnectionFactory;
+import Strutures.ResultInfo;
 
 public class GetMoviesTest {
 

@@ -1,10 +1,9 @@
 package commands;
 
+import java.util.HashMap;
+
 import Strutures.ICommand;
 import Strutures.ResultInfo;
-
-import java.sql.SQLException;
-import java.util.HashMap;
 
 /**
  * Created by Red on 26/04/2016.

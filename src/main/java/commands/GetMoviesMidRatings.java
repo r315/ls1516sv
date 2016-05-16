@@ -1,13 +1,19 @@
 package commands;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+
+import sqlserver.ConnectionFactory;
+import utils.Utils;
 import Strutures.ICommand;
 import Strutures.ResultInfo;
 import exceptions.InvalidCommandVariableException;
-import utils.Utils;
-import sqlserver.ConnectionFactory;
-
-import java.sql.*;
-import java.util.*;
 
 
 public class GetMoviesMidRatings implements ICommand {

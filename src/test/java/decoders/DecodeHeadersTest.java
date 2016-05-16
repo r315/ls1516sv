@@ -1,11 +1,12 @@
 package decoders;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DecodeHeadersTest {
     HashMap<String, String> head;
@@ -62,4 +63,12 @@ public class DecodeHeadersTest {
         HashMap<String, String> param = DecodeHeaders.decode(aux);
         assertEquals(new HashMap<String, String>(),param);
     }
+    
+    @Test
+	public void shouldGetHeaderFromCommandLine(){
+		String cmdline = "GET /movies accept:text/plain|file-name:teste.txt";
+		Map <String,String> map = DecodeHeaders.decode(cmdline);		
+		assertEquals(map.get("accept"),"text/plain");
+		assertEquals(map.get("file-name"),"teste.txt");		
+	}	
 }

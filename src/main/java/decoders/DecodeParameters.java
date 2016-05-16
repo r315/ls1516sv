@@ -1,8 +1,8 @@
 package decoders;
 
-import exceptions.InvalidCommandParametersException;
-
 import java.util.HashMap;
+
+import exceptions.InvalidCommandParametersException;
 
 /**
  * Created by Luigi Sekuiya on 23/04/2016.

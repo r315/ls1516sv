@@ -1,6 +1,8 @@
 package commands;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,10 +16,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
 import sqlserver.ConnectionFactory;
 import Strutures.ResultInfo;
+import exceptions.InvalidCommandParametersException;
 
 public class PostMoviesMidReviewsTest {
 	private static int mid;

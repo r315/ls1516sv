@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import sqlserver.ConnectionFactory;
 import Strutures.ICommand;
 import Strutures.ResultInfo;
 import exceptions.InvalidCommandParametersException;
 import exceptions.SqlInsertionException;
-import sqlserver.ConnectionFactory;
 
 public class PostMovies implements ICommand {
 	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
