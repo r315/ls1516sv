@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created hugo reis on 27/04/2016 
  */
-public class HtmlResult implements IResult {
+public class HtmlResult extends HtmlTree implements IResult{
 	private static final Object FILENAME_KEY = "file-name";	
 	private String html = null;
 	
@@ -17,20 +17,15 @@ public class HtmlResult implements IResult {
     	if(resultInfo == null){
     		html = null;
     		return;
-    	}    		
+    	}
     	
-    	HtmlNode root = new HtmlNode("html");  
-    	HtmlNode node = new HtmlNode("head");     	
-    	
-    	node.addChild(new HtmlNode("title",resultInfo.getDisplayTitle()));
-    	node.addChild(new HtmlNode("h2","LS-1516-2"));
-    	node.addChild(new HtmlNode("style","table, th, td { border: 1px solid black; border-collapse: collapse;}"));
-    	root.addChild(node);
-    	
+    	addTitle(resultInfo.getDisplayTitle());    	
     	HtmlNode table = new HtmlNode("table");
     	table.addAttributes("style=\"width:100%\"");
-    	//TODO HR: Fix resultinfo null Titles
-    	table.addChild(addDataToRow(new HtmlNode("tr"),"th",resultInfo.getTitles()));
+    	
+    	if(!resultInfo.getTitles().isEmpty())
+    		table.addChild(addDataToRow(new HtmlNode("tr"),"th",resultInfo.getTitles()));
+    	
     	if(resultInfo.getValues().isEmpty()){
     		ArrayList<String> ndata = new ArrayList<String>();
     		ndata.add("No results found.");
@@ -41,11 +36,13 @@ public class HtmlResult implements IResult {
     		}
     	}
     	
-    	node = new HtmlNode("body");
-    	node.addChild(table);    	
-    	root.addChild(node); 
+    	//TODO: Get Table name
+    	HtmlNode body = root.findNode("body");
+    	body.addChild(h2("Table Name"));    	
+    	body.addChild(table);
     	
-    	html = "<!DOCTYPE html>\n" + root.getHtml(0);   
+    	html = getHtml();
+    	 
     	try {
     		if(headers == null)
     			writeToFile(null);
@@ -74,75 +71,17 @@ public class HtmlResult implements IResult {
     		}
     	}
     }    
-    
-    class HtmlNode{
-    	private String tag = "";
-    	private String content =""; 
-    	private String attributes = "";
-    	private Collection<HtmlNode> childs;
-
-    	public HtmlNode(String tag){
-    		this.tag = tag;
-    		childs = new ArrayList<HtmlNode>();
-    	}
-
-    	public HtmlNode(String tag, String content){
-    		this(tag);
-    		this.content = content;
-    	}
-
-
-    	public void addContent(String content){
-    		this.content = content;
-    	}
-
-    	public void addAttributes(String attributes){
-    		this.attributes = " " + attributes;
-    	}
-
-    	public void addChild(HtmlNode node){
-    		childs.add(node);
-    	}
-
-    	public String getHtml(int level){    		
-    		StringBuffer sb = new StringBuffer();
-    		StringBuffer tabs = new StringBuffer("\n");
-
-    		for(int i = 0; i < level; i++) tabs.append("\t");    		
-
-    		sb.append(tabs + "<" + tag + attributes + ">");
-
-    		for(HtmlNode child : childs){
-    			sb.append(child.getHtml(level+1));
-    		}
-
-    		if(content.length()!=0)
-    			sb.append(content + "</" + tag + ">");
-    		else
-    			sb.append(tabs + "</" + tag + ">");
-
-    		return  sb.toString();
-    	}
-
-    	public HtmlNode findNode(String tag){
-    		if(this.tag == tag) return this;
-    		for(HtmlNode child : childs){
-    			return child.findNode(tag);
-    		}     		
-    		return null;
-    	}
-    }     
 }
 
 /*
 <!DOCTYPE html>
 <html>
 	<head>
-		<title> Titulo tab browser </title> 
-		<h2> Titulo pagina </h2>
+		<title> Titulo tab browser </title> 		
 		<style> table, th, td { border: 1px solid black; border-collapse: collapse;} </style>
 	</head>
 	<body>
+		<h2> Titulo Tabela </h2>
 		<table style="width:100%">
 			<tr>
 				<th>Titulo</th>
