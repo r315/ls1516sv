@@ -1,15 +1,11 @@
 package structures;
 
+import Strutures.*;
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import Strutures.HeaderInfo;
-import Strutures.HeaderMap;
-import Strutures.HtmlResult;
-import Strutures.IResultFormat;
-import Strutures.TextResult;
 import console.MainApp;
 
 /**
@@ -21,7 +17,7 @@ public class HeaderMapTest {
 
     @Before
     public void before() throws Exception{
-        map= MainApp.createHeadersMap();
+        map= Manager.createHeadersMap();
     }
 
     @Test

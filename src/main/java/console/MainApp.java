@@ -18,8 +18,7 @@ public class MainApp {
 			interactive_mode=true;
 
 		try {
-			Manager.createMap();
-			Manager.createHeadersMap();
+			Manager.Init();
 			do {
 				if(interactive_mode){
 					System.out.println("[Interactive mode] Insert a command:");

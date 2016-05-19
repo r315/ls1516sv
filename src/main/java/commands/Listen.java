@@ -1,5 +1,6 @@
 package commands;
 
+import Strutures.ExampleServlet;
 import Strutures.ICommand;
 import Strutures.Manager;
 import Strutures.ResultInfo;
@@ -26,13 +27,13 @@ public class Listen implements ICommand{
         //Create a handler for each functionality
         ServletHandler handler = new ServletHandler();
         Manager.ServerSetHandler(handler);
-        handler.addServletWithMapping(TimeServlet.class, "/*");
+        handler.addServletWithMapping(ExampleServlet.class, "/*");
 
         //Starts listening to requests
         Manager.ServerStart();
         System.out.println("Http Server started listening requests on port: "+port);
         
-        //// TODO: 19/05/2016  
+        //// TODO: 19/05/2016
         //Change return to ResultInfo
         return null;
     }

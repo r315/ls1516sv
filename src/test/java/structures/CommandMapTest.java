@@ -1,14 +1,10 @@
 package structures;
 
+import Strutures.*;
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import Strutures.CommandInfo;
-import Strutures.CommandMap;
-import Strutures.ICommand;
-import Strutures.ResultInfo;
 
 import commands.GetMoviesMid;
 import commands.PostMovies;
@@ -21,7 +17,7 @@ public class CommandMapTest {
 
 	@Before
 	public void before() throws Exception{
-		map= MainApp.createMap();
+		map= Manager.createMap();
 	}
 
 	@Test

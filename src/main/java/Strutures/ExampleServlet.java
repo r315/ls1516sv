@@ -16,15 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ServletHandler extends HttpServlet{
+public class ExampleServlet extends HttpServlet{
 
-    private int LISTEN_PORT;
-    private CommandMap commandMap;
-
-    public ServletHandler(CommandMap commandMap, int port){
-        this.LISTEN_PORT=port;
-        this.commandMap=commandMap;
-    }
+    public ExampleServlet(){}
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
@@ -34,12 +28,9 @@ public class ServletHandler extends HttpServlet{
         try{
             HeaderInfo headerInfo = new HeaderInfo(new String[]{req.getHeader("Accept")});
             CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
-            ResultInfo result = commandMap.get(command).execute(command.getData());
-            //// TODO: 18/05/2016  
-            IResultFormat resultFormat= MainApp.commandMap.getResponseMethod(headerInfo.getHeadersMap());
-            resultFormat.generate(result,headerInfo.getHeadersMap());
+            respBody= Manager.executeCommand(command,headerInfo);
         }catch(Exception e){
-            e.getMessage();
+            //// TODO: 19/05/2016  
         }
         byte[] respBodyBytes = respBody.getBytes(utf8);
         resp.setStatus(200);

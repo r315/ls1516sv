@@ -9,14 +9,14 @@ import java.util.Map;
 /**
  * Created hugo reis on 27/04/2016 
  */
-public class HtmlResult extends HtmlTree implements IResult{
-	private static final Object FILENAME_KEY = "file-name";	
-	private String html = null;
-	
-    public void display(ResultInfo resultInfo, Map<String,String> headers){
+public class HtmlResult extends HtmlTree implements IResultFormat{
+	//private static final String FILENAME_KEY = "file-name";
+	private String html;
+
+    public String generate(ResultInfo resultInfo, Map<String,String> headers){
     	if(resultInfo == null){
-    		html = null;
-    		return;
+    		//html = null;
+    		return null;
     	}
     	
     	addTitle(resultInfo.getDisplayTitle());    	
@@ -42,7 +42,8 @@ public class HtmlResult extends HtmlTree implements IResult{
     	body.addChild(table);
     	
     	html = getHtml();
-    	 
+    	return html;
+    	/*
     	try {
     		if(headers == null)
     			writeToFile(null);
@@ -54,6 +55,7 @@ public class HtmlResult extends HtmlTree implements IResult{
 			System.out.println("File name given Not Found!");
 			
 		}
+		*/
     }    
     
     private HtmlNode addDataToRow(HtmlNode row, String tag, Collection<String> vals){    		
@@ -61,7 +63,8 @@ public class HtmlResult extends HtmlTree implements IResult{
     		row.addChild(new HtmlNode(tag,s)); 
     	return row;
     }
-    
+
+	/*
     public void writeToFile(String filename) throws FileNotFoundException{ 
     	if(filename == null){
     		System.out.println(html);
@@ -70,7 +73,8 @@ public class HtmlResult extends HtmlTree implements IResult{
     			file.println(html);
     		}
     	}
-    }    
+    }
+       */
 }
 
 /*

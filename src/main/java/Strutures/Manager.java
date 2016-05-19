@@ -17,7 +17,7 @@ public class Manager {
     public static HeaderMap headersMap;
     private static Server server;
 
-    public void Init(){
+    public static void Init(){
         try {
             commandMap = createMap();
             headersMap = createHeadersMap();
@@ -33,7 +33,7 @@ public class Manager {
             IResultFormat resultFormat = headersMap.getResponseMethod(headerInfo);
             response= resultFormat.generate(result, headerInfo.getHeadersMap());
         }catch(Exception e){
-            //// TODO: 19/05/2016  
+            //// TODO: 19/05/2016
         }
         return response;
     }
