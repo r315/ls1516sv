@@ -27,20 +27,20 @@ public class HtmlResultTest {
 	@Test
 	public void shoudNotThrowExceptions()
 	{
-		hr.display(null, null);
-		hr.display(new ResultInfo(null,null,null), null);
+		hr.generate(null, null);
+		hr.generate(new ResultInfo(null,null,null), null);
 	}
 
 	@Test
 	public void shoudPrintOnConsole()
 	{
-		hr.display(createResultInfo(4,4),new HashMap<String,String>());
+		hr.generate(createResultInfo(4,4),new HashMap<String,String>());
 	}
 
 	@Test
 	public void shoudWriteToFile()
 	{
-		hr.display(createResultInfo(4,4),hmap);
+		hr.generate(createResultInfo(4,4),hmap);
 		File file = new File("HtmlOut.html");
 		assertTrue(file.isFile());
 	}
@@ -48,14 +48,14 @@ public class HtmlResultTest {
 	public void shoudPrintToConsoleAndWriteToFile()
 	{
 		hmap.put("accept","text/html");
-		hr.display(createResultInfo(4,4),hmap);
+		hr.generate(createResultInfo(4,4),hmap);
 
 	}
 
 	@Test
 	public void shouldSaveHtmlToFileNodata()
 	{
-		hr.display(createResultInfo(0,0),hmap);
+		hr.generate(createResultInfo(0,0),hmap);
 	}
 		
 	private ResultInfo createResultInfo(int r, int c){

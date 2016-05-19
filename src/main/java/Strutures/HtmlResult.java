@@ -1,6 +1,7 @@
 package Strutures;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,14 +10,15 @@ import java.util.Map;
 /**
  * Created hugo reis on 27/04/2016 
  */
-public class HtmlResult implements IResult {
-	private static final Object FILENAME_KEY = "file-name";	
-	private String html = null;
+public class HtmlResult implements IResultFormat{
+	//private static final Object FILENAME_KEY = "file-name";
+	//private String html = null;
+	private String response;
 	
-    public void display(ResultInfo resultInfo, Map<String,String> headers){
+    public String generate(ResultInfo resultInfo, Map<String,String> headers){
     	if(resultInfo == null){
-    		html = null;
-    		return;
+    		//html = null;
+    		return null;
     	}    		
     	
     	HtmlNode root = new HtmlNode("html");  
@@ -44,8 +46,9 @@ public class HtmlResult implements IResult {
     	node = new HtmlNode("body");
     	node.addChild(table);    	
     	root.addChild(node); 
-    	
-    	html = "<!DOCTYPE html>\n" + root.getHtml(0);   
+    	response="<!DOCTYPE html>\n" + root.getHtml(0);
+    	return response;
+		/*
     	try {
     		if(headers == null)
     			writeToFile(null);
@@ -55,22 +58,39 @@ public class HtmlResult implements IResult {
 		} catch (FileNotFoundException e) {
 			// TODO HR: Discuss Exceptions!!
 			System.out.println("File name given Not Found!");
-			
 		}
-    }    
-    
-    private HtmlNode addDataToRow(HtmlNode row, String tag, Collection<String> vals){    		
+		*/
+    }
+
+	/*
+	public void display(Map<String,String> headers) {
+		String filename= headers.get("file-name");
+		if(filename==null){//write to console
+			//// TODO: 18/05/2016
+			System.out.println(response);
+		}else {//write response into a file
+			//// TODO: 18/05/2016
+			try{
+				writeToFile(filename,response);
+			}catch(IOException e){
+				System.out.println("Error writing into file");
+			}
+		}
+	}
+	*/
+
+	private HtmlNode addDataToRow(HtmlNode row, String tag, Collection<String> vals){
     	for(String s : vals)
     		row.addChild(new HtmlNode(tag,s)); 
     	return row;
     }
     
-    public void writeToFile(String filename) throws FileNotFoundException{ 
+    private void writeToFile(String filename, String s) throws FileNotFoundException{
     	if(filename == null){
-    		System.out.println(html);
+    		System.out.println(s);
     	}else{
     		try(  PrintWriter file = new PrintWriter(filename)) {
-    			file.println(html);
+    			file.println(s);
     		}
     	}
     }    

@@ -1,35 +1,46 @@
 package Strutures;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
 
 /**
  * Created by Red on 24/04/2016.
  */
-public class TextResult implements IResult{
+public class TextResult implements IResultFormat{
 
-    public void display(ResultInfo resultInfo, Map<String,String> headersMap){
+    private String response;
+
+    public String generate(ResultInfo resultInfo, Map<String,String> headersMap){
         if(resultInfo.getValues().isEmpty()){
-            System.out.println("No results found.");
-            return;
+            //System.out.println("No results found.");
+            response="No results found.";
+            return response;
         }
-        System.out.println(resultInfo.getDisplayTitle()+":");
-        resultInfo.getValues().forEach( dataList-> {
+        String result=null;
+        result= resultInfo.getDisplayTitle()+":";
+        //System.out.println(resultInfo.getDisplayTitle()+":");
+        for (ArrayList<String> dataList : resultInfo.getValues()) {
             Iterator<String> dataList_it= dataList.iterator();
             if(resultInfo.getTitles()==null) {
                 while(dataList_it.hasNext())
-                    System.out.println(dataList_it.next());
+                    result+=dataList_it.next()+"\n";
+                //System.out.println(dataList_it.next());
             }else{
                 Iterator<String> title_it =resultInfo.getTitles().iterator();
                 while(title_it.hasNext())  //dataList and titleList have the same size
-                    System.out.println(title_it.next()+" : "+dataList_it.next());
-                System.out.println("---------------------------");
+                        result+=title_it.next()+" : "+dataList_it.next()+"\n";
+                    //System.out.println(title_it.next()+" : "+dataList_it.next());
+                result+="---------------------------\n";
+                //System.out.println("---------------------------");
             }
-        });
+        }
+        return result;
     }
 
-    @Override
-    public void writeToFile(String filename) throws Exception {
-        throw new UnsupportedOperationException();
+    /*
+    public void display(Map<String,String> headers) {
+        System.out.println(response);
     }
+    */
 }

@@ -8,23 +8,24 @@ import java.util.HashMap;
  */
 public class HeaderMap {
 
-    HashMap<String, IResult> headersMap;
+    HashMap<String, IResultFormat> headersMap;
 
     public HeaderMap(){headersMap=new HashMap<>();}
 
-    public HeaderMap(HashMap<String, IResult> headersMap){
+    public HeaderMap(HashMap<String, IResultFormat> headersMap){
         this.headersMap=headersMap;
     }
 
-    public void addResponseMethod(String resultMethod, IResult result){
+    public void addResponseMethod(String resultMethod, IResultFormat result){
         headersMap.put(resultMethod,result);
 }
 
-    public Collection<IResult> getResults(){
+    public Collection<IResultFormat> getResults(){
         return this.headersMap.values();
     }
 
-    public IResult getResponseMethod(HeaderInfo headerInfo){
+    public IResultFormat getResponseMethod(HeaderInfo headerInfo){
        return headersMap.get(headerInfo.getHeadersMap().get("accept"));
     }
+
 }

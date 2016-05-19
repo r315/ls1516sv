@@ -2,35 +2,10 @@ package console;
 
 import java.util.Scanner;
 
-import Strutures.CommandInfo;
-import Strutures.CommandMap;
-import Strutures.HeaderInfo;
-import Strutures.HeaderMap;
-import Strutures.HtmlResult;
-import Strutures.ResultInfo;
-import Strutures.TextResult;
+import Strutures.*;
 
-import commands.DeleteCollectionsCidMoviesMid;
-import commands.Exit;
-import commands.GetCollections;
-import commands.GetCollectionsCid;
-import commands.GetMovies;
-import commands.GetMoviesMid;
-import commands.GetMoviesMidRatings;
-import commands.GetMoviesMidReviews;
-import commands.GetMoviesMidReviewsRid;
-import commands.GetTopsNRatingsHigherAverage;
-import commands.GetTopsNRatingsLowerAverage;
-import commands.GetTopsNReviewsHigherCount;
-import commands.GetTopsRatingsHigherAverage;
-import commands.GetTopsRatingsLowerAverage;
-import commands.GetTopsReviewsHigherCount;
-import commands.Options;
-import commands.PostCollections;
-import commands.PostCollectionsCidMovies;
-import commands.PostMovies;
-import commands.PostMoviesMidRatings;
-import commands.PostMoviesMidReviews;
+import commands.*;
+import org.eclipse.jetty.server.Server;
 
 public class MainApp {
 
@@ -38,32 +13,37 @@ public class MainApp {
 		String[] userArgs=args;
 		boolean interactive_mode=false;
 		Scanner scanner = new Scanner(System.in);
+
 		if(args.length==0)
 			interactive_mode=true;
-		do {
-			try {
+
+		try {
+			Manager.createMap();
+			Manager.createHeadersMap();
+			do {
 				if(interactive_mode){
 					System.out.println("[Interactive mode] Insert a command:");
 					userArgs= scanner.nextLine().split(" ");
 				}
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
-				ResultInfo result = createMap().get(command).execute(command.getData());
-				createHeadersMap().getResponseMethod(headerInfo).display(result,headerInfo.getHeadersMap());
-			} catch(Exception e){
- 				if(interactive_mode){
-					System.out.println(e.getMessage());
-					System.out.println("Please insert a valid command. (For more informations type:OPTION / )");
-				}else{
-					scanner.close();
-					System.out.println(e.getMessage());
-					return;
-				}
+				String response= Manager.executeCommand(command,headerInfo);
+				Manager.displayResponse(response,headerInfo);
+			}while(interactive_mode);
+			scanner.close();
+		}catch(Exception e){
+			if(interactive_mode){
+				System.out.println(e.getMessage());
+				System.out.println("Please insert a valid command. (For more informations type:OPTION / )");
+			}else{
+				scanner.close();
+				System.out.println(e.getMessage());
+				return;
 			}
-		}while(interactive_mode);
-		scanner.close();
+		}
 	}
 
+	/*
 	public static CommandMap createMap() throws Exception{
 		CommandMap map=new CommandMap();
 		map.add("POST /movies",new PostMovies());
@@ -89,6 +69,7 @@ public class MainApp {
 
 		map.add("DELETE /collections/{cid}/movies/{mid}",new DeleteCollectionsCidMoviesMid());
 
+		map.add("LISTEN /", new Listen());
 		map.add("EXIT /",new Exit());
 		map.add("OPTION /",new Options());
 		return map;
@@ -100,4 +81,5 @@ public class MainApp {
 		map.addResponseMethod("text/plain",new TextResult());
 		return map;
 	}
+	*/
 }
