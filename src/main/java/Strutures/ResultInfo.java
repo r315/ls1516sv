@@ -6,18 +6,17 @@ import java.util.Collection;
 /**
  * Created by Red on 25/04/2016.
  */
-
-//TODO HR: avoid handling exceptions by return empty collections insted null 
+//HR: null fields now return empty collections insted null 
 public class ResultInfo {
 
-    private String diplayTitle;
+    private String displayTitle;
     private Collection<String> title;
     private Collection<ArrayList<String>> data;
 
     public ResultInfo(){}
 
     public ResultInfo(String displayTitle, Collection<String> title, Collection<ArrayList<String>> data){
-        this.diplayTitle = displayTitle;
+        this.displayTitle = displayTitle;
         this.title=title;
         this.data=data;
     }
@@ -28,12 +27,12 @@ public class ResultInfo {
 
     public void setValues(Collection<ArrayList<String>> data){this.data=data;}
 
-    public String getDisplayTitle() {return this.diplayTitle;}
+    public String getDisplayTitle() {return this.displayTitle == null ? "": this.displayTitle;}
 
-    public Collection<String> getTitles(){
-        return this.title;
-    }
+    public Collection<String> getTitles(){ 
+    	return this.title == null ? new ArrayList<String>():this.title;
+    } 
 
-    public Collection<ArrayList<String>> getValues(){return this.data;}
-
+    public Collection<ArrayList<String>> getValues(){
+    	return this.data == null ? new ArrayList<ArrayList<String>>(): this.data;}
 }
