@@ -1,7 +1,5 @@
 package Strutures;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -9,76 +7,44 @@ import java.util.Map;
 /**
  * Created hugo reis on 27/04/2016 
  */
-public class HtmlResult extends HtmlTree implements IResultFormat{
-	//private static final String FILENAME_KEY = "file-name";
-	//private String html;
+public class HtmlResult implements IResultFormat {
 
-    public String generate(ResultInfo resultInfo, Map<String,String> headers){
-    	if(resultInfo == null){
-    		//html = null;
-    		return null;
-    	}
-    	
-    	addTitle(resultInfo.getDisplayTitle());    	
-    	HtmlNode table = new HtmlNode("table");
-    	table.addAttributes("style=\"width:100%\"");
-    	
-    	if(!resultInfo.getTitles().isEmpty())
-    		table.addChild(addDataToRow(new HtmlNode("tr"),"th",resultInfo.getTitles()));
-    	
-    	if(resultInfo.getValues().isEmpty()){
-    		ArrayList<String> ndata = new ArrayList<String>();
-    		ndata.add("No results found.");
-    		table.addChild(addDataToRow(new HtmlNode("tr"),"td",ndata));
-    	}else{
-    		for(ArrayList<String> line: resultInfo.getValues()){
-    			table.addChild(addDataToRow(new HtmlNode("tr"),"td",line));
-    		}
-    	}
-    	
-    	//TODO: Get Table name
-    	HtmlNode body = root.findNode("body");
-    	body.addChild(h2("Table Name"));    	
-    	body.addChild(table);
-    	/*
-    	String res= getHtml();
-		html=null;
-    	return res;
-
-    	*/
-		return getHtml();
-		/*
-    	try {
-    		if(headers == null)
-    			writeToFile(null);
-    		else
-    			writeToFile(headers.get(FILENAME_KEY));
-    		
-		} catch (FileNotFoundException e) {
-			// TODO HR: Discuss Exceptions!!
-			System.out.println("File name given Not Found!");
-			
+	public String generate(ResultInfo resultInfo, Map<String, String> headers) {
+		if (resultInfo == null) {
+			return null;
 		}
-		*/
-    }    
-    
-    private HtmlNode addDataToRow(HtmlNode row, String tag, Collection<String> vals){    		
-    	for(String s : vals)
-    		row.addChild(new HtmlNode(tag,s)); 
-    	return row;
-    }
 
-	/*
-    public void writeToFile(String filename) throws FileNotFoundException{ 
-    	if(filename == null){
-    		System.out.println(html);
-    	}else{
-    		try(  PrintWriter file = new PrintWriter(filename)) {
-    			file.println(html);
-    		}
-    	}
-    }
-       */
+		HtmlTree page = new HtmlTree();
+		page.addElementTo("head", HtmlElement.title(resultInfo.getDisplayTitle())); // Tab Title
+		page.addElementTo("head",HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
+
+		HtmlElement table = new HtmlElement("table");
+		table.addAttributes("style=\"width:100%\"");
+
+		if (!resultInfo.getTitles().isEmpty())
+			table.addChild(addDataToRow(new HtmlElement("tr"), "th", resultInfo.getTitles()));
+
+		if (resultInfo.getValues().isEmpty()) {
+			ArrayList<String> ndata = new ArrayList<String>();
+			ndata.add("No results found.");
+			table.addChild(addDataToRow(new HtmlElement("tr"), "td", ndata));
+		} else {
+			for (ArrayList<String> line : resultInfo.getValues()) {
+				table.addChild(addDataToRow(new HtmlElement("tr"), "td", line));
+			}
+		}
+
+		//TODO: Get Table name
+		page.addElementTo("body", HtmlElement.h2("Table Name"));
+		page.addElementTo("body", table);
+		return page.getHtml();
+	}
+
+	private HtmlElement addDataToRow(HtmlElement row, String tag, Collection<String> vals) {
+		for (String s : vals)
+			row.addChild(new HtmlElement(tag, s));
+		return row;
+	}
 }
 
 /*
