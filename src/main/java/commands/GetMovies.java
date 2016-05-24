@@ -87,7 +87,7 @@ public class GetMovies implements ICommand {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Title");
         columns.add("Release Year");
-        columns.add("Raiting");
+        columns.add("Rating");
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
