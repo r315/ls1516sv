@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Strutures.ICommand;
-import Strutures.Manager;
+import console.Manager;
 import Strutures.ResultInfo;
-import console.MainApp;
 
 public class Options implements ICommand{
     public final String INFO = "OPTION / - presents a list of available commands and their characteristics.";

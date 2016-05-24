@@ -1,5 +1,6 @@
-package Strutures;
+package console;
 
+import Strutures.*;
 import commands.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -16,6 +17,7 @@ public class Manager {
     public static CommandMap commandMap;
     public static HeaderMap headersMap;
     private static Server server;
+    private static boolean isActive;
 
     public static void Init(){
         try {
@@ -34,6 +36,7 @@ public class Manager {
             response= resultFormat.generate(result, headerInfo.getHeadersMap());
         }catch(Exception e){
             //// TODO: 19/05/2016
+            System.out.println(e.getMessage());
         }
         return response;
     }
@@ -52,16 +55,6 @@ public class Manager {
         }
     }
 
-    private static void writeToFile(String filename, String s) throws FileNotFoundException {
-        if(filename == null){
-            System.out.println(s);
-        }else{
-            try(  PrintWriter file = new PrintWriter(filename)) {
-                file.println(s);
-            }
-        }
-    }
-
     public static void ServerCreate(int port){
         server=new Server(port);
     }
@@ -71,6 +64,8 @@ public class Manager {
             server.start();
         }catch(Exception e){
             //// TODO: 19/05/2016
+        }finally {
+            isActive=true;
         }
     }
 
@@ -83,6 +78,8 @@ public class Manager {
             server.join();
         }catch(Exception e){
             //// TODO: 19/05/2016
+        }finally {
+            isActive=false;
         }
     }
 
@@ -122,5 +119,15 @@ public class Manager {
         map.addResponseMethod("text/html",new HtmlResult());
         map.addResponseMethod("text/plain",new TextResult());
         return map;
+    }
+
+    private static void writeToFile(String filename, String s) throws FileNotFoundException {
+        if(filename == null){
+            System.out.println(s);
+        }else{
+            try(  PrintWriter file = new PrintWriter(filename)) {
+                file.println(s);
+            }
+        }
     }
 }

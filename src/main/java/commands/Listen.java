@@ -1,12 +1,11 @@
 package commands;
 
-import Strutures.ExampleServlet;
+import Strutures.Server.ExampleServlet;
 import Strutures.ICommand;
-import Strutures.Manager;
+import Strutures.Server.favIconServlet;
+import console.Manager;
 import Strutures.ResultInfo;
 
-import org.eclipse.jetty.server.Server;
-import pt.isel.ls.apps.http.TimeServlet;
 import org.eclipse.jetty.servlet.ServletHandler;
 import utils.Utils;
 
@@ -27,15 +26,27 @@ public class Listen implements ICommand{
         //Create a handler for each functionality
         ServletHandler handler = new ServletHandler();
         Manager.ServerSetHandler(handler);
-        handler.addServletWithMapping(ExampleServlet.class, "/*");
-
+        AssociateHandlers(handler);
+        handler.addServletWithMapping(ExampleServlet.class, "/movies/*");
+        handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
         //Starts listening to requests
         Manager.ServerStart();
-        System.out.println("Http Server started listening requests on port: "+port);
+        //wait for server to initialize
+        try{
+            Thread.sleep(10);
+        }catch(InterruptedException e){
+            System.out.println("Server could not initialize.");
+        }
+        //System.out.println("Http Server started listening requests on port: "+port);
         
         //// TODO: 19/05/2016
         //Change return to ResultInfo
         return null;
+    }
+
+    private static void AssociateHandlers(ServletHandler handler){
+        handler.addServletWithMapping(ExampleServlet.class, "/movies/*");
+        handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
     }
 
     @Override

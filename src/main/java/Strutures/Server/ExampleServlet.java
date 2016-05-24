@@ -1,4 +1,4 @@
-package Strutures;
+package Strutures.Server;
 
 /**
  * Created by Red on 18/05/2016.
@@ -7,8 +7,10 @@ package Strutures;
 
 import java.io.IOException;
 
-import console.MainApp;
-import org.eclipse.jetty.server.Server;
+import Strutures.CommandInfo;
+import Strutures.HeaderInfo;
+import console.Manager;
+
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 
@@ -23,17 +25,24 @@ public class ExampleServlet extends HttpServlet{
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
         Charset utf8 = Charset.forName("utf-8");
-        resp.setContentType(String.format("text/plain; charset=%s",utf8.name()));
+        resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
+        resp.setStatus(200);
         String respBody=null;
         try{
-            HeaderInfo headerInfo = new HeaderInfo(new String[]{req.getHeader("Accept")});
+            String  header= req.getHeader("Accept");
+            String method= req.getMethod();
+            String URI= req.getRequestURI();
+            String query= req.getQueryString();
+            //HeaderInfo headerInfo = new HeaderInfo(new String[]{req.getHeader("Accept")});
+            HeaderInfo headerInfo = new HeaderInfo(new String[]{});
             CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
             respBody= Manager.executeCommand(command,headerInfo);
         }catch(Exception e){
-            //// TODO: 19/05/2016  
+            //// TODO: 19/05/2016
+            resp.setStatus(404);
+            respBody="Error 404.";
         }
         byte[] respBodyBytes = respBody.getBytes(utf8);
-        resp.setStatus(200);
         resp.setContentLength(respBodyBytes.length);
         OutputStream os = resp.getOutputStream();
         os.write(respBodyBytes);

@@ -4,9 +4,6 @@ import java.util.Scanner;
 
 import Strutures.*;
 
-import commands.*;
-import org.eclipse.jetty.server.Server;
-
 public class MainApp {
 
 	public static void main(String [] args){
@@ -17,9 +14,9 @@ public class MainApp {
 		if(args.length==0)
 			interactive_mode=true;
 
-		try {
-			Manager.Init();
-			do {
+		Manager.Init();
+		do {
+			try {
 				if(interactive_mode){
 					System.out.println("[Interactive mode] Insert a command:");
 					userArgs= scanner.nextLine().split(" ");
@@ -27,19 +24,19 @@ public class MainApp {
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
 				String response= Manager.executeCommand(command,headerInfo);
-				Manager.displayResponse(response,headerInfo);
-			}while(interactive_mode);
-			scanner.close();
-		}catch(Exception e){
-			if(interactive_mode){
-				System.out.println(e.getMessage());
-				System.out.println("Please insert a valid command. (For more informations type:OPTION / )");
-			}else{
-				scanner.close();
-				System.out.println(e.getMessage());
-				return;
-			}
-		}
+				if(response!=null)Manager.displayResponse(response,headerInfo);
+				}catch(Exception e){
+					if(interactive_mode){
+						System.out.println(e.getMessage());
+						System.out.println("Please insert a valid command. (For more informations type:OPTION / )");
+					}else{
+						System.out.println(e.getMessage());
+						scanner.close();
+						return;
+					}
+				}
+		}while(interactive_mode);
+		scanner.close();
 	}
 
 	/*

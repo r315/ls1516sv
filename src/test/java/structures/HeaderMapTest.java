@@ -1,12 +1,11 @@
 package structures;
 
 import Strutures.*;
+import console.Manager;
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import console.MainApp;
 
 /**
  * Created by Red on 30/04/2016.

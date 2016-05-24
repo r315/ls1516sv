@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class HtmlResult extends HtmlTree implements IResultFormat{
 	//private static final String FILENAME_KEY = "file-name";
-	private String html;
+	//private String html;
 
     public String generate(ResultInfo resultInfo, Map<String,String> headers){
     	if(resultInfo == null){
@@ -40,10 +40,14 @@ public class HtmlResult extends HtmlTree implements IResultFormat{
     	HtmlNode body = root.findNode("body");
     	body.addChild(h2("Table Name"));    	
     	body.addChild(table);
-    	
-    	html = getHtml();
-    	return html;
     	/*
+    	String res= getHtml();
+		html=null;
+    	return res;
+
+    	*/
+		return getHtml();
+		/*
     	try {
     		if(headers == null)
     			writeToFile(null);

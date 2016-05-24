@@ -21,6 +21,7 @@ public class HtmlTree {
 	}
 
 	public static String getHtml(){
+
 		return "<!DOCTYPE html>\n" + root.getHtml(0);  
 	}
 

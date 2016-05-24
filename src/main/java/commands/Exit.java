@@ -3,7 +3,6 @@ package commands;
 import java.util.HashMap;
 
 import Strutures.ICommand;
-import Strutures.Manager;
 import Strutures.ResultInfo;
 
 /**
@@ -14,7 +13,7 @@ public class Exit implements ICommand{
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
-        Manager.ServerJoin();
+        //Manager.ServerJoin();
         System.exit(0);
         return null;
     }
