@@ -4,22 +4,34 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-class HtmlNode{
+class HtmlElement {
 	private String tag = "";
 	private String content =""; 
 	private String attributes = "";
-	private Collection<HtmlNode> childs;
+	private Collection<HtmlElement> childs;
 
-	public HtmlNode(String tag){
-		this.tag = tag;
-		childs = new ArrayList<HtmlNode>();
+	public static HtmlElement title(String text){
+		return new HtmlElement("title",text);
+	}
+	public static HtmlElement style(String style){
+		return new HtmlElement("style",style);
+	}
+	public static HtmlElement h1(String text){
+		return new HtmlElement("h1",text);
+	}
+	public static HtmlElement h2(String text){
+		return new HtmlElement("h2",text);
 	}
 
-	public HtmlNode(String tag, String content){
+	public HtmlElement(String tag){
+		this.tag = tag;
+		childs = new ArrayList<HtmlElement>();
+	}
+
+	public HtmlElement(String tag, String content){
 		this(tag);
 		this.content = content;
 	}
-
 
 	public void addContent(String content){
 		this.content = content;
@@ -29,7 +41,7 @@ class HtmlNode{
 		this.attributes = " " + attributes;
 	}
 
-	public void addChild(HtmlNode node){
+	public void addChild(HtmlElement node){
 		childs.add(node);
 	}
 
@@ -41,7 +53,7 @@ class HtmlNode{
 
 		sb.append(tabs + "<" + tag + attributes + ">");
 
-		for(HtmlNode child : childs){
+		for(HtmlElement child : childs){
 			sb.append(child.getHtml(level+1));
 		}
 
@@ -53,10 +65,10 @@ class HtmlNode{
 		return  sb.toString();
 	}
 
-	public HtmlNode findNode(String tag){
+	public HtmlElement findNode(String tag){
 		if(this.tag == tag) return this;
-		for(HtmlNode child : childs){
-			HtmlNode next = child.findNode(tag);
+		for(HtmlElement child : childs){
+			HtmlElement next = child.findNode(tag);
 			if( next != null)
 				return next;
 		}     		
