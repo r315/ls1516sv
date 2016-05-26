@@ -7,14 +7,19 @@ import java.util.Map;
 /**
  * Created hugo reis on 27/04/2016 
  */
+
 public class HtmlResult implements IResultFormat {
+		private HtmlTree page;
 
 	public String generate(ResultInfo resultInfo, Map<String, String> headers) {
 		if (resultInfo == null) {
 			return null;
 		}
 
-		HtmlTree page = new HtmlTree();
+		if (resultInfo.getValues().isEmpty())
+			return emptyPage();
+
+		page = new HtmlTree();
 		page.addElementTo("head", HtmlElement.title(resultInfo.getDisplayTitle())); // Tab Title
 		page.addElementTo("head",HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
 
@@ -24,18 +29,12 @@ public class HtmlResult implements IResultFormat {
 		if (!resultInfo.getTitles().isEmpty())
 			table.addChild(addDataToRow(new HtmlElement("tr"), "th", resultInfo.getTitles()));
 
-		if (resultInfo.getValues().isEmpty()) {
-			ArrayList<String> ndata = new ArrayList<String>();
-			ndata.add("No results found.");
-			table.addChild(addDataToRow(new HtmlElement("tr"), "td", ndata));
-		} else {
-			for (ArrayList<String> line : resultInfo.getValues()) {
-				table.addChild(addDataToRow(new HtmlElement("tr"), "td", line));
-			}
+		for (ArrayList<String> line : resultInfo.getValues()) {
+			table.addChild(addDataToRow(new HtmlElement("tr"), "td", line));
 		}
 
 		//TODO: Get Table name
-		page.addElementTo("body", HtmlElement.h2("Table Name"));
+		page.addElementTo("body", HtmlElement.heading("h2", "Table Name"));
 		page.addElementTo("body", table);
 		return page.getHtml();
 	}
@@ -44,6 +43,38 @@ public class HtmlResult implements IResultFormat {
 		for (String s : vals)
 			row.addChild(new HtmlElement(tag, s));
 		return row;
+	}
+
+	public void addLink(String cont, String link) {
+		page.addLinkToContent(cont,link);
+	}
+
+	//TODO add list of links
+	public void addLinksToTable() {
+		throw new UnsupportedOperationException("Not implemented yet");
+	}
+
+	//TODO discuss parameters
+	public void addNavigationLinks(String title, String link){
+		HtmlElement table = new HtmlElement("table");
+		table.addAttributes("style=\"width:100%\"");
+		//add columns to table heading, title for now
+		table.addChild(new HtmlElement("th", title));
+		page.addElementTo("body",table,1);//first element on body
+		page.addElementTo("body",HtmlElement.heading("p",""),2); // second element on body
+		page.addLinkToContent(title,link);
+	}
+
+	public String getHtml(){
+		return page.getHtml();
+	}
+
+	private String emptyPage(){
+		page = new HtmlTree();
+		page.addElementTo("head", HtmlElement.title("Not Found!")); // Tab Title
+		page.addElementTo("body", HtmlElement.heading("h2","Add Title Here"));
+		page.addElementTo("body", HtmlElement.heading("h4","No results found!"));
+		return page.getHtml();
 	}
 }
 

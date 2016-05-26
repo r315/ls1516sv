@@ -32,32 +32,46 @@ public class HtmlResultTest {
 	}
 
 	@Test
-	public void shoudPrintOnConsole()
+	public void shouldPrintSimpleHtmlOnConsole()
+	{
+		System.out.println(
+				hr.generate(createResultInfo(4, 4), new HashMap<String, String>())
+		);
+	}
+
+	@Test
+	public void shouldCreateHthmlForNoResults()
+	{
+		System.out.println(
+			hr.generate(createResultInfo(0, 0), new HashMap<String, String>())
+		);
+	}
+
+	@Test
+	public void shouldAddLink()
+	{
+		String s = hr.generate(createResultInfo(4,4),new HashMap<String,String>());
+		hr.addLink("Column Title 1","/home");
+		System.out.println(hr.getHtml());
+	}
+
+	@Test
+	public void shouldAddNavigationTable()
 	{
 		hr.generate(createResultInfo(4,4),new HashMap<String,String>());
+		hr.addNavigationLinks("Home","/home");
+		System.out.println(hr.getHtml());
 	}
 
 	@Test
 	public void shoudWriteToFile()
 	{
-		hr.generate(createResultInfo(4,4),hmap);
-		File file = new File("HtmlOut.html");
-		assertTrue(file.isFile());
-	}
-	@Test
-	public void shoudPrintToConsoleAndWriteToFile()
-	{
-		hmap.put("accept","text/html");
-		hr.generate(createResultInfo(4,4),hmap);
-
+		//TODO: check write to file
+		//hr.generate(createResultInfo(4,4),hmap);
+		//File file = new File("HtmlOut.html");
+		//assertTrue(file.isFile());
 	}
 
-	@Test
-	public void shouldSaveHtmlToFileNodata()
-	{
-		hr.generate(createResultInfo(0,0),hmap);
-	}
-		
 	private ResultInfo createResultInfo(int r, int c){
 		int rows = r;
 		int cols = c;
