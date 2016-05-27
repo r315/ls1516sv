@@ -38,7 +38,7 @@ public class ExampleServlet extends HttpServlet{
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
             CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
             IResultFormat resultFormat= Manager.executeCommand(command,headerInfo);
-            resultFormat.generate();
+            respBody = resultFormat.generate();
 
 
             //// TODO: 25/05/2016
