@@ -11,15 +11,15 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import Strutures.ResponseFormat.Html.HtmlResult;
-import Strutures.ResponseFormat.ResultInfo;
+import Strutures.HtmlResult;
+import Strutures.ResultInfo;
 
 public class HtmlResultTest {
 	public static HtmlResult hr;
 	public static Map<String,String> hmap;
 	@BeforeClass
 	public static void createHtmlResultInstance(){
-		hr = new HtmlResult(null);
+		hr = new HtmlResult();
 		hmap = new HashMap<String,String>();
 		hmap.put("file-name","HtmlOut.html");
 	}
@@ -27,37 +27,51 @@ public class HtmlResultTest {
 	@Test
 	public void shoudNotThrowExceptions()
 	{
-		hr.generate();
-		hr.generate();
+		hr.generate(null, null);
+		hr.generate(new ResultInfo(null,null,null), null);
 	}
 
 	@Test
-	public void shoudPrintOnConsole()
+	public void shouldPrintSimpleHtmlOnConsole()
 	{
-		hr.generate();
+		System.out.println(
+				hr.generate(createResultInfo(4, 4), new HashMap<String, String>())
+		);
+	}
+
+	@Test
+	public void shouldCreateHthmlForNoResults()
+	{
+		System.out.println(
+			hr.generate(createResultInfo(0, 0), new HashMap<String, String>())
+		);
+	}
+
+	@Test
+	public void shouldAddLink()
+	{
+		String s = hr.generate(createResultInfo(4,4),new HashMap<String,String>());
+		hr.addLink("Column Title 1","/home");
+		System.out.println(hr.getHtml());
+	}
+
+	@Test
+	public void shouldAddNavigationTable()
+	{
+		hr.generate(createResultInfo(4,4),new HashMap<String,String>());
+		hr.addNavigationLinks("Home","/home");
+		System.out.println(hr.getHtml());
 	}
 
 	@Test
 	public void shoudWriteToFile()
 	{
-		hr.generate();
-		File file = new File("HtmlOut.html");
-		assertTrue(file.isFile());
-	}
-	@Test
-	public void shoudPrintToConsoleAndWriteToFile()
-	{
-		hmap.put("accept","text/html");
-		hr.generate();
-
+		//TODO: check write to file
+		//hr.generate(createResultInfo(4,4),hmap);
+		//File file = new File("HtmlOut.html");
+		//assertTrue(file.isFile());
 	}
 
-	@Test
-	public void shouldSaveHtmlToFileNodata()
-	{
-		hr.generate();
-	}
-		
 	private ResultInfo createResultInfo(int r, int c){
 		int rows = r;
 		int cols = c;
