@@ -1,46 +1,52 @@
 package Strutures.Server;
 
-/**
- * Created by Red on 18/05/2016.
- */
-
-
-import java.io.IOException;
-
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
+import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.IResultFormat;
 import console.Manager;
-
-import java.io.OutputStream;
-import java.nio.charset.Charset;
+import utils.Pair;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class ExampleServlet extends HttpServlet{
+/**
+ * Created by Red on 27/05/2016.
+ */
+public class HomeServlet extends HttpServlet {
 
-    public ExampleServlet(){}
+    public HomeServlet(){}
 
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);
         String respBody=null;
         try{
-            String  header= req.getHeader("Accept");
-            String method= req.getMethod();
-            String URI= req.getRequestURI();
-            String query= req.getQueryString();
-            //HeaderInfo headerInfo = new HeaderInfo(new String[]{req.getHeader("Accept")});
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
             CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
-            IResultFormat resultFormat= Manager.executeCommand(command,headerInfo);
-            respBody= resultFormat.generate();
+            HtmlResult resultFormat= (HtmlResult)Manager.executeCommand(command,headerInfo);
 
+            resultFormat.generate();
+            List<Pair<String,String>> list= new ArrayList<Pair<String,String>>(){};
 
+            resultFormat.addNavigationLinks(Arrays.asList(
+                    new Pair<String,String>("Movies","/movies")));
+
+            /*
+            new ArrayList<Pair<String,String>>(){
+                        new Pair<String,String>("Movies","/movies"),
+                        new Pair<String,String>("Collections","/collections")
+                        });
+            */
             //// TODO: 25/05/2016
         }catch(Exception e){
             //// TODO: 19/05/2016
