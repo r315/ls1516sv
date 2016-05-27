@@ -1,4 +1,4 @@
-package Strutures;
+package Strutures.ResponseFormat.Html;
 
 
 import java.util.function.BiPredicate;

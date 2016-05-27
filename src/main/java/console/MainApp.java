@@ -4,7 +4,6 @@ import java.util.Scanner;
 
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
-import Strutures.ResponseFormat.IResultFormat;
 
 public class MainApp {
 

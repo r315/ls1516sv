@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.ResultInfo;
+import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 import org.junit.After;
 import org.junit.Before;

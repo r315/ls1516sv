@@ -1,7 +1,7 @@
 package commands;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;

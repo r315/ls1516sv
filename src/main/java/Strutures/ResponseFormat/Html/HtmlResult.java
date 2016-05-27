@@ -1,5 +1,6 @@
 package Strutures.ResponseFormat.Html;
 
+import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.ResultInfo;
