@@ -2,6 +2,7 @@ package Strutures.ResponseFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by Red on 25/04/2016.
@@ -35,4 +36,17 @@ public class ResultInfo {
 
     public Collection<ArrayList<String>> getValues(){
     	return this.data == null ? new ArrayList<ArrayList<String>>(): this.data;}
+
+    public void removeColumn(String col){
+        if(title.size() == 0)
+            return;
+        List<String> newtitletable = (List<String>)title;
+
+        int index = newtitletable.indexOf(col);
+
+        ((List<String>) title).remove(index);
+
+        for(List<String> line : data)
+            line.remove(index);
+    }
 }

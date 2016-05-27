@@ -4,10 +4,12 @@ import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.ResultInfo;
+import utils.Pair;
 
 import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,15 +22,18 @@ public class HtmlResult implements IResultFormat {
 
 	private ResultInfo resultInfo;
 
-
+	public HtmlResult(){
+		resultInfo = null;
+	}
 	public HtmlResult(ResultInfo ri){
 		resultInfo=ri;
 	}
 	
 	public String generate() {
 		if (resultInfo == null) {
-			return null;
+			return blankPage();
 		}
+
 
 		if (resultInfo.getValues().isEmpty())
 			return emptyPage();
@@ -37,8 +42,7 @@ public class HtmlResult implements IResultFormat {
 		page.addElementTo("head", HtmlElement.title(resultInfo.getDisplayTitle())); // Tab Title
 		page.addElementTo("head",HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
 
-		HtmlElement table = new HtmlElement("table");
-		table.addAttributes("style=\"width:100%\"");
+		HtmlElement table = createTable();
 
 		if (!resultInfo.getTitles().isEmpty())
 			table.addChild(addDataToRow(new HtmlElement("tr"), "th", resultInfo.getTitles()));
@@ -48,7 +52,7 @@ public class HtmlResult implements IResultFormat {
 		}
 
 		//TODO: Get Table name
-		page.addElementTo("body", HtmlElement.heading("h2", "Table Name"));
+		page.addElementTo("body", HtmlElement.heading("h2", resultInfo.getDisplayTitle()));
 		page.addElementTo("body", table);
 		return page.getHtml();
 	}
@@ -59,24 +63,34 @@ public class HtmlResult implements IResultFormat {
 		return row;
 	}
 
+	private HtmlElement createTable(){
+		HtmlElement table = new HtmlElement("table");
+		table.addAttributes("style=\"width:100%\"");
+		return table;
+	}
+
 	public void addLink(String cont, String link) {
 		page.addLinkToContent(cont,link);
 	}
 
-	//TODO add list of links
-	public void addLinksToTable() {
-		throw new UnsupportedOperationException("Not implemented yet");
+
+	public void addLinksToTable(List<Pair> lines) {
+		for(Pair<String,String> p : lines) {
+			page.addLinkToContent(p.value1,p.value2);
+		}
 	}
 
-	//TODO discuss parameters
-	public void addNavigationLinks(String title, String link){
-		HtmlElement table = new HtmlElement("table");
-		table.addAttributes("style=\"width:100%\"");
-		//add columns to table heading, title for now
-		table.addChild(new HtmlElement("th", title));
+	public void addNavigationLinks(List<Pair> cols){
+		HtmlElement table = createTable();
+
+		for(Pair<String,String> p : cols) {
+			HtmlElement col = new HtmlElement("th", p.value1);
+			col.addLink(p.value2);
+			table.addChild(col);
+		}
+
 		page.addElementTo("body",table,1);//first element on body
 		page.addElementTo("body",HtmlElement.heading("p",""),2); // second element on body
-		page.addLinkToContent(title,link);
 	}
 
 	public String getHtml(){
@@ -88,6 +102,11 @@ public class HtmlResult implements IResultFormat {
 		page.addElementTo("head", HtmlElement.title("Not Found!")); // Tab Title
 		page.addElementTo("body", HtmlElement.heading("h2","Add Title Here"));
 		page.addElementTo("body", HtmlElement.heading("h4","No results found!"));
+		return page.getHtml();
+	}
+
+	private String blankPage(){
+		page = new HtmlTree();
 		return page.getHtml();
 	}
 }

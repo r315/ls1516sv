@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,15 +14,14 @@ import org.junit.Test;
 
 import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.ResultInfo;
-//// TODO: 27/05/2016
-/*
+import utils.Pair;
+
 
 public class HtmlResultTest {
 	public static HtmlResult hr;
 	public static Map<String,String> hmap;
 	@BeforeClass
 	public static void createHtmlResultInstance(){
-		hr = new HtmlResult();
 		hmap = new HashMap<String,String>();
 		hmap.put("file-name","HtmlOut.html");
 	}
@@ -29,49 +29,42 @@ public class HtmlResultTest {
 	@Test
 	public void shoudNotThrowExceptions()
 	{
-		hr.generate(null, null);
-		hr.generate(new ResultInfo(null,null,null), null);
+		hr = new HtmlResult(new ResultInfo(null,null,null));
+		hr.generate();
 	}
 
 	@Test
 	public void shouldPrintSimpleHtmlOnConsole()
 	{
-		System.out.println(
-				hr.generate(createResultInfo(4, 4), new HashMap<String, String>())
+		hr = new HtmlResult(createResultInfo(4, 4));
+		System.out.println("Page with 4 result lines \n" + hr.generate()
 		);
 	}
 
 	@Test
 	public void shouldCreateHthmlForNoResults()
 	{
-		System.out.println(
-			hr.generate(createResultInfo(0, 0), new HashMap<String, String>())
-		);
+		hr = new HtmlResult(createResultInfo(0, 0));
+		System.out.println("Page for no results \n" +
+                        hr.generate());
 	}
 
 	@Test
 	public void shouldAddLink()
 	{
-		String s = hr.generate(createResultInfo(4,4),new HashMap<String,String>());
+		hr = new HtmlResult(createResultInfo(4, 4));
+		String s = hr.generate();
 		hr.addLink("Column Title 1","/home");
-		System.out.println(hr.getHtml());
+		System.out.println("Html with link on Column Title 1\n" + hr.getHtml());
 	}
 
 	@Test
 	public void shouldAddNavigationTable()
 	{
-		hr.generate(createResultInfo(4,4),new HashMap<String,String>());
-		hr.addNavigationLinks("Home","/home");
-		System.out.println(hr.getHtml());
-	}
-
-	@Test
-	public void shoudWriteToFile()
-	{
-		//TODO: check write to file
-		//hr.generate(createResultInfo(4,4),hmap);
-		//File file = new File("HtmlOut.html");
-		//assertTrue(file.isFile());
+		hr = new HtmlResult(createResultInfo(4, 4));
+		hr.generate();
+        hr.addNavigationLinks(Arrays.asList( new Pair("Home","/home")));
+		System.out.println("Page with navigation links \n" + hr.getHtml());
 	}
 
 	private ResultInfo createResultInfo(int r, int c){
@@ -93,4 +86,4 @@ public class HtmlResultTest {
 	}
 
 }
-*/
+
