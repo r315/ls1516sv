@@ -50,7 +50,7 @@ public class HtmlResultTest {
 	}
 
 	@Test
-	public void shouldAddLink()
+	public void shouldAddLinksToResultsTable()
 	{
 		hr = new HtmlResult(createResultInfo(4, 4));
 		String s = hr.generate();
@@ -63,8 +63,24 @@ public class HtmlResultTest {
 	{
 		hr = new HtmlResult(createResultInfo(4, 4));
 		hr.generate();
-        hr.addNavigationLinks(Arrays.asList( new Pair("Home","/home")));
+        hr.addNavigationLinks(Arrays.asList( new Pair("Home","/home"),new Pair("forward","#\" onclick=\"history.go(1);return false;"),new Pair("back","#\" onclick=\"history.go(-1);return false;")));
 		System.out.println("Page with navigation links \n" + hr.getHtml());
+	}
+
+	@Test
+	public void shouldAddList()
+	{
+		hr = new HtmlResult();
+		hr.generate();
+		hr.addNavigationLinks(Arrays.asList( new Pair("Home","/home"),new Pair("forward","#\" onclick=\"history.go(1);return false;"),new Pair("back","#\" onclick=\"history.go(-1);return false;")));
+		hr.addList(Arrays.asList(new Pair("List 1", "/home"), new Pair("List 2", "/home"), new Pair("List 3", "/home")));
+		System.out.println("Page with List \n" + hr.getHtml());
+	}
+
+	@Test
+	public void shouldGetBlankPage(){
+		hr = new HtmlResult();
+		System.out.println("Blank Page" + hr.getHtml());
 	}
 
 	private ResultInfo createResultInfo(int r, int c){
@@ -82,7 +98,6 @@ public class HtmlResultTest {
 			 data.add(line);
 		 }
 		 return new ResultInfo("Teste",columns,data);
-		
 	}
 
 }

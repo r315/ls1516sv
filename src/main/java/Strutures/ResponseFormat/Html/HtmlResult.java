@@ -17,30 +17,26 @@ import java.util.Map;
  */
 
 public class HtmlResult implements IResultFormat {
-		private HtmlTree page;
+	private HtmlTree page;
+	public ResultInfo resultInfo;
 
-
-	private ResultInfo resultInfo;
-
-	public HtmlResult(){
-		resultInfo = null;
-	}
+	public HtmlResult(){ page = new HtmlTree();	}
 	public HtmlResult(ResultInfo ri){
 		resultInfo=ri;
 	}
+
 	
 	public String generate() {
 		if (resultInfo == null) {
-			return blankPage();
+			return getHtml(); //blankPage
 		}
-
 
 		if (resultInfo.getValues().isEmpty())
 			return emptyPage();
 
 		page = new HtmlTree();
 		page.addElementTo("head", HtmlElement.title(resultInfo.getDisplayTitle())); // Tab Title
-		page.addElementTo("head",HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
+		page.addElementTo("head", HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
 
 		HtmlElement table = createTable();
 
@@ -51,7 +47,6 @@ public class HtmlResult implements IResultFormat {
 			table.addChild(addDataToRow(new HtmlElement("tr"), "td", line));
 		}
 
-		//TODO: Get Table name
 		page.addElementTo("body", HtmlElement.heading("h2", resultInfo.getDisplayTitle()));
 		page.addElementTo("body", table);
 		return page.getHtml();
@@ -74,13 +69,26 @@ public class HtmlResult implements IResultFormat {
 	}
 
 
-	public void addLinksToTable(List<Pair> lines) {
+	public void addLinksToTable(List<Pair<String,String>> lines) {
 		for(Pair<String,String> p : lines) {
 			page.addLinkToContent(p.value1,p.value2);
 		}
 	}
 
-	public void addNavigationLinks(List<Pair> cols){
+	public void addList(List<Pair<String,String>> items){
+		HtmlElement list = new HtmlElement("ul");
+
+		for(Pair<String,String> item: items){
+			HtmlElement line = new HtmlElement("li", item.value1);
+			line.addLink(item.value2);
+			list.addChild(line);
+		}
+		page.addElementTo("body",list);
+	}
+
+	public void addNavigationLinks(List<Pair<String,String>> cols){
+		page.addElementTo("head", HtmlElement.style("table, th, td { border-style: double; border-collapse: collapse;}"));
+
 		HtmlElement table = createTable();
 
 		for(Pair<String,String> p : cols) {
@@ -89,8 +97,8 @@ public class HtmlResult implements IResultFormat {
 			table.addChild(col);
 		}
 
-		page.addElementTo("body",table,1);//first element on body
-		page.addElementTo("body",HtmlElement.heading("p",""),2); // second element on body
+		page.addElementTo("body",table,0);//first element on body
+		page.addElementTo("body",HtmlElement.heading("p",""),1); // second element on body
 	}
 
 	public String getHtml(){
@@ -100,13 +108,9 @@ public class HtmlResult implements IResultFormat {
 	private String emptyPage(){
 		page = new HtmlTree();
 		page.addElementTo("head", HtmlElement.title("Not Found!")); // Tab Title
+		//TODO ad title
 		page.addElementTo("body", HtmlElement.heading("h2","Add Title Here"));
 		page.addElementTo("body", HtmlElement.heading("h4","No results found!"));
-		return page.getHtml();
-	}
-
-	private String blankPage(){
-		page = new HtmlTree();
 		return page.getHtml();
 	}
 }
