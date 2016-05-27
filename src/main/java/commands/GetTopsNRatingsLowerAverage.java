@@ -11,8 +11,8 @@ import java.util.Locale;
 
 import sqlserver.ConnectionFactory;
 import utils.Utils;
-import Strutures.ICommand;
-import Strutures.ResultInfo;
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 
 public class GetTopsNRatingsLowerAverage implements ICommand {

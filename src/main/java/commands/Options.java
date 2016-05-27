@@ -3,9 +3,9 @@ package commands;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Strutures.ICommand;
+import Strutures.Command.ICommand;
 import console.Manager;
-import Strutures.ResultInfo;
+import Strutures.ResponseFormat.ResultInfo;
 
 public class Options implements ICommand{
     public final String INFO = "OPTION / - presents a list of available commands and their characteristics.";

@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
-import Strutures.ResultInfo;
+import Strutures.ResponseFormat.ResultInfo;
 
 /**
  * Created by Luigi Sekuiya on 09/04/2016.

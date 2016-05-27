@@ -11,15 +11,15 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import Strutures.HtmlResult;
-import Strutures.ResultInfo;
+import Strutures.ResponseFormat.Html.HtmlResult;
+import Strutures.ResponseFormat.ResultInfo;
 
 public class HtmlResultTest {
 	public static HtmlResult hr;
 	public static Map<String,String> hmap;
 	@BeforeClass
 	public static void createHtmlResultInstance(){
-		hr = new HtmlResult();
+		hr = new HtmlResult(null);
 		hmap = new HashMap<String,String>();
 		hmap.put("file-name","HtmlOut.html");
 	}
@@ -27,20 +27,20 @@ public class HtmlResultTest {
 	@Test
 	public void shoudNotThrowExceptions()
 	{
-		hr.generate(null, null);
-		hr.generate(new ResultInfo(null,null,null), null);
+		hr.generate();
+		hr.generate();
 	}
 
 	@Test
 	public void shoudPrintOnConsole()
 	{
-		hr.generate(createResultInfo(4,4),new HashMap<String,String>());
+		hr.generate();
 	}
 
 	@Test
 	public void shoudWriteToFile()
 	{
-		hr.generate(createResultInfo(4,4),hmap);
+		hr.generate();
 		File file = new File("HtmlOut.html");
 		assertTrue(file.isFile());
 	}
@@ -48,14 +48,14 @@ public class HtmlResultTest {
 	public void shoudPrintToConsoleAndWriteToFile()
 	{
 		hmap.put("accept","text/html");
-		hr.generate(createResultInfo(4,4),hmap);
+		hr.generate();
 
 	}
 
 	@Test
 	public void shouldSaveHtmlToFileNodata()
 	{
-		hr.generate(createResultInfo(0,0),hmap);
+		hr.generate();
 	}
 		
 	private ResultInfo createResultInfo(int r, int c){

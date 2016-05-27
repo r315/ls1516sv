@@ -1,6 +1,9 @@
 package structures;
 
-import Strutures.*;
+import Strutures.Command.CommandInfo;
+import Strutures.Command.CommandMap;
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
 import console.Manager;
 import junit.framework.Assert;
 

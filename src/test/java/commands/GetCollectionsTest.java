@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
-import Strutures.ResultInfo;
+import Strutures.ResponseFormat.ResultInfo;
 
 /**
  * Created by Luigi Sekuiya on 30/04/2016.

@@ -1,11 +1,18 @@
 package structures;
 
-import Strutures.*;
+import Strutures.Command.HeaderInfo;
+import Strutures.Command.HeaderMap;
+import Strutures.ResponseFormat.Html.HtmlResult;
+import Strutures.ResponseFormat.IResultFormat;
+import Strutures.ResponseFormat.Plain.TextResult;
+import Strutures.ResponseFormat.ResultInfo;
 import console.Manager;
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.function.Function;
 
 /**
  * Created by Red on 30/04/2016.
@@ -22,28 +29,28 @@ public class HeaderMapTest {
     @Test
     public void GetNumberOfResultTypesTest() throws Exception{
         int i =0;
-        for (IResultFormat cmd : map.getResults()) ++i;
+        for (Function<ResultInfo,IResultFormat> func : map.getResults()) ++i;
         Assert.assertEquals(2,i);
     }
 
     @Test
     public void GetHtmlResultFromMap(){
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies","accept:text/html"});
-        IResultFormat r=map.getResponseMethod(hi);
+        IResultFormat r=map.getResponseMethod(hi).apply(new ResultInfo());
         Assert.assertTrue(r instanceof HtmlResult);
     }
 
     @Test
     public void GetTextResultFromMap(){
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies","accept:text/plain"});
-        IResultFormat r=map.getResponseMethod(hi);
+        IResultFormat r=map.getResponseMethod(hi).apply(new ResultInfo());
         Assert.assertTrue(r instanceof TextResult);
     }
 
     @Test
     public void GetDefaultResultFromMapWithoutParams(){
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies"});
-        IResultFormat r=map.getResponseMethod(hi);
+        IResultFormat r=map.getResponseMethod(hi).apply(new ResultInfo());
         Assert.assertTrue(r instanceof HtmlResult);
     }
 

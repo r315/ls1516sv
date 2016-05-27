@@ -17,7 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
-import Strutures.ResultInfo;
+import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
 
 public class PostMoviesMidReviewsTest {

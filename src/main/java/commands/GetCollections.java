@@ -9,8 +9,8 @@ import java.util.HashMap;
 
 import sqlserver.ConnectionFactory;
 import utils.Utils;
-import Strutures.ICommand;
-import Strutures.ResultInfo;
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
 
 /**
  * Created by Luigi Sekuiya on 29/04/2016.

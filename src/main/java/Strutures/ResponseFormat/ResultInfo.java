@@ -1,4 +1,4 @@
-package Strutures;
+package Strutures.ResponseFormat;
 
 import java.util.ArrayList;
 import java.util.Collection;

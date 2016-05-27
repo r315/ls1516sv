@@ -1,5 +1,10 @@
-package Strutures;
+package Strutures.ResponseFormat.Html;
 
+import Strutures.ResponseFormat.IResultFormat;
+import Strutures.ResponseFormat.Html.HtmlElement;
+import Strutures.ResponseFormat.ResultInfo;
+
+import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -9,7 +14,15 @@ import java.util.Map;
  */
 public class HtmlResult implements IResultFormat {
 
-	public String generate(ResultInfo resultInfo, Map<String, String> headers) {
+
+	private ResultInfo resultInfo;
+
+
+	public HtmlResult(ResultInfo ri){
+		resultInfo=ri;
+	}
+	
+	public String generate() {
 		if (resultInfo == null) {
 			return null;
 		}

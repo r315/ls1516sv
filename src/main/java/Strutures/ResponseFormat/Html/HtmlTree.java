@@ -1,5 +1,7 @@
-package Strutures;
+package Strutures.ResponseFormat.Html;
 
+
+import Strutures.ResponseFormat.Html.HtmlElement;
 
 public class HtmlTree {
 	

@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import Strutures.CommandInfo;
+import Strutures.Command.CommandInfo;
 
 /**
  * Created by Red on 30/04/2016.

@@ -2,7 +2,9 @@ package console;
 
 import java.util.Scanner;
 
-import Strutures.*;
+import Strutures.Command.CommandInfo;
+import Strutures.Command.HeaderInfo;
+import Strutures.ResponseFormat.IResultFormat;
 
 public class MainApp {
 
@@ -23,8 +25,9 @@ public class MainApp {
 				}
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
-				String response= Manager.executeCommand(command,headerInfo);
-				if(response!=null)Manager.displayResponse(response,headerInfo);
+				String result= Manager.executeCommand(command,headerInfo).generate();
+				if(result!=null)Manager.displayResponse(result,headerInfo);
+
 				}catch(Exception e){
 					if(interactive_mode){
 						System.out.println(e.getMessage());

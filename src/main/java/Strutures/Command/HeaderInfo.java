@@ -1,4 +1,4 @@
-package Strutures;
+package Strutures.Command;
 
 import java.util.Map;
 

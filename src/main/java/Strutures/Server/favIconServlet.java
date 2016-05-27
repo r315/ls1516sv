@@ -14,15 +14,8 @@ public class favIconServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("image/png; charset=%s",utf8.name()));
-        String respBody="";
-        byte[] respBodyBytes = respBody.getBytes(utf8);
-        resp.setStatus(200);
-        resp.setContentLength(respBodyBytes.length);
-        OutputStream os = resp.getOutputStream();
-        os.write(respBodyBytes);
-        os.close();
+        resp.setStatus(404);
     }
 }

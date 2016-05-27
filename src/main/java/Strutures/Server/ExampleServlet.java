@@ -7,8 +7,9 @@ package Strutures.Server;
 
 import java.io.IOException;
 
-import Strutures.CommandInfo;
-import Strutures.HeaderInfo;
+import Strutures.Command.CommandInfo;
+import Strutures.Command.HeaderInfo;
+import Strutures.ResponseFormat.IResultFormat;
 import console.Manager;
 
 import java.io.OutputStream;
@@ -36,7 +37,11 @@ public class ExampleServlet extends HttpServlet{
             //HeaderInfo headerInfo = new HeaderInfo(new String[]{req.getHeader("Accept")});
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
             CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
-            respBody= Manager.executeCommand(command,headerInfo);
+            IResultFormat resultFormat= Manager.executeCommand(command,headerInfo);
+            resultFormat.generate();
+
+
+            //// TODO: 25/05/2016
         }catch(Exception e){
             //// TODO: 19/05/2016
             resp.setStatus(404);

@@ -1,10 +1,11 @@
-package Strutures;
+package Strutures.ResponseFormat.Html;
 
 import java.util.ArrayList;
 
 /**
  * Created by Luigi Sekuiya on 24/05/2016.
  */
+/*
 public class HtmlHelper {
     private ArrayList<Pair> pairs = new ArrayList<>();
     private String link;
@@ -42,3 +43,4 @@ public class HtmlHelper {
     }
 
 }
+*/

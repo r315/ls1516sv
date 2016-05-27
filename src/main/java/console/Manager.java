@@ -1,6 +1,13 @@
 package console;
 
-import Strutures.*;
+import Strutures.Command.CommandInfo;
+import Strutures.Command.CommandMap;
+import Strutures.Command.HeaderInfo;
+import Strutures.Command.HeaderMap;
+import Strutures.ResponseFormat.Html.HtmlResult;
+import Strutures.ResponseFormat.IResultFormat;
+import Strutures.ResponseFormat.Plain.TextResult;
+import Strutures.ResponseFormat.ResultInfo;
 import commands.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
@@ -9,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Created by Red on 18/05/2016.
@@ -28,17 +36,16 @@ public class Manager {
         }
     }
 
-    public static String executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo){
-        String response=null;
+    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo){
+        IResultFormat resultFormat=null;
         try {
             ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
-            IResultFormat resultFormat = headersMap.getResponseMethod(headerInfo);
-            response= resultFormat.generate(result, headerInfo.getHeadersMap());
+            resultFormat = headersMap.getResponseMethod(headerInfo).apply(result);
         }catch(Exception e){
             //// TODO: 19/05/2016
             System.out.println(e.getMessage());
         }
-        return response;
+        return resultFormat;
     }
 
     public static void displayResponse(String response, HeaderInfo headerinfo){
@@ -69,12 +76,25 @@ public class Manager {
         }
     }
 
+    public static void ServerStop(){
+        try{
+            server.stop();
+        }catch(Exception e){
+            //// TODO: 25/05/2016
+        }finally {
+            isActive=false;
+        }
+    }
+
     public static void ServerSetHandler(ServletHandler handler){
         server.setHandler(handler);
     }
 
+
+
     public static void ServerJoin(){
         try{
+            server.stop();
             server.join();
         }catch(Exception e){
             //// TODO: 19/05/2016
@@ -116,8 +136,8 @@ public class Manager {
 
     public static HeaderMap createHeadersMap(){
         HeaderMap map=new HeaderMap();
-        map.addResponseMethod("text/html",new HtmlResult());
-        map.addResponseMethod("text/plain",new TextResult());
+        map.addResponseMethod("text/html",  ri-> new HtmlResult(ri));
+        map.addResponseMethod("text/plain", ri-> new TextResult(ri));
         return map;
     }
 

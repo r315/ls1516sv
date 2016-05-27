@@ -9,8 +9,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import sqlserver.ConnectionFactory;
-import Strutures.ICommand;
-import Strutures.ResultInfo;
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
 
 public class GetTopsReviewsHigherCount implements ICommand {
 	private static final String INFO = "GET /tops/reviews/higher/count - returns the detail for the movie with most reviews.";

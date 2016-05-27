@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import sqlserver.ConnectionFactory;
-import Strutures.ICommand;
-import Strutures.ResultInfo;
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
 
 public class GetTopsRatingsHigherAverage implements ICommand {
     private static final String INFO = "GET /tops/ratings/higher/average - returns the detail for the movie with the higher average rating.";

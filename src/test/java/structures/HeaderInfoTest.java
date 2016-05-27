@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import Strutures.HeaderInfo;
+import Strutures.Command.HeaderInfo;
 
 /**
  * Created by Red on 30/04/2016.

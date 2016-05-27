@@ -2,8 +2,9 @@ package commands;
 
 import java.util.HashMap;
 
-import Strutures.ICommand;
-import Strutures.ResultInfo;
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import console.Manager;
 
 /**
  * Created by Red on 26/04/2016.
@@ -13,6 +14,7 @@ public class Exit implements ICommand{
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
+        Manager.ServerStop();
         //Manager.ServerJoin();
         System.exit(0);
         return null;

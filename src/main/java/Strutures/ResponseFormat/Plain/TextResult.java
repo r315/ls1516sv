@@ -1,4 +1,7 @@
-package Strutures;
+package Strutures.ResponseFormat.Plain;
+
+import Strutures.ResponseFormat.IResultFormat;
+import Strutures.ResponseFormat.ResultInfo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,11 +10,16 @@ import java.util.Map;
 /**
  * Created by Red on 24/04/2016.
  */
-public class TextResult implements IResultFormat{
+public class TextResult implements IResultFormat {
 
     private String response;
+    private ResultInfo resultInfo;
 
-    public String generate(ResultInfo resultInfo, Map<String,String> headersMap){
+    public TextResult(ResultInfo ri){
+        resultInfo=ri;
+    }
+
+    public String generate(){
         if(resultInfo.getValues().isEmpty()){
             //System.out.println("No results found.");
             response="No results found.";
