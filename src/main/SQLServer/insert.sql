@@ -13,3 +13,13 @@ INSERT INTO Review (movie_id,name,review,summary,rating) VALUES ('2','Hugo','Pod
 INSERT INTO Rating (movie_id,one,two,three,four,five) VALUES ('1','1','2','3','4','5');
 INSERT INTO Rating (movie_id,one,two,three,four,five) VALUES ('2','5','4','3','2','1');
 INSERT INTO Rating (movie_id,one,two,three,four,five) VALUES ('3','3','4','1','7','11');
+
+INSERT INTO Collection (name,description) VALUES ('CollectionOne','The very first one');
+INSERT INTO Collection (name,description) VALUES ('CollectionTwo','The one that comes after');
+INSERT INTO Collection (name,description) VALUES ('CollectionThree','The one that shouldnt be');
+
+INSERT INTO Has (collection_id,movie_id) VALUES ('1','1');
+INSERT INTO Has (collection_id,movie_id) VALUES ('1','2');
+INSERT INTO Has (collection_id,movie_id) VALUES ('1','3');
+INSERT INTO Has (collection_id,movie_id) VALUES ('2','1');
+INSERT INTO Has (collection_id,movie_id) VALUES ('2','2');
