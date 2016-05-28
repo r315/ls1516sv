@@ -1,6 +1,5 @@
 package commands;
 
-import Strutures.Server.ExampleServlet;
 import Strutures.Command.ICommand;
 import Strutures.Server.*;
 import console.Manager;
@@ -61,6 +60,7 @@ public class Listen implements ICommand{
         handler.addServletWithMapping(CollectionsServlet.class, "/collections");
         handler.addServletWithMapping(HomeServlet.class, "");
         handler.addServletWithMapping(TopsRatingsReviewsServlet.class, "/tops/*");
+        handler.addServletWithMapping(CollectionsCidServlet.class, "/collections/*");
     }
 
     @Override
