@@ -62,6 +62,7 @@ public class GetCollections implements ICommand {
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
+        columns.add("ID");
         columns.add("Name");
         columns.add("Description");
 
@@ -70,6 +71,7 @@ public class GetCollections implements ICommand {
         while(rs.next()) {
             ArrayList<String> line = new ArrayList<>();
 
+            line.add(rs.getString("collection_id"));
             line.add(rs.getString("name"));
             line.add(rs.getString("description"));
 
