@@ -64,6 +64,8 @@ public class GetMoviesMidReviewsRidTest {
         ArrayList<String> line1 = new ArrayList<>();
 
         line1.add("1");
+        line1.add("Star Wars IV");
+        line1.add("1");
         line1.add("Luis");
         line1.add("5");
         line1.add("Gostei");
