@@ -37,16 +37,20 @@ public class ResultInfo {
     public Collection<ArrayList<String>> getValues(){
     	return this.data == null ? new ArrayList<ArrayList<String>>(): this.data;}
 
-    public void removeColumn(String col){
+    public List<String> removeColumn(String col){
+        List<String> removedValues = new ArrayList<String>();
         if(title.size() == 0)
-            return;
+            return removedValues;
         List<String> newtitletable = (List<String>)title;
 
         int index = newtitletable.indexOf(col);
 
         ((List<String>) title).remove(index);
 
-        for(List<String> line : data)
+        for(List<String> line : data){
+            removedValues.add(line.get(index));
             line.remove(index);
+        }
+        return removedValues;
     }
 }

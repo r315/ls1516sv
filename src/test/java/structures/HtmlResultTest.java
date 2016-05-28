@@ -1,13 +1,6 @@
 package structures;
 
-
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -19,15 +12,9 @@ import utils.Pair;
 
 public class HtmlResultTest {
 	public static HtmlResult hr;
-	public static Map<String,String> hmap;
-	@BeforeClass
-	public static void createHtmlResultInstance(){
-		hmap = new HashMap<String,String>();
-		hmap.put("file-name","HtmlOut.html");
-	}
 
 	@Test
-	public void shoudNotThrowExceptions()
+	public void shouldNotThrowExceptions()
 	{
 		hr = new HtmlResult(new ResultInfo(null,null,null));
 		hr.generate();
@@ -53,8 +40,11 @@ public class HtmlResultTest {
 	public void shouldAddLinksToResultsTable()
 	{
 		hr = new HtmlResult(createResultInfo(4, 4));
+		List<Pair<String,String>> links = new ArrayList<Pair<String,String>>();
+		for(int i = 1; i<5;i++)
+			links.add(new Pair( "Column Title "+ Integer.toString(i), "/home"));
 		String s = hr.generate();
-		hr.addLink("Column Title 1","/home");
+		hr.addLinksToTable(links);
 		System.out.println("Html with link on Column Title 1\n" + hr.getHtml());
 	}
 
@@ -73,7 +63,8 @@ public class HtmlResultTest {
 		hr = new HtmlResult();
 		hr.generate();
 		hr.addNavigationLinks(Arrays.asList( new Pair("Home","/home"),new Pair("forward","#\" onclick=\"history.go(1);return false;"),new Pair("back","#\" onclick=\"history.go(-1);return false;")));
-		hr.addList(Arrays.asList(new Pair("List 1", "/home"), new Pair("List 2", "/home"), new Pair("List 3", "/home")));
+		hr.addList(Arrays.asList(new Pair("Item 1", "/home"), new Pair("Item 2", "/home"), new Pair("Item 3", "/home")),"List A");
+		hr.addList(Arrays.asList(new Pair("Item 1", "/home"), new Pair("Item 2", "/home"), new Pair("Item 3", "/home")),"List B");
 		System.out.println("Page with List \n" + hr.getHtml());
 	}
 
