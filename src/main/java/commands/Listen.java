@@ -1,7 +1,9 @@
 package commands;
 
+import Strutures.ResponseFormat.Html.CollectionsServlet;
 import Strutures.Server.ExampleServlet;
 import Strutures.Command.ICommand;
+import Strutures.Server.HomeServlet;
 import Strutures.Server.favIconServlet;
 import console.Manager;
 import Strutures.ResponseFormat.ResultInfo;
@@ -10,6 +12,7 @@ import org.eclipse.jetty.servlet.ServletHandler;
 import utils.Utils;
 
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -37,9 +40,8 @@ public class Listen implements ICommand{
         ServletHandler handler = new ServletHandler();
         Manager.ServerSetHandler(handler);
         AssociateHandlers(handler);
-        //// TODO: 27/05/2016  
-        handler.addServletWithMapping(ExampleServlet.class, "/movies/*");
-        handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
+        //// TODO: 27/05/2016
+
         //Starts listening to requests
         Manager.ServerStart();
         //wait for server to initialize
@@ -59,6 +61,8 @@ public class Listen implements ICommand{
     private static void AssociateHandlers(ServletHandler handler){
         handler.addServletWithMapping(ExampleServlet.class, "/movies/*");
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
+        handler.addServletWithMapping(HomeServlet.class, "/");
+        handler.addServletWithMapping(CollectionsServlet.class, "/collections");
     }
 
     @Override
