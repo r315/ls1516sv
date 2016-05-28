@@ -26,13 +26,14 @@ public class GetCollectionMoviesMid implements ICommand {
         int mid;
 
         try {
-            mid = Utils.getInt(data.get("mid1"));
+            mid = Utils.getInt(data.get("mid"));
         } catch (NumberFormatException e) {
             throw new InvalidCommandVariableException();
         }
         try(Connection conn = ConnectionFactory.getConn()) {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT Collection.collection_id, Collection.name FROM Has WHERE movie_id=? " +
-                                                            "INNER JOIN Collection WHERE Has.collection_id = Collection.collection_id");
+            PreparedStatement pstmt = conn.prepareStatement("SELECT Collection.collection_id, Collection.name FROM Has\n" +
+                                                            "INNER JOIN Collection ON Has.collection_id = Collection.collection_id\n" +
+                                                            "WHERE movie_id=?");
             pstmt.setInt(1, mid);
 
             ResultSet rs = pstmt.executeQuery();
