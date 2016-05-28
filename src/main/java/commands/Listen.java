@@ -2,6 +2,8 @@ package commands;
 
 import Strutures.Server.ExampleServlet;
 import Strutures.Command.ICommand;
+import Strutures.Server.MoviesServlet;
+import Strutures.Server.TopsRatingsServlet;
 import Strutures.Server.favIconServlet;
 import console.Manager;
 import Strutures.ResponseFormat.ResultInfo;
@@ -37,9 +39,6 @@ public class Listen implements ICommand{
         ServletHandler handler = new ServletHandler();
         Manager.ServerSetHandler(handler);
         AssociateHandlers(handler);
-        //// TODO: 27/05/2016  
-        handler.addServletWithMapping(ExampleServlet.class, "/movies/*");
-        handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
         //Starts listening to requests
         Manager.ServerStart();
         //wait for server to initialize
@@ -57,7 +56,8 @@ public class Listen implements ICommand{
     }
 
     private static void AssociateHandlers(ServletHandler handler){
-        handler.addServletWithMapping(ExampleServlet.class, "/movies/*");
+        handler.addServletWithMapping(TopsRatingsServlet.class, "/tops/ratings");
+        handler.addServletWithMapping(MoviesServlet.class, "/movies");
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
     }
 
