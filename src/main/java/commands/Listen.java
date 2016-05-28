@@ -48,6 +48,8 @@ public class Listen implements ICommand{
         }
         //System.out.println("Http Server started listening requests on port: "+port);
 
+        //// TODO: 19/05/2016
+        //Change return to ResultInfo
         return new ResultInfo(false);
     }
 
@@ -57,7 +59,8 @@ public class Listen implements ICommand{
         handler.addServletWithMapping(MoviesMidServlet.class, "/movies/*");
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
         handler.addServletWithMapping(CollectionsServlet.class, "/collections");
-        handler.addServletWithMapping(HomeServlet.class, "/");
+        handler.addServletWithMapping(HomeServlet.class, "");
+        handler.addServletWithMapping(TopsRatingsHigherAverageServlet.class, "tops/5/ratings/higher/average");
     }
 
     @Override

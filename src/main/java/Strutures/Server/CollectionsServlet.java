@@ -37,18 +37,10 @@ public class CollectionsServlet extends HttpServlet{
             CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
             HtmlResult resultFormat= (HtmlResult)Manager.executeCommand(command,headerInfo);
 
-
-
-
-
-
-
             //Add collections links to each column
             List<Pair<String,String>> pairs=new ArrayList<>();
-
             for (ArrayList<String> line : resultFormat.resultInfo.getValues())
                 pairs.add(new Pair<>(line.get(1),"/collections/"+line.get(0)));
-
 
             //Remove id column
             List<String> list= resultFormat.resultInfo.removeColumn("ID");
