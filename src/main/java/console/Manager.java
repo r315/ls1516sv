@@ -125,6 +125,7 @@ public class Manager {
         map.add("GET /tops/{n}/ratings/lower/average",new GetTopsNRatingsLowerAverage());
         map.add("GET /tops/reviews/higher/count",new GetTopsReviewsHigherCount());
         map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
+        map.add("GET /tops/{n}/reviews/lower/count", new GetTopsNReviewsLowerCount());
 
         map.add("DELETE /collections/{cid}/movies/{mid}",new DeleteCollectionsCidMoviesMid());
 

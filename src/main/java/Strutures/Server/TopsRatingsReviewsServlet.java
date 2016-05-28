@@ -5,7 +5,6 @@ import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
 import utils.Pair;
-
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,7 @@ import java.util.List;
 /**
  * Created by Red on 28/05/2016.
  */
-public class TopsRatingsHigherAverageServlet extends HttpServlet{
+public class TopsRatingsReviewsServlet extends HttpServlet{
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -50,7 +49,7 @@ public class TopsRatingsHigherAverageServlet extends HttpServlet{
             resultFormat.addNavigationLinks(
                     Arrays.asList(
                             new Pair<>("Home", "/"),
-                            new Pair<>("Top Ratings", "/top/ratings")
+                            new Pair<>("Top Ratings", "/tops/ratings")
                     )
             );
 

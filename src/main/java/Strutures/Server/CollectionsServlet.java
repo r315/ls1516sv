@@ -28,6 +28,9 @@ public class CollectionsServlet extends HttpServlet{
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        System.out.println("--New request was received --");
+        System.out.println(req.getRequestURI());
+
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);

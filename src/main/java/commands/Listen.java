@@ -60,7 +60,7 @@ public class Listen implements ICommand{
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
         handler.addServletWithMapping(CollectionsServlet.class, "/collections");
         handler.addServletWithMapping(HomeServlet.class, "");
-        handler.addServletWithMapping(TopsRatingsHigherAverageServlet.class, "tops/5/ratings/higher/average");
+        handler.addServletWithMapping(TopsRatingsReviewsServlet.class, "/tops/*");
     }
 
     @Override
