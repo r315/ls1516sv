@@ -60,7 +60,7 @@ public class GetMoviesMidReviews implements ICommand {
     }
 
     private String getQuery(Boolean topB, int top) {
-        String query = "SELECT Movie.title, Review.review_id, Review.name, Review.summary, Review.rating " +
+        String query = "SELECT Movie.movie_id, Movie.title, Review.review_id, Review.name, Review.summary, Review.rating " +
                         "FROM Review " +
                         "INNER JOIN Movie ON Review.movie_id=Movie.movie_id " +
                         "WHERE Movie.movie_id = ? " +
@@ -72,6 +72,7 @@ public class GetMoviesMidReviews implements ICommand {
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
+        columns.add("Movie's ID");
         columns.add("Review's ID");
         columns.add("username");
         columns.add("Rating");
@@ -85,6 +86,7 @@ public class GetMoviesMidReviews implements ICommand {
         do {
             ArrayList<String> line = new ArrayList<>();
 
+            line.add(rs.getString("movie_id"));
             line.add(rs.getString("review_id"));
             line.add(rs.getString("name"));
             line.add(rs.getString("rating"));
