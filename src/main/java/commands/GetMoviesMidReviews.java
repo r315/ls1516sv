@@ -73,8 +73,9 @@ public class GetMoviesMidReviews implements ICommand {
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Movie's ID");
+        columns.add("Movie's Title");
         columns.add("Review's ID");
-        columns.add("username");
+        columns.add("Username");
         columns.add("Rating");
         columns.add("Summary");
 
@@ -87,6 +88,7 @@ public class GetMoviesMidReviews implements ICommand {
             ArrayList<String> line = new ArrayList<>();
 
             line.add(rs.getString("movie_id"));
+            line.add(rs.getString("title"));
             line.add(rs.getString("review_id"));
             line.add(rs.getString("name"));
             line.add(rs.getString("rating"));

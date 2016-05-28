@@ -77,8 +77,8 @@ public class GetMoviesMidRatings implements ICommand {
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
+        columns.add("ID");
         columns.add("Titulo");
-        columns.add("Ano de Lançamento");
         columns.add("Average Rating");
         columns.add("One");
         columns.add("Two");
@@ -94,8 +94,8 @@ public class GetMoviesMidRatings implements ICommand {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(rs.getDate("release_year"));
 
+        line.add(rs.getString("movie_id"));
         line.add(rs.getString("title"));
-        line.add(Integer.toString(calendar.get(Calendar.YEAR)));
         line.add(String.format(Locale.FRENCH,"%.2f", rs.getFloat("rating")));
         line.add(rs.getString("one"));
         line.add(rs.getString("two"));

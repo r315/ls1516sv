@@ -73,8 +73,8 @@ public class GetMoviesMidRatingsTest {
 
         ArrayList<String> line1 = new ArrayList<>();
 
+        line1.add("1");
         line1.add("Star Wars IV");
-        line1.add("1977");
         line1.add("3,56");
         line1.add("2");
         line1.add("2");

@@ -56,7 +56,7 @@ public class GetMoviesMidTest {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        ArrayList<String> line1 = new ArrayList<>(); line1.add("Star Wars IV"); line1.add("1977");
+        ArrayList<String> line1 = new ArrayList<>(); line1.add("1"); line1.add("Star Wars IV"); line1.add("1977");
 
         data.add(line1);
 

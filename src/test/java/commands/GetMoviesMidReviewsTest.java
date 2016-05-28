@@ -68,15 +68,21 @@ public class GetMoviesMidReviewsTest {
         ArrayList<String> line3 = new ArrayList<>();
 
         line1.add("1");
+        line1.add("Star Wars IV");
+        line1.add("1");
         line1.add("Luis");
         line1.add("5");
         line1.add("Gostei");
 
+        line2.add("1");
+        line2.add("Star Wars IV");
         line2.add("2");
         line2.add("Red");
         line2.add("1");
         line2.add("mau");
 
+        line3.add("1");
+        line3.add("Star Wars IV");
         line3.add("3");
         line3.add("Hugo");
         line3.add("3");
@@ -106,11 +112,15 @@ public class GetMoviesMidReviewsTest {
         ArrayList<String> line2 = new ArrayList<>();
         ArrayList<String> line3 = new ArrayList<>();
 
+        line2.add("1");
+        line2.add("Star Wars IV");
         line2.add("2");
         line2.add("Red");
         line2.add("1");
         line2.add("mau");
 
+        line3.add("1");
+        line3.add("Star Wars IV");
         line3.add("3");
         line3.add("Hugo");
         line3.add("3");
@@ -141,10 +151,14 @@ public class GetMoviesMidReviewsTest {
         ArrayList<String> line2 = new ArrayList<>();
 
         line1.add("1");
+        line1.add("Star Wars IV");
+        line1.add("1");
         line1.add("Luis");
         line1.add("5");
         line1.add("Gostei");
 
+        line2.add("1");
+        line2.add("Star Wars IV");
         line2.add("2");
         line2.add("Red");
         line2.add("1");
@@ -173,6 +187,8 @@ public class GetMoviesMidReviewsTest {
 
         ArrayList<String> line2 = new ArrayList<>();
 
+        line2.add("1");
+        line2.add("Star Wars IV");
         line2.add("2");
         line2.add("Red");
         line2.add("1");

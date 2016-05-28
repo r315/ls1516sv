@@ -91,12 +91,15 @@ public class GetTopsNRatingsHigherAverageTest {
         ArrayList<String> line2 = new ArrayList<>();
         ArrayList<String> line3 = new ArrayList<>();
 
+        line2.add("3");
         line2.add("Star Wars VI");
         line2.add("1983");
         line2.add("3,73");
+        line1.add("1");
         line1.add("Star Wars IV");
         line1.add("1977");
         line1.add("3,56");
+        line3.add("2");
         line3.add("Star Wars V");
         line3.add("1980");
         line3.add("2,44");
@@ -124,9 +127,11 @@ public class GetTopsNRatingsHigherAverageTest {
         ArrayList<String> line1 = new ArrayList<>();
         ArrayList<String> line2 = new ArrayList<>();
 
+        line2.add("3");
         line2.add("Star Wars VI");
         line2.add("1983");
         line2.add("3,73");
+        line1.add("1");
         line1.add("Star Wars IV");
         line1.add("1977");
         line1.add("3,56");
@@ -154,6 +159,7 @@ public class GetTopsNRatingsHigherAverageTest {
 
         ArrayList<String> line1 = new ArrayList<>();
 
+        line1.add("1");
         line1.add("Star Wars IV");
         line1.add("1977");
         line1.add("3,56");
@@ -180,6 +186,7 @@ public class GetTopsNRatingsHigherAverageTest {
 
         ArrayList<String> line1 = new ArrayList<>();
 
+        line1.add("1");
         line1.add("Star Wars IV");
         line1.add("1977");
         line1.add("3,56");

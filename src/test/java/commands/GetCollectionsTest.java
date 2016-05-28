@@ -59,10 +59,10 @@ public class GetCollectionsTest {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        ArrayList<String> line1 = new ArrayList<>(); line1.add("Best Movies"); line1.add("y");
-        ArrayList<String> line2 = new ArrayList<>(); line2.add("x"); line2.add("z");
-        ArrayList<String> line3 = new ArrayList<>(); line3.add("a"); line3.add("b");
-        ArrayList<String> line4 = new ArrayList<>(); line4.add("c"); line4.add("d");
+        ArrayList<String> line1 = new ArrayList<>(); line1.add("1"); line1.add("Best Movies"); line1.add("y");
+        ArrayList<String> line2 = new ArrayList<>(); line2.add("2"); line2.add("x"); line2.add("z");
+        ArrayList<String> line3 = new ArrayList<>(); line3.add("3"); line3.add("a"); line3.add("b");
+        ArrayList<String> line4 = new ArrayList<>(); line4.add("4"); line4.add("c"); line4.add("d");
 
         data.add(line1); data.add(line2); data.add(line3); data.add(line4);
 
@@ -80,8 +80,8 @@ public class GetCollectionsTest {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        ArrayList<String> line1 = new ArrayList<>(); line1.add("Best Movies"); line1.add("y");
-        ArrayList<String> line2 = new ArrayList<>(); line2.add("x"); line2.add("z");
+        ArrayList<String> line1 = new ArrayList<>(); line1.add("1"); line1.add("Best Movies"); line1.add("y");
+        ArrayList<String> line2 = new ArrayList<>(); line2.add("2"); line2.add("x"); line2.add("z");
 
         data.add(line1); data.add(line2);
 
@@ -102,8 +102,8 @@ public class GetCollectionsTest {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        ArrayList<String> line3 = new ArrayList<>(); line3.add("a"); line3.add("b");
-        ArrayList<String> line4 = new ArrayList<>(); line4.add("c"); line4.add("d");
+        ArrayList<String> line3 = new ArrayList<>(); line3.add("3"); line3.add("a"); line3.add("b");
+        ArrayList<String> line4 = new ArrayList<>(); line4.add("4"); line4.add("c"); line4.add("d");
 
         data.add(line3); data.add(line4);
 
@@ -124,8 +124,8 @@ public class GetCollectionsTest {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        ArrayList<String> line2 = new ArrayList<>(); line2.add("x"); line2.add("z");
-        ArrayList<String> line3 = new ArrayList<>(); line3.add("a"); line3.add("b");
+        ArrayList<String> line2 = new ArrayList<>(); line2.add("2"); line2.add("x"); line2.add("z");
+        ArrayList<String> line3 = new ArrayList<>(); line3.add("3"); line3.add("a"); line3.add("b");
 
         data.add(line2); data.add(line3);
 
