@@ -94,6 +94,7 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 
 	private ResultInfo createRI(ResultSet rs, int n) throws SQLException {
 		ArrayList<String> columns = new ArrayList<>();
+		columns.add("ID");
 		columns.add("Title");
 		columns.add("Release Year");
 		columns.add("Average Rating");
@@ -105,6 +106,7 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(rs.getDate("release_year"));
 
+			line.add(rs.getString("movie_id"));
 			line.add(rs.getString("title"));
 			line.add(Integer.toString(calendar.get(Calendar.YEAR)));
 			line.add(String.format(Locale.FRENCH,"%.2f", rs.getFloat("rating")));

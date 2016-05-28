@@ -80,6 +80,7 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 
 	private ResultInfo createRI(ResultSet rs, int n) throws SQLException {
 		ArrayList<String> columns = new ArrayList<>();
+		columns.add("ID");
 		columns.add("Title");
 		columns.add("Release Year");
 		columns.add("Review Count");
@@ -91,6 +92,7 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(rs.getDate("release_year"));
 
+			line.add(rs.getString("movie_id"));
 			line.add(rs.getString("title"));
 			line.add(Integer.toString(calendar.get(Calendar.YEAR)));
 			line.add(rs.getString("revcount"));
