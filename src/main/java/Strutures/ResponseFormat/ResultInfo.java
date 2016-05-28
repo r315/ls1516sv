@@ -50,7 +50,7 @@ public class ResultInfo {
         for(List<String> line : data){
             removedValues.add(line.get(index));
             line.remove(index);
-        }          
-         return removedValues;
+        }
+        return removedValues;
     }
 }

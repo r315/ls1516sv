@@ -32,7 +32,7 @@ public class HtmlResult implements IResultFormat {
 		}
 
 		if (resultInfo.getValues().isEmpty())
-			return emptyPage();
+			return emptyPage(resultInfo.getDisplayTitle());
 
 		page = new HtmlTree();
 		page.addElementTo("head", HtmlElement.title(resultInfo.getDisplayTitle())); // Tab Title
@@ -74,9 +74,9 @@ public class HtmlResult implements IResultFormat {
 		}
 	}
 
-	public void addList(List<Pair<String,String>> items){
+	public void addList(List<Pair<String,String>> items,String title){
 		HtmlElement list = new HtmlElement("ul");
-
+		page.addElementTo("body",new HtmlElement("h3",title));
 		for(Pair<String,String> item: items){
 			HtmlElement line = new HtmlElement("li", item.value1);
 			line.addLink(item.value2);
@@ -103,11 +103,10 @@ public class HtmlResult implements IResultFormat {
 		return page.getHtml();
 	}
 
-	private String emptyPage(){
+	private String emptyPage(String title){
 		page = new HtmlTree();
 		page.addElementTo("head", HtmlElement.title("Not Found!")); // Tab Title
-		//TODO ad title
-		page.addElementTo("body", HtmlElement.heading("h2","Add Title Here"));
+		page.addElementTo("body", HtmlElement.heading("h2",title));
 		page.addElementTo("body", HtmlElement.heading("h4","No results found!"));
 		return page.getHtml();
 	}
