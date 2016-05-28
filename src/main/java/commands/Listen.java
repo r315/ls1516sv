@@ -2,9 +2,7 @@ package commands;
 
 import Strutures.Server.ExampleServlet;
 import Strutures.Command.ICommand;
-import Strutures.Server.MoviesServlet;
-import Strutures.Server.TopsRatingsServlet;
-import Strutures.Server.favIconServlet;
+import Strutures.Server.*;
 import console.Manager;
 import Strutures.ResponseFormat.ResultInfo;
 
@@ -59,6 +57,8 @@ public class Listen implements ICommand{
         handler.addServletWithMapping(TopsRatingsServlet.class, "/tops/ratings");
         handler.addServletWithMapping(MoviesServlet.class, "/movies");
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
+        handler.addServletWithMapping(CollectionsServlet.class, "/collections");
+        handler.addServletWithMapping(HomeServlet.class, "/");
     }
 
     @Override
