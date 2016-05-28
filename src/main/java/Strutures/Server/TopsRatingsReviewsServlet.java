@@ -28,10 +28,10 @@ public class TopsRatingsReviewsServlet extends HttpServlet{
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);
-        String respBody=null;
+        String respBody;
         try{
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-            CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
+            CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI(),req.getQueryString()});
             HtmlResult resultFormat= (HtmlResult) Manager.executeCommand(command,headerInfo);
 
             //Add collections links to each column

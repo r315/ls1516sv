@@ -33,8 +33,9 @@ public class MoviesMidReviewsServlet extends HttpServlet {
         try{
             String method= req.getMethod();
             String path= req.getRequestURI();
+            String query= req.getQueryString();
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-            CommandInfo command = new CommandInfo(new String[]{method,path});
+            CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
 
             ArrayList<String> values = resultFormat.resultInfo.getValues().iterator().next();

@@ -37,7 +37,7 @@ public class CollectionsServlet extends HttpServlet{
         String respBody=null;
         try{
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-            CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI()});
+            CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI(),req.getQueryString()});
             HtmlResult resultFormat= (HtmlResult)Manager.executeCommand(command,headerInfo);
 
             //Add collections links to each column
