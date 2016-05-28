@@ -26,7 +26,7 @@ public class TextResult implements IResultFormat {
             return response;
         }
         String result=null;
-        result= resultInfo.getDisplayTitle()+":";
+        result= resultInfo.getDisplayTitle()+":\n\n";
         //System.out.println(resultInfo.getDisplayTitle()+":");
         for (ArrayList<String> dataList : resultInfo.getValues()) {
             Iterator<String> dataList_it= dataList.iterator();

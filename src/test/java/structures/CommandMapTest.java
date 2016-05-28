@@ -15,31 +15,30 @@ import commands.PostMovies;
 
 public class CommandMapTest {
 
-	CommandMap map;
-
 	@Before
 	public void before() throws Exception{
-		map= Manager.createMap();
+		Manager.Init();
+
 	}
 
 	@Test
 	public void GetCommandsTest() throws Exception{
 		int i =0;
-		for (ICommand cmd : map.getCommands()) ++i;
-		Assert.assertEquals(21,i);
+		for (ICommand cmd : Manager.commandMap.getCommands()) ++i;
+		Assert.assertEquals(23,i);
 	}
 
 	@Test
 	public void should_Get_GetMoviesMid_ICommand_Test()throws Exception{
 		CommandInfo command=new CommandInfo(new String[]{"GET","/movies/1"});
-		ICommand cmd=map.get(command);
+		ICommand cmd=Manager.commandMap.get(command);
 		Assert.assertTrue(cmd instanceof GetMoviesMid);
 	}
 
 	@Test
 	public void should_Get_ResultInfo_GetMoviesMid_Test() throws Exception{
 		CommandInfo command=new CommandInfo(new String[]{"GET","/movies/1"});
-		ICommand cmd=map.get(command);
+		ICommand cmd=Manager.commandMap.get(command);
 		Assert.assertTrue(cmd instanceof GetMoviesMid);
 		ResultInfo result = cmd.execute(command.getData());
 		int a=0;
@@ -60,13 +59,13 @@ public class CommandMapTest {
 	@Test
 	public void OptionsCommandTest() throws Exception{
 		CommandInfo command=new CommandInfo(new String[]{"OPTION","/"});
-		map.get(command).execute(command.getData());
+		Manager.commandMap.get(command).execute(command.getData());
 	}
 
 	@Test
 	public void shouldBeAbleToGetICommandPostMovies()throws Exception{
 		CommandInfo cmdInfo = new CommandInfo(new String[]{"POST","/movies","title=filme1&release_year=2014"});
-		Assert.assertTrue(map.get(cmdInfo) instanceof PostMovies);
+		Assert.assertTrue(Manager.commandMap.get(cmdInfo) instanceof PostMovies);
 	}
 
 //	@Test

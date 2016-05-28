@@ -55,12 +55,12 @@ public class Listen implements ICommand{
     private static void AssociateHandlers(ServletHandler handler){
         handler.addServletWithMapping(TopsRatingsServlet.class, "/tops/ratings");
         handler.addServletWithMapping(MoviesServlet.class, "/movies");
-        handler.addServletWithMapping(MoviesMidServlet.class, "/movies/*");
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
         handler.addServletWithMapping(CollectionsServlet.class, "/collections");
         handler.addServletWithMapping(HomeServlet.class, "");
         handler.addServletWithMapping(TopsRatingsReviewsServlet.class, "/tops/*");
         handler.addServletWithMapping(CollectionsCidServlet.class, "/collections/*");
+        handler.addServletWithMapping(GenericMoviesMidServlet.class, "/movies/*");
     }
 
     @Override
