@@ -74,4 +74,11 @@ public class DecodeParametersTest {
         HashMap<String, String> param = DecodeParameters.decode(aux);
         assertEquals(new HashMap<String, String>(),param);
     }
+
+    @Test
+    public void ParametersExecute_NullParam() throws Exception {
+        String [] aux = new String[]{"POST","/movies/1/reviews","accept:text/plain|accept-language:en-gb",null};
+        HashMap<String, String> param = DecodeParameters.decode(aux);
+        assertEquals(new HashMap<>(),param);
+    }
 }

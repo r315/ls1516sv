@@ -33,12 +33,17 @@ public class TopsRatingsServlet extends HttpServlet {
             resultFormat.addNavigationLinks(
                     Arrays.asList(
                         new Pair<>("Home","/"),
-                        new Pair<>("Movies","/movies"),
-                        new Pair<>("Top Ratings Higher Average","/tops/5/ratings/higher/average"),
-                        new Pair<>("Top Ratings Lower Average","/tops/5/ratings/lower/average"),
-                        new Pair<>("Top Review Higher Count","/tops/5/reviews/higher/count"),
-                        new Pair<>("Top Review Lower Count","/tops/5/reviews/lower/count")
+                        new Pair<>("Movies","/movies")
                     )
+            );
+
+            resultFormat.addList(
+                    Arrays.asList(
+                        new Pair<>("Ratings Higher Average","/tops/5/ratings/higher/average"),
+                        new Pair<>("Ratings Lower Average","/tops/5/ratings/lower/average"),
+                        new Pair<>("Review Higher Count","/tops/5/reviews/higher/count"),
+                        new Pair<>("Review Lower Count","/tops/5/reviews/lower/count")
+                    ),"Tops"
             );
 
             respBody = resultFormat.getHtml();

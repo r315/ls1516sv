@@ -60,7 +60,7 @@ public class MoviesMidServlet extends HttpServlet {
             //Generate and Add Reviews
             resultFormat.resultInfo.removeColumn("ID");
             resultFormat.generate();
-            resultFormat.addList(pairs,"Reviews by");
+            if (!pairs.isEmpty()) resultFormat.addList(pairs,"Reviews by");
 
             //Get Collections
             GetCollectionMoviesMid collections = new GetCollectionMoviesMid();
@@ -73,14 +73,14 @@ public class MoviesMidServlet extends HttpServlet {
                 pairs.add(new Pair<>(line.get(1),"/collections/"+line.get(0)));
             }
 
-            resultFormat.addList(pairs,"Collections");
+            if (!pairs.isEmpty()) resultFormat.addList(pairs,"Collections");
 
             resultFormat.addNavigationLinks(
                     Arrays.asList(
                             new Pair<>("Home","/"),
                             new Pair<>("Movies","/movies"),
-                            new Pair<>("Ratings","/movie"+mid+"/ratings"),
-                            new Pair<>("Reviews","/movie"+mid+"/reviews")
+                            new Pair<>("Ratings","/movie/"+mid+"/ratings"),
+                            new Pair<>("Reviews","/movie/"+mid+"/reviews")
                     )
             );
 
