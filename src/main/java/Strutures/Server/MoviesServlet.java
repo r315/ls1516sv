@@ -33,8 +33,9 @@ public class MoviesServlet extends HttpServlet {
         try{
             String method= req.getMethod();
             String path= req.getRequestURI();
+            String query= req.getQueryString();
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-            CommandInfo command = new CommandInfo(new String[]{method,path});
+            CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
 
             List<Pair<String,String>> pairs = new ArrayList<>();
@@ -46,6 +47,19 @@ public class MoviesServlet extends HttpServlet {
             resultFormat.resultInfo.removeColumn("ID");
             resultFormat.generate();
             resultFormat.addLinksToTable(pairs);
+
+            resultFormat.addNavigationLinks(
+                    Arrays.asList(
+                            new Pair<>("Sort by Date","/movies?sortBy=addedDate"),
+                            new Pair<>("Sort by Date Desc","/movies?sortBy=addedDateDesc"),
+                            new Pair<>("Sort by Year","/movies?sortBy=year"),
+                            new Pair<>("Sort by Year Desc","/movies?sortBy=yearDesc"),
+                            new Pair<>("Sort by Title","/movies?sortBy=title"),
+                            new Pair<>("Sort by Title Desc","/movies?sortBy=titleDesc"),
+                            new Pair<>("Sort by Rating","/movies?sortBy=rating"),
+                            new Pair<>("Sort by Rating Desc","/movies?sortBy=ratingDesc")
+                    )
+            );
 
             resultFormat.addNavigationLinks(
                     Arrays.asList(

@@ -50,7 +50,8 @@ public class CollectionsCidServlet extends HttpServlet {
             //Set Navigation links
             resultFormat.addNavigationLinks(
                     Arrays.asList(
-                            new Pair<>("Home", "/")
+                            new Pair<>("Home", "/"),
+                            new Pair<>("Collections", "/collections")
                     )
             );
 

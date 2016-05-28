@@ -35,6 +35,7 @@ public class HomeServlet extends HttpServlet {
             resultFormat.generate();
             resultFormat.addNavigationLinks(
                 Arrays.asList(
+                    new Pair<>("Home","/"),
                     new Pair<>("Movies","/movies"),
                     new Pair<>("Collections","/collections"),
                     new Pair<>("Top Ratings","/tops/ratings")
