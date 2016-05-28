@@ -20,6 +20,7 @@ public class HtmlTree {
 		root = new HtmlElement("html");
 		root.addChild(new HtmlElement("head"));
 		root.addChild(new HtmlElement("body"));
+		addElementTo("head", HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
 	}
 
 	private void addElementTo(String elm, HtmlElement htmlElement, Consumer<HtmlElement> cons) {

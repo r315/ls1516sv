@@ -36,7 +36,6 @@ public class HtmlResult implements IResultFormat {
 
 		page = new HtmlTree();
 		page.addElementTo("head", HtmlElement.title(resultInfo.getDisplayTitle())); // Tab Title
-		page.addElementTo("head", HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
 
 		HtmlElement table = createTable();
 
@@ -87,7 +86,6 @@ public class HtmlResult implements IResultFormat {
 	}
 
 	public void addNavigationLinks(List<Pair<String,String>> cols){
-		page.addElementTo("head", HtmlElement.style("table, th, td { border-style: double; border-collapse: collapse;}"));
 
 		HtmlElement table = createTable();
 
