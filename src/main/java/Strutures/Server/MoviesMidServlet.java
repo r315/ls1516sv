@@ -54,7 +54,7 @@ public class MoviesMidServlet extends HttpServlet {
             List<Pair<String,String>> pairs = new ArrayList<>();
 
             for (ArrayList<String> line : ri.getValues()){
-                pairs.add(new Pair<>(line.get(2),"/movies/"+mid+"/reviews/"+line.get(1)));
+                pairs.add(new Pair<>(line.get(3),"/movies/"+mid+"/reviews/"+line.get(2)));
             }
 
             //Generate and Add Reviews
