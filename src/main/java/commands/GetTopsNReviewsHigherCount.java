@@ -65,10 +65,10 @@ public class GetTopsNReviewsHigherCount implements ICommand {
 	}
 
 	private String getQuery(Boolean topB, int top) {
-		String query = "SELECT Movie.title, Movie.release_year, COUNT(Review.rating) AS revcount " +
+		String query = "SELECT Movie.movie_id, Movie.title, Movie.release_year, COUNT(Review.rating) AS revcount " +
 				"FROM Movie " +
 				"LEFT JOIN Review ON Review.movie_id = Movie.movie_id " +
-				"GROUP BY Movie.title, Movie.release_year " +
+				"GROUP BY Movie.title, Movie.release_year, Movie.movie_id " +
 				"ORDER BY revcount DESC " +
 				"OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 		if (topB) {

@@ -62,7 +62,7 @@ public class GetTopsNReviewsLowerCount implements ICommand {
     }
 
     private String getQuery(Boolean topB, int top) {
-        String query = "SELECT title, release_year, revcount FROM ( \n" +
+        String query = "SELECT movie_id, title, release_year, revcount FROM ( \n" +
                 "SELECT Movie.title, Movie.release_year, COUNT(Review.rating) AS revcount, Movie.movie_id\n" +
                 "FROM Movie\n" +
                 "LEFT JOIN Review ON Review.movie_id = Movie.movie_id\n" +
