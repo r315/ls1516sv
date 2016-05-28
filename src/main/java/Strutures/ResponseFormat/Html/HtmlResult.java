@@ -31,6 +31,9 @@ public class HtmlResult implements IResultFormat {
 			return getHtml(); //blankPage
 		}
 
+        if(!resultInfo.generateresult)
+            return "";
+
 		if (resultInfo.getValues().isEmpty())
 			return emptyPage(resultInfo.getDisplayTitle());
 

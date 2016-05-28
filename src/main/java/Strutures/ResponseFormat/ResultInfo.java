@@ -3,6 +3,7 @@ package Strutures.ResponseFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Created by Red on 25/04/2016.
@@ -10,6 +11,7 @@ import java.util.List;
 //HR: null fields now return empty collections insted null 
 public class ResultInfo {
 
+    public  boolean generateresult;
     private String displayTitle;
     private Collection<String> title;
     private Collection<ArrayList<String>> data;
@@ -20,6 +22,11 @@ public class ResultInfo {
         this.displayTitle = displayTitle;
         this.title=title;
         this.data=data;
+        this.generateresult = true;
+    }
+
+    public ResultInfo(boolean b) {
+        this.generateresult = b;
     }
 
     public void setTitles(Collection<String> titles){
@@ -37,19 +44,22 @@ public class ResultInfo {
     public Collection<ArrayList<String>> getValues(){
     	return this.data == null ? new ArrayList<ArrayList<String>>(): this.data;}
 
-    public List<String> removeColumn(String col){
+    public List<String> removeColumn(String col) throws NoSuchElementException{
         List<String> removedValues = new ArrayList<String>();
         if(title.size() == 0)
             return removedValues;
         List<String> newtitletable = (List<String>)title;
+        try {
+            int index = newtitletable.indexOf(col);
 
-        int index = newtitletable.indexOf(col);
+            ((List<String>) title).remove(index);
 
-        ((List<String>) title).remove(index);
-
-        for(List<String> line : data){
-            removedValues.add(line.get(index));
-            line.remove(index);
+            for (List<String> line : data) {
+                removedValues.add(line.get(index));
+                line.remove(index);
+            }
+        }catch (Exception e){
+            throw new NoSuchElementException();
         }
         return removedValues;
     }

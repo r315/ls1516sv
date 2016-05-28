@@ -47,10 +47,8 @@ public class Listen implements ICommand{
             System.out.println("Server could not initialize.");
         }
         //System.out.println("Http Server started listening requests on port: "+port);
-        
-        //// TODO: 19/05/2016
-        //Change return to ResultInfo
-        return null;
+
+        return new ResultInfo(false);
     }
 
     private static void AssociateHandlers(ServletHandler handler){
