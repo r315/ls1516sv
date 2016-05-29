@@ -8,6 +8,6 @@ dependencies {
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')    
 }
 
-mainClassName = "pt.isel.ls.apps.http.FirstHttpServer"
+mainClassName = "pt.isel.ls.apps.http.HerokuFirstHttpServer"
 
 task stage(dependsOn: ['clean', 'installApp'])
