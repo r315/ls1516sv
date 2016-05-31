@@ -39,9 +39,9 @@ public class HtmlResult implements IResultFormat {
 			return emptyPage(resultInfo.getDisplayTitle());
 
 		page = new HtmlTree();
-		page.addElementTo("head", HtmlElement.title(resultInfo.getDisplayTitle())); // Tab Title
+		page.addElementTo("head", HtmlTree.title(resultInfo.getDisplayTitle())); // Tab Title
 
-		HtmlElement table = createTable();
+		HtmlElement table = HtmlTree.createTable();
 
 		if (!resultInfo.getTitles().isEmpty())
 			table.addChild(addDataToRow(new HtmlElement("tr"), "th", resultInfo.getTitles()));
@@ -50,7 +50,7 @@ public class HtmlResult implements IResultFormat {
 			table.addChild(addDataToRow(new HtmlElement("tr"), "td", line));
 		}
 
-		page.addElementTo("body", HtmlElement.heading("h2", resultInfo.getDisplayTitle()));
+		page.addElementTo("body", HtmlTree.heading("h2", resultInfo.getDisplayTitle()));
 		page.addElementTo("body", table);
 		return page.getHtml();
 	}
@@ -61,16 +61,9 @@ public class HtmlResult implements IResultFormat {
 		return row;
 	}
 
-	private HtmlElement createTable(){
-		HtmlElement table = new HtmlElement("table");
-		table.addAttributes("style","width:100%");
-		return table;
-	}
-
 	public void addLink(String cont, String link) {
 		page.addLinkToContent(cont,link);
 	}
-
 
 	public void addLinksToTable(List<Pair<String,String>> lines) {
 		for(Pair<String,String> p : lines) {
@@ -78,69 +71,33 @@ public class HtmlResult implements IResultFormat {
 		}
 	}
 
-    public void addForm( String legend, List<Pair> formAtributes,  List<Pair> inputs ){
-        HtmlElement form = new HtmlElement("form");
-        for(Pair<String,String> p : formAtributes){
-            form.addAttributes( p.value1, p.value2);
-        }
-
-        HtmlElement fieldset = new HtmlElement("fieldset");
-        fieldset.addChild(new HtmlElement("legend", legend));
-
-        for(Pair<String,List<Pair<String,String>>> p : inputs){
-            fieldset.addChild(new HtmlElement("br",p.value1));  //description
-            HtmlElement input = new HtmlElement("input");
-            for(Pair<String,String> atr : p.value2){
-                input.addAttributes(atr.value1,atr.value2);
-            }
-            fieldset.addChild(input);
-        }
-
-        fieldset.addChild(new HtmlElement("input")
-                .addAttributes("type","submit")
-                .addAttributes("value","Submit")
-        );
-
-        form.addChild(fieldset);
-        page.addElementTo("body",form);
-    }
-
-	public void addList(List<Pair<String,String>> items,String title){
-		HtmlElement list = new HtmlElement("ul");
-		page.addElementTo("body",new HtmlElement("h3",title));
-		for(Pair<String,String> item: items){
-			HtmlElement line = new HtmlElement("li", item.value1);
-			line.addLink(item.value2);
-			list.addChild(line);
-		}
-		page.addElementTo("body",list);
-	}
-
-	public void addNavigationLinks(List<Pair<String,String>> cols){
-
-		HtmlElement table = createTable();
-
-		for(Pair<String,String> p : cols) {
-			HtmlElement col = new HtmlElement("th", p.value1);
-			col.addLink(p.value2);
-			table.addChild(col);
-		}
-
-		page.addElementTo("body",table,0);//first element on body
-		page.addElementTo("body",HtmlElement.heading("p",""),1); // second element on body
-	}
-
 	public String getHtml(){
-		return page.getHtml();
+        return page.getHtml();
 	}
 
 	private String emptyPage(String title){
 		page = new HtmlTree();
-		page.addElementTo("head", HtmlElement.title("Not Found!")); // Tab Title
-		page.addElementTo("body", HtmlElement.heading("h2",title));
-		page.addElementTo("body", HtmlElement.heading("h4","No results found!"));
+		page.addElementTo("head", HtmlTree.title("Not Found!")); // Tab Title
+		page.addElementTo("body", HtmlTree.heading("h2",title));
+		page.addElementTo("body", HtmlTree.heading("h4","No results found!"));
 		return page.getHtml();
 	}
+
+    public void addList(List<Pair<String,String>> items,String title){
+        page.addElementTo("body",new HtmlElement("h3",title));
+        page.addElementTo("body",page.addList(items));
+    }
+
+    public void addNavigationLinks(List<Pair<String,String>> cols){
+        page.addElementToDiv("header", HtmlTree.addNavigationLinks(cols));
+        page.addElementToDiv("header",HtmlTree.p());
+    }
+
+    public void addForm(String legend, List<Pair> formAtributes, List<Pair> inputs){
+        page.addElementTo("body", HtmlTree.p());
+        page.addElementTo("body", HtmlTree.p());
+        page.addElementTo("body", HtmlTree.addForm(legend, formAtributes, inputs));
+    }
 }
 
 /*

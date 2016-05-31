@@ -13,15 +13,6 @@ class HtmlElement{
 	private String attributes = "";
 	private Collection<HtmlElement> childs;
 
-	public static HtmlElement title(String text){
-		return new HtmlElement("title",text);
-	}
-	public static HtmlElement style(String style){
-		return new HtmlElement("style",style);
-	}
-	public static HtmlElement heading(String h, String text){
-		return new HtmlElement(h,text);
-	}
 	public HtmlElement(String tag){
 		this.tag = tag;
 		childs = new ArrayList<HtmlElement>();
@@ -41,7 +32,10 @@ class HtmlElement{
 		return this;
 	}
 
-	public void addChild(HtmlElement node){	childs.add(node); }
+	public HtmlElement addChild(HtmlElement node){
+		childs.add(node);
+		return this;
+	}
     public void addChild(HtmlElement node,int pos){
         List<HtmlElement> left = childs.stream().limit(pos).collect(Collectors.toList());
         left.add(node);

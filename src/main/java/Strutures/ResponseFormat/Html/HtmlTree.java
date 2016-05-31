@@ -1,6 +1,9 @@
 package Strutures.ResponseFormat.Html;
 
 
+import utils.Pair;
+
+import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -10,6 +13,23 @@ public class HtmlTree {
 	
 	protected HtmlElement root;
 
+	public static HtmlElement title(String text){
+		return new HtmlElement("title",text);
+	}
+	public static HtmlElement style(String style){
+		return new HtmlElement("style",style);
+	}
+	public static HtmlElement heading(String h, String text){
+		return new HtmlElement(h,text);
+	}
+	public static HtmlElement form(){
+		return new HtmlElement("form");
+	}
+	public static HtmlElement div(String id){
+		return new HtmlElement("div").addAttributes("id",id);
+	}
+	public static HtmlElement p() {return new HtmlElement("p");}
+
 	public String getHtml(){
 		StringBuilder sb = new StringBuilder("<!DOCTYPE html>\n");
 		getHtml(sb,root, 0);
@@ -17,17 +37,19 @@ public class HtmlTree {
 	}
 
 	public HtmlTree(){
-		root = new HtmlElement("html");
-		root.addChild(new HtmlElement("head"));
-		root.addChild(new HtmlElement("body"));
-		addElementTo("head", HtmlElement.style("table, th, td { border: 1px solid black; border-collapse: collapse;}"));
+		root = new HtmlElement("html")
+				.addChild(new HtmlElement("head")
+					.addChild(style("table, th, td { border: 1px solid black; border-collapse: collapse;}")))
+				.addChild(new HtmlElement("body")
+						.addChild(div("header")));
 	}
 
-	private void addElementTo(String elm, HtmlElement htmlElement, Consumer<HtmlElement> cons) {
-		HtmlElement element = findElementByTag(elm);
+	private void addElementTo(String tag, HtmlElement htmlElement, Consumer<HtmlElement> cons) {
+		HtmlElement element = findElementByTag(tag);
 		if(element != null)
 			cons.accept(element);
 	}
+
 	public void addElementTo(String elm, HtmlElement htmlElement) {
 		addElementTo(elm,htmlElement,e -> e.addChild(htmlElement));
 	}
@@ -48,6 +70,10 @@ public class HtmlTree {
 
 	public HtmlElement findByContent(String cont) {
 		return findElement(root, cont, (k, r) -> r.getContent().equals(k));
+	}
+
+	public HtmlElement findById(String id) { //used to search div element
+		return findElement(root, id, (k, r) -> r.getAttributes().contains("id=" + "\"" + k + "\""));
 	}
 
 	private HtmlElement findElement(HtmlElement root, String key, BiPredicate<String,HtmlElement> pred){
@@ -80,4 +106,69 @@ public class HtmlTree {
 		sb.append(content.length()!=0?content:tabs);
 		sb.append("</" + tag + ">");
 	}
+
+
+	private static HtmlElement htmlElementWithAtr(String tag,List<Pair> atrs){
+		HtmlElement elm = new HtmlElement(tag);
+		for(Pair<String,String> p : atrs){
+			elm.addAttributes(p.value1, p.value2);
+		}
+		return elm;
+	}
+
+	public static HtmlElement createTable(){
+		HtmlElement table = new HtmlElement("table")
+			.addAttributes("width", "100%")
+			.addAttributes("border", "1")
+			.addAttributes("style", "border-collapse:collapse;");
+		return table;
+	}
+
+	public static HtmlElement addForm(String legend, List<Pair> formAtributes, List<Pair> inputs){
+
+		HtmlElement form = htmlElementWithAtr("form",formAtributes);
+		HtmlElement fieldset = new HtmlElement("fieldset")
+				.addAttributes("style","width:300px;")
+				.addChild(new HtmlElement("legend", legend));
+
+		for(Pair<String,List<Pair>> p : inputs){
+			fieldset
+					.addChild(new HtmlElement("br",p.value1))  //description
+					.addChild(htmlElementWithAtr("input", p.value2));
+		}
+
+		fieldset.addChild(new HtmlElement("input")
+						.addAttributes("type","submit")
+						.addAttributes("value","Submit")
+		);
+
+		form.addChild(fieldset);
+		return form;
+	}
+
+	public HtmlElement addList(List<Pair<String,String>> items){
+		HtmlElement list = new HtmlElement("ul");
+		for(Pair<String,String> item: items){
+			HtmlElement line = new HtmlElement("li", item.value1);
+			line.addLink(item.value2);
+			list.addChild(line);
+		}
+		return list;
+	}
+
+	public static HtmlElement addNavigationLinks(List<Pair<String, String>> cols){
+		HtmlElement table = createTable();
+		for(Pair<String,String> p : cols) {
+			HtmlElement col = new HtmlElement("th", p.value1);
+			col.addLink(p.value2);
+			table.addChild(col);
+		}
+		return table;
+	}
+
+	public HtmlElement addElementToDiv(String div, HtmlElement elem) {
+		return findById(div).addChild(elem);
+	}
+
+
 }

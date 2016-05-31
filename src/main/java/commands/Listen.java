@@ -24,10 +24,10 @@ public class Listen implements ICommand{
             port = Utils.getInt(prmts.get("port"));
         }catch(NullPointerException e){
             System.out.println("Missing port parameter.");
-            return null;
+            return new ResultInfo(false);
         }catch (NumberFormatException n){
             System.out.println("Invalid port parameter.");
-            return null;
+            return new ResultInfo(false);
         }
 
         Manager.ServerCreate(port);
