@@ -74,6 +74,37 @@ public class HtmlResultTest {
 		System.out.println("Blank Page" + hr.getHtml());
 	}
 
+	@Test
+	public void shouldInsertForm(){
+		hr = new HtmlResult();
+
+		hr.addForm("Legenda Fieldset",
+
+				Arrays.asList(
+						new Pair<String,String>("method","POST"),
+						new Pair<String,String>("action","/movies")),
+
+				Arrays.asList(
+						new Pair<String,List<Pair<String,String>>>(
+								"Movie Name",commonAtributes()),
+
+						new Pair<String,List<Pair<String,String>>>(
+								"Release Year",
+								commonAtributes()))
+				);
+
+		System.out.println("Form insertion \n" + hr.getHtml());
+	}
+
+
+	private List<Pair<String,String>> commonAtributes(){
+		return Arrays.asList(
+				new Pair("type","text"),
+				new Pair("name","title"),
+				new Pair("required",null));
+	}
+
+
 	private ResultInfo createResultInfo(int r, int c){
 		int rows = r;
 		int cols = c;

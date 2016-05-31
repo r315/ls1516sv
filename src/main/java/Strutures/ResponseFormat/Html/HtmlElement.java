@@ -35,7 +35,12 @@ class HtmlElement{
         content = "<a href = \"" + link + "\" > " + content + "</a>";
     }
     public void addContent(String content){	this.content = content;}
-	public void addAttributes(String attributes){ this.attributes = " " + attributes; }
+
+	public HtmlElement addAttributes(String atr, String val){
+		this.attributes += " " + (val != null ? atr + "=\"" + val +"\"" : atr);
+		return this;
+	}
+
 	public void addChild(HtmlElement node){	childs.add(node); }
     public void addChild(HtmlElement node,int pos){
         List<HtmlElement> left = childs.stream().limit(pos).collect(Collectors.toList());
