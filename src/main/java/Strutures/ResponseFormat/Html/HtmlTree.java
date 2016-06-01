@@ -2,12 +2,9 @@ package Strutures.ResponseFormat.Html;
 
 
 import utils.Pair;
-
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class HtmlTree {
 	
@@ -108,12 +105,9 @@ public class HtmlTree {
 	}
 
 
-	private static HtmlElement htmlElementWithAtr(String tag,List<Pair> atrs){
+	private static HtmlElement htmlElementWithAtr(String tag,List<Pair<String,String>> atrs){
 		HtmlElement elm = new HtmlElement(tag);
-		//atrs.forEach( elm.addAttributes(p.value1, p.value2); );
-		for(Pair<String,String> p : atrs){
-			elm.addAttributes(p.value1, p.value2);
-		}
+		atrs.forEach( p -> elm.addAttributes(p.value1, p.value2) );
 		return elm;
 	}
 
@@ -125,18 +119,17 @@ public class HtmlTree {
 		return table;
 	}
 
-	public static HtmlElement addForm(String legend, List<Pair> formAtributes, List<Pair> inputs){
+	public static HtmlElement addForm(String legend, List<Pair<String,String>> formAtributes, List<Pair<String,List<Pair<String,String>>>> inputs){
 
 		HtmlElement form = htmlElementWithAtr("form",formAtributes);
 		HtmlElement fieldset = new HtmlElement("fieldset")
 				.addAttributes("style","width:300px;")
 				.addChild(new HtmlElement("legend", legend));
 
-		for(Pair<String,List<Pair>> p : inputs){
-			fieldset
-					.addChild(new HtmlElement("br",p.value1))  //description
-					.addChild(htmlElementWithAtr("input", p.value2));
-		}
+		inputs.forEach( p -> { fieldset
+				.addChild(new HtmlElement("br",p.value1))  //form title
+				.addChild(htmlElementWithAtr("input", p.value2));
+		});
 
 		fieldset.addChild(new HtmlElement("input")
 						.addAttributes("type","submit")

@@ -105,7 +105,5 @@ public class CollectionsServlet extends HttpServlet{
             // TODO: 31/05/2016
             resp.setStatus(404);
         }
-
-
     }
 }
