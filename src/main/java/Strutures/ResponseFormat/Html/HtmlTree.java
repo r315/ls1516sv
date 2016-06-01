@@ -50,12 +50,12 @@ public class HtmlTree {
 			cons.accept(element);
 	}
 
-	public void addElementTo(String elm, HtmlElement htmlElement) {
-		addElementTo(elm,htmlElement,e -> e.addChild(htmlElement));
+	public void addElementTo(String tag, HtmlElement htmlElement) {
+		addElementTo(tag,htmlElement,e -> e.addChild(htmlElement));
 	}
 
-	public void addElementTo(String elm, HtmlElement htmlElement, int pos) {
-		addElementTo(elm,htmlElement,e -> e.addChild(htmlElement,pos));
+	public void addElementTo(String tag, HtmlElement htmlElement, int pos) {
+		addElementTo(tag,htmlElement,e -> e.addChild(htmlElement,pos));
 	}
 
 	public void addLinkToContent(String content, String link){

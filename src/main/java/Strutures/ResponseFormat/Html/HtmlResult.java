@@ -102,6 +102,10 @@ public class HtmlResult implements IResultFormat {
     public void addElementTo(String tag, HtmlElement elem){
         page.addElementTo(tag,elem);
     }
+    
+    public void addElementTo(String tag, HtmlElement elem, int pos){
+        page.addElementTo(tag,elem,pos);
+    }
 }
 
 /*
