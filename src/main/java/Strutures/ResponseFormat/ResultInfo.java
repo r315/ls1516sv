@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by Red on 25/04/2016.
@@ -62,5 +64,16 @@ public class ResultInfo {
             throw new NoSuchElementException();
         }
         return removedValues;
+    }
+
+    private String getValueFromData(int col, int line){
+           return data.stream()
+                   .skip(line)
+                   .limit(1)
+                   .collect(Collectors.toList()).get(0).get(col);
+    }
+
+    public String getGeneratedId(){
+       return  getValueFromData(0,0);
     }
 }

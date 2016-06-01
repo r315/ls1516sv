@@ -110,6 +110,7 @@ public class HtmlTree {
 
 	private static HtmlElement htmlElementWithAtr(String tag,List<Pair> atrs){
 		HtmlElement elm = new HtmlElement(tag);
+		//atrs.forEach( elm.addAttributes(p.value1, p.value2); );
 		for(Pair<String,String> p : atrs){
 			elm.addAttributes(p.value1, p.value2);
 		}

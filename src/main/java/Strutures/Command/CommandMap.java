@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import decoders.DecodeMethod;
 import decoders.DecodePath;
@@ -28,7 +29,7 @@ public class CommandMap {
 
     public boolean add(String sCommand, ICommand iCommand)
             throws InvalidCommandPathException, InvalidCommandMethodException{
-
+        //TODO make optional iCommand
         if(sCommand==null || iCommand==null) return false;
 
         String table=null;
