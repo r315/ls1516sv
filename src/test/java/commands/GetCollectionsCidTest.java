@@ -37,6 +37,7 @@ public class GetCollectionsCidTest {
             stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
 
             stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('Best Movies','y')");
+            stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('SomethingHappened','x')");
 
             stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars IV','19770525')");
             stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars V','19800629');");
@@ -70,9 +71,9 @@ public class GetCollectionsCidTest {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        ArrayList<String> line1 = new ArrayList<>(); line1.add("1"); line1.add("Star Wars IV"); line1.add("1977");
-        ArrayList<String> line2 = new ArrayList<>(); line2.add("2"); line2.add("Star Wars V"); line2.add("1980");
-        ArrayList<String> line3 = new ArrayList<>(); line3.add("3"); line3.add("Star Wars VI"); line3.add("1983");
+        ArrayList<String> line1 = new ArrayList<>(); line1.add("1"); line1.add("1"); line1.add("Star Wars IV"); line1.add("1977");
+        ArrayList<String> line2 = new ArrayList<>(); line2.add("1"); line2.add("2"); line2.add("Star Wars V"); line2.add("1980");
+        ArrayList<String> line3 = new ArrayList<>(); line3.add("1"); line3.add("3"); line3.add("Star Wars VI"); line3.add("1983");
 
         data.add(line1); data.add(line2); data.add(line3);
 
@@ -114,5 +115,22 @@ public class GetCollectionsCidTest {
 
         GetCollectionsCid stuff = new GetCollectionsCid();
         ResultInfo rs = stuff.execute(param);
+    }
+
+    @Test
+    public void GetCollectionsCidSomethingHappened()throws Exception{
+        Collection<String> title = new ArrayList<>();
+        ArrayList<ArrayList<String>> data = new ArrayList<>();
+
+        ResultInfo result = new ResultInfo(null,title,data);
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("cid","2");
+
+        /* --- */
+
+        GetCollectionsCid stuff = new GetCollectionsCid();
+        ResultInfo rs = stuff.execute(param);
+        assertEquals(result.getValues(),rs.getValues());
     }
 }

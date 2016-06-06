@@ -76,6 +76,7 @@ public class GetCollectionsCid implements ICommand {
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
+        columns.add("Collection ID");
         columns.add("Movie ID");
         columns.add("Movie Name");
         columns.add("Release Year");
@@ -85,17 +86,19 @@ public class GetCollectionsCid implements ICommand {
         if (!rs.next()) return new ResultInfo(TITLE, columns, data);
         String name = rs.getString("name");
 
-        while(rs.next() && rs.getString("movie_id") != "null") {
+        if(!(rs.getString("movie_id") != "null")) {
+            do {
+                ArrayList<String> line = new ArrayList<>();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(rs.getDate("release_year"));
+                line.add(rs.getString("collection_id"));
+                line.add(rs.getString("movie_id"));
+                line.add(rs.getString("title"));
+                line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+                data.add(line);
+            } while (rs.next());
+        }
 
-        ArrayList<String> line = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(rs.getDate("release_year"));
-        line.add(rs.getString("movie_id"));
-        line.add(rs.getString("title"));
-        line.add(Integer.toString(calendar.get(Calendar.YEAR)));
-
-        data.add(line);
-    }
         return new ResultInfo(name + TITLE, columns, data);
     }
 }
