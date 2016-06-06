@@ -97,7 +97,7 @@ public class MoviesServlet extends HttpServlet {
         req.getParameterMap().forEach((k,v)-> {
             System.out.print("key: "+k);
             for (String s: v)
-                System.out.println("Value: "+s);
+                System.out.println(" Value: "+s);
         });
 
         Charset utf8 = Charset.forName("utf-8");
