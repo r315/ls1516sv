@@ -63,7 +63,7 @@ public class CollectionsCidServlet extends HttpServlet {
             resultFormat.addForm("Add Movie to Collection"
                     ,Arrays.asList(new Pair("method","POST"),new Pair("action",String.format("/collections/%s/movies",cid)))
                     ,Arrays.asList(
-                            new Pair("Movie ID",Arrays.asList(new Pair("name","name"),new Pair("type","text"),new Pair("required",null)))
+                            new Pair("Movie ID",Arrays.asList(new Pair("name","mid"),new Pair("type","text"),new Pair("required",null)))
                            // new Pair("Description ",Arrays.asList(new Pair("name","description"),new Pair("type","text"),new Pair("required",null)))
                     )
             );
@@ -97,11 +97,14 @@ public class CollectionsCidServlet extends HttpServlet {
                     command,
                     new HeaderInfo(new String[]{}));
 
-            //String ID = resultFormat.resultInfo.getGeneratedId();
-            //resp.sendRedirect(String.format("/collections/%d",Integer.parseInt(ID)));
-            //resp.sendRedirect(req.getRequestURI());
-            //TODO: get cid from resultInfo
-            resp.sendRedirect("/collections");
+            //TODO:
+            // distinguish resultFormat on null case
+            // reasons: movie already exists on collection
+            //          movie does't exists on database
+
+
+            // cid is inserted on command by Manager on path decode
+            resp.sendRedirect(String.format("/collections/%s",command.getData().get("cid")));
             resp.setStatus(303);
         }catch (Exception e ){
             // TODO: 31/05/2016
