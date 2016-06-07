@@ -2,10 +2,13 @@ package Strutures.Command;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Optional;
 
 import decoders.DecodeMethod;
 import decoders.DecodeParameters;
 import decoders.DecodePath;
+import exceptions.InvalidCommandMethodException;
+import exceptions.InvalidCommandPathException;
 
 public class CommandInfo {	
 	private String method;			//GET
@@ -13,7 +16,21 @@ public class CommandInfo {
 	private HashMap<String, String> parameters;		// name=filme&release_year=2016
 	private Collection<String> resources;	//path
 
-	
+	public CommandInfo(String m, String path,String params) throws Exception{
+		if(m==null)throw  new InvalidCommandMethodException();
+		if(path==null)throw  new InvalidCommandPathException();
+		if(params==null)parameters=new HashMap<>();
+		else{
+			parameters = DecodeParameters.decodeParameters(params);
+
+		}
+
+		method = DecodeMethod.decode(m);
+		resources = DecodePath.decodePath(path);
+		if(resources.size()!=0)
+			table = resources.iterator().next();
+	}
+
 	public CommandInfo(String[] command) throws Exception{
 		method = DecodeMethod.decode(command);
 		resources = DecodePath.decode(command);

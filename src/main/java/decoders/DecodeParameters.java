@@ -19,7 +19,7 @@ public class DecodeParameters {
         else return new HashMap<>();
     }
 
-    private static HashMap<String, String> decodeParameters(String param)throws InvalidCommandParametersException {
+    public static HashMap<String, String> decodeParameters(String param)throws InvalidCommandParametersException {
         String [] paramS = param.split("&");
         HashMap<String, String> parameters = new HashMap<>();
 

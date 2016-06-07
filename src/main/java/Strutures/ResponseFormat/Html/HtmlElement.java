@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-class HtmlElement{
+public class HtmlElement{
 	private String tag = "";
 	private String content =""; 
 	private String attributes = "";

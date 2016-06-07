@@ -61,6 +61,10 @@ public class PostMovies implements ICommand {
 	                throw excep;
 	            }
 	        }
+			// TODO: 01/06/2016 Clean Commands. Use Try with resources. re-throw sql exceptions and interpret them above. 
+			if(e.getErrorCode()==2627){
+				throw new SqlInsertionException("Information already exists");
+			}
 		}finally{
 			if(movieinsert != null)
 				movieinsert.close();
@@ -69,7 +73,7 @@ public class PostMovies implements ICommand {
 		}
 		
 		if(ri == null)
-			throw new SqlInsertionException("Movie insertion Fail");		
+			throw new SqlInsertionException("Movie insertion Failed");
 		return ri;
     }
 

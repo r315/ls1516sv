@@ -2,11 +2,11 @@ package Strutures.Server;
 
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
+import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
 import utils.Pair;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ import java.util.*;
 public class MoviesServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+        //// TODO: 01/06/2016 Substituir por logger
         System.out.println("--New request was received --");
         System.out.println(req.getRequestURI());
 
@@ -33,52 +33,11 @@ public class MoviesServlet extends HttpServlet {
             String method= req.getMethod();
             String path= req.getRequestURI();
             String query= req.getQueryString();
-            HeaderInfo headerInfo = new HeaderInfo(new String[]{});
+            HeaderInfo headerInfo = new HeaderInfo();
             CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
-
-            List<Pair<String,String>> pairs = new ArrayList<>();
-
-            for (ArrayList<String> line : resultFormat.resultInfo.getValues()){
-                pairs.add(new Pair<>(line.get(1),"/movies/"+line.get(0)));
-            }
-
-            resultFormat.resultInfo.removeColumn("ID");
-            resultFormat.generate();
-            resultFormat.addLinksToTable(pairs);
-
-            resultFormat.addNavigationLinks(
-                    Arrays.asList(
-                            new Pair<>("Home","/"),
-                            new Pair<>("Movies","/movies"),
-                            new Pair<>("Top Ratings","/tops/ratings")
-                    )
-            );
-
-            resultFormat.addNavigationLinks(
-                    Arrays.asList(
-                            new Pair<>("Sort by Date","/movies?sortBy=addedDate"),
-                            new Pair<>("Sort by Date Desc","/movies?sortBy=addedDateDesc"),
-                            new Pair<>("Sort by Year","/movies?sortBy=year"),
-                            new Pair<>("Sort by Year Desc","/movies?sortBy=yearDesc"),
-                            new Pair<>("Sort by Title","/movies?sortBy=title"),
-                            new Pair<>("Sort by Title Desc","/movies?sortBy=titleDesc"),
-                            new Pair<>("Sort by Rating","/movies?sortBy=rating"),
-                            new Pair<>("Sort by Rating Desc","/movies?sortBy=ratingDesc")
-                    )
-            );
-
-
-
-            resultFormat.addForm("Legend"
-                    ,Arrays.asList(new Pair("method","POST"),new Pair("action","/movies"))
-                    ,Arrays.asList(
-                            new Pair("Movie title",Arrays.asList(new Pair("name","title"),new Pair("type","text"),new Pair("required",null))),
-                            new Pair("Release Year",Arrays.asList(new Pair("name","releaseYear"),new Pair("type","text"),new Pair("required",null)))
-                    )
-            );
+            ProduceTemplate(resultFormat, Optional.empty());
             respBody = resultFormat.getHtml();
-
             //// TODO: 25/05/2016
         }catch(Exception e){
             //// TODO: 19/05/2016
@@ -93,35 +52,93 @@ public class MoviesServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getParameterMap().forEach((k,v)-> {
-            System.out.print("key: "+k);
-            for (String s: v)
-                System.out.println("Value: "+s);
-        });
-
-        Charset utf8 = Charset.forName("utf-8");
-        resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
-        resp.setStatus(303);
-
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         try {
             String method = req.getMethod();
             String path = req.getRequestURI();
-            String query = req.getQueryString();
-            Map<String, String[]> m= req.getParameterMap();
-            //resp.getHeaderNames().forEach(s-> System.out.println(s));
-            HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-            //System.out.println(m.get("title")[0]);
-            //System.out.println(m.get("releaseYear")[0]);
-            String params= String.format("title=%s&releaseYear=%s",m.get("title")[0],m.get("releaseYear")[0]);
-            CommandInfo command = new CommandInfo(new String[]{method, path,params});
+            String query= req.getQueryString();
+            HeaderInfo headerInfo = new HeaderInfo();
+            String params= String.format("title=%s&releaseYear=%s",req.getParameter("title"),req.getParameter("releaseYear"));
+            CommandInfo command = new CommandInfo(method, path,params);
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
-            String ID= resultFormat.resultInfo.getValues().iterator().next().get(0);
+            String ID= resultFormat.resultInfo.getGeneratedId();
             resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
-        }catch (Exception e ){
-            // TODO: 31/05/2016
-            resp.setStatus(404);
+            resp.setStatus(303);
+        }catch (Exception e){
+            // TODO: 31/05/2016 Retornar um campo a indicar o erro.
+            Charset utf8 = Charset.forName("utf-8");
+            resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
+            resp.setStatus(200);
+            String respBody=null;
+            try{
+                String method="GET";
+                String path= req.getRequestURI();
+                String query= req.getQueryString();
+                HeaderInfo headerInfo = new HeaderInfo();
+                CommandInfo command = new CommandInfo(method,path,query);
+                HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
+                ProduceTemplate(resultFormat, Optional.ofNullable(e.getMessage()));
+                respBody= resultFormat.getHtml();
+            }catch (Exception c){
+                resp.setStatus(404);
+                respBody="Error 404.";
+            }
+            byte[] respBodyBytes = respBody.getBytes(utf8);
+            resp.setContentLength(respBodyBytes.length);
+            OutputStream os = resp.getOutputStream();
+            os.write(respBodyBytes);
+            os.close();
+        }
+    }
+
+    private void ProduceTemplate(HtmlResult resultFormat, Optional<String> errorMessage) throws Exception {
+        List<Pair<String,String>> pairs = new ArrayList<>();
+
+        for (ArrayList<String> line : resultFormat.resultInfo.getValues()){
+            pairs.add(new Pair<>(line.get(1),"/movies/"+line.get(0)));
         }
 
+        resultFormat.resultInfo.removeColumn("ID");
+        resultFormat.generate();
+        resultFormat.addLinksToTable(pairs);
+
+        resultFormat.addNavigationLinks(
+                Arrays.asList(
+                        new Pair<>("Home","/"),
+                        new Pair<>("Movies","/movies"),
+                        new Pair<>("Top Ratings","/tops/ratings")
+                )
+        );
+
+        resultFormat.addNavigationLinks(
+                Arrays.asList(
+                        new Pair<>("Sort by Date","/movies?sortBy=addedDate"),
+                        new Pair<>("Sort by Date Desc","/movies?sortBy=addedDateDesc"),
+                        new Pair<>("Sort by Year","/movies?sortBy=year"),
+                        new Pair<>("Sort by Year Desc","/movies?sortBy=yearDesc"),
+                        new Pair<>("Sort by Title","/movies?sortBy=title"),
+                        new Pair<>("Sort by Title Desc","/movies?sortBy=titleDesc"),
+                        new Pair<>("Sort by Rating","/movies?sortBy=rating"),
+                        new Pair<>("Sort by Rating Desc","/movies?sortBy=ratingDesc")
+                )
+        );
+
+        resultFormat.addForm("Insert a new Movie"
+                ,Arrays.asList(new Pair("method","POST"),new Pair("action","/movies"))
+                ,Arrays.asList(
+                        new Pair("Movie title",Arrays.asList(new Pair("name","title"),new Pair("type","text"),new Pair("required",null))),
+                        new Pair("Release Year",Arrays.asList(new Pair("name","releaseYear"),new Pair("type","text"),new Pair("required",null)))
+                )
+        );
+
+        if(errorMessage.isPresent()){
+            resultFormat.addElementTo("fieldset",
+                    new HtmlElement(
+                            //String.format("<strong id=\"errorMessage\" style=\"color:red;\">%s</strong>", errorMessage.get())),0);
+                            "strong",
+                            errorMessage.get()),
+                            0
+                    );
+        }
     }
 }

@@ -21,7 +21,7 @@ public class DecodePath {
 
     }
 
-    private static Collection<String> decodePath(String path) {
+    public static Collection<String> decodePath(String path) {
         String [] pathS = path.split("/");
         Collection<String> resources = new ArrayList<>();
 

@@ -1,9 +1,6 @@
 package console;
 
-import Strutures.Command.CommandInfo;
-import Strutures.Command.CommandMap;
-import Strutures.Command.HeaderInfo;
-import Strutures.Command.HeaderMap;
+import Strutures.Command.*;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.Plain.TextResult;
@@ -36,15 +33,12 @@ public class Manager {
         }
     }
 
-    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo){
+    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo) throws Exception{
         IResultFormat resultFormat=null;
-        try {
-            ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
+            ICommand cmd = commandMap.get(commandInfo);
+            ResultInfo result =cmd.execute(commandInfo.getData());
+            //ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
             resultFormat = headersMap.getResponseMethod(headerInfo).apply(result);
-        }catch(Exception e){
-            //// TODO: 19/05/2016
-            System.out.println(e.getMessage());
-        }
         return resultFormat;
     }
 
