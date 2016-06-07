@@ -1,17 +1,12 @@
 package Strutures.ResponseFormat.Html;
 
-import Strutures.ResponseFormat.Html.HtmlTree;
-import Strutures.ResponseFormat.IResultFormat;
-import Strutures.ResponseFormat.Html.HtmlElement;
-import Strutures.ResponseFormat.ResultInfo;
-import pt.isel.ls.html.HtmlElem;
-import utils.Pair;
 
-import javax.xml.transform.Result;
+import Strutures.ResponseFormat.IResultFormat;
+import Strutures.ResponseFormat.ResultInfo;
+import utils.Pair;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created hugo reis on 27/04/2016 
@@ -93,7 +88,7 @@ public class HtmlResult implements IResultFormat {
         page.addElementToDiv("header",HtmlTree.p());
     }
 
-    public void addForm(String legend, List<Pair> formAtributes, List<Pair> inputs){
+    public void addForm(String legend, List<Pair<String,String>> formAtributes, List<Pair<String,List<Pair<String,String>>>> inputs){
         page.addElementTo("body", HtmlTree.p());
         page.addElementTo("body", HtmlTree.p());
         page.addElementTo("body", HtmlTree.addForm(legend, formAtributes, inputs));
@@ -102,7 +97,7 @@ public class HtmlResult implements IResultFormat {
     public void addElementTo(String tag, HtmlElement elem){
         page.addElementTo(tag,elem);
     }
-    
+
     public void addElementTo(String tag, HtmlElement elem, int pos){
         page.addElementTo(tag,elem,pos);
     }

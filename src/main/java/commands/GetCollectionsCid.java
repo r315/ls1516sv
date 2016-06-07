@@ -19,7 +19,7 @@ import exceptions.InvalidCommandVariableException;
  */
 public class GetCollectionsCid implements ICommand {
     private static final String INFO = "GET /collections/{cid} - returns the details for the cid collection, namely all the movies in that collection.";
-    private final String TITLE = " 's Collection"; //Adicionar titulo ao retornar
+    private final String TITLE = "'s Collection"; //Adicionar titulo ao retornar
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
@@ -66,7 +66,7 @@ public class GetCollectionsCid implements ICommand {
     private String getQuery(Boolean topB, int top, String orderBy) {
         String query = "SELECT Collection.*, Movie.* FROM Movie " +
                 "INNER JOIN Has ON Has.movie_id = Movie.movie_id " +
-                "INNER JOIN Collection ON Collection.collection_id = Has.collection_id " +
+                "RIGHT JOIN Collection ON Collection.collection_id = Has.collection_id " +
                 "WHERE Collection.collection_id = ? " +
                 "ORDER BY Movie.title " +
                 "OFFSET ? ROWS";
@@ -76,6 +76,7 @@ public class GetCollectionsCid implements ICommand {
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
+        columns.add("Collection ID");
         columns.add("Movie ID");
         columns.add("Movie Name");
         columns.add("Release Year");
@@ -85,16 +86,19 @@ public class GetCollectionsCid implements ICommand {
         if (!rs.next()) return new ResultInfo(TITLE, columns, data);
         String name = rs.getString("name");
 
-        do {
-            ArrayList<String> line = new ArrayList<>();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(rs.getDate("release_year"));
-            line.add(rs.getString("movie_id"));
-            line.add(rs.getString("title"));
-            line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+        if(!(rs.getString("movie_id") != "null")) {
+            do {
+                ArrayList<String> line = new ArrayList<>();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(rs.getDate("release_year"));
+                line.add(rs.getString("collection_id"));
+                line.add(rs.getString("movie_id"));
+                line.add(rs.getString("title"));
+                line.add(Integer.toString(calendar.get(Calendar.YEAR)));
+                data.add(line);
+            } while (rs.next());
+        }
 
-            data.add(line);
-        } while(rs.next());
         return new ResultInfo(name + TITLE, columns, data);
     }
 }
