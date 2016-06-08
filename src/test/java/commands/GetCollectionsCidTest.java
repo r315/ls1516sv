@@ -17,9 +17,6 @@ import sqlserver.ConnectionFactory;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 
-/**
- * Created by Luigi Sekuiya on 30/04/2016.
- */
 public class GetCollectionsCidTest {
 
     @Before
@@ -59,6 +56,7 @@ public class GetCollectionsCidTest {
             stmt.executeUpdate("DELETE FROM Has");
             stmt.executeUpdate("DELETE FROM Movie");
             stmt.executeUpdate("DELETE FROM Collection WHERE collection_id=1");
+            stmt.executeUpdate("DELETE FROM Collection WHERE collection_id=2");
 
             stmt.executeUpdate("DBCC CHECKIDENT (Collection, RESEED, 0)");
             stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
