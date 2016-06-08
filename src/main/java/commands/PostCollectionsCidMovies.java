@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exceptions.PostException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 import Strutures.Command.ICommand;
@@ -18,12 +19,15 @@ import exceptions.InvalidCommandParametersException;
  */
 public class PostCollectionsCidMovies implements ICommand {
     private static final String INFO = "POST /collections/{cid}/movies/ - adds a movie to the cid collection, given \"mid\".";
+    public static final int ENTRY_EXISTS = 2627;
+    public static final int ENTRY_NOT_FOUND = 547;
     private final String TITLE = "Movie inserted into Collection";
 
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
         int cid, mid;
+        PreparedStatement pstmt;
 
         if (data == null) throw new InvalidCommandParametersException();
 
@@ -35,24 +39,23 @@ public class PostCollectionsCidMovies implements ICommand {
         }
 
         try(Connection conn = ConnectionFactory.getConn()) {
-            PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
+            pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
-
-            // TODO: Handle if cid or mid don't exist
-            // TODO: Handle if adding the same movie again to a collection
             pstmt.executeUpdate();
-
-
             ResultSet rs = pstmt.getGeneratedKeys();
-
             ResultInfo result = createRI();
-
             pstmt.close();
-
             return result;
-
+        }catch (SQLException e){//TODO: check bad id entry ex: wr324
+            switch(e.getErrorCode()){
+                case ENTRY_EXISTS:
+                    throw new PostException("Movie Already Exists");
+                case ENTRY_NOT_FOUND:
+                    throw new PostException("Movie not found on database");
+            }
         }
+        return new ResultInfo(TITLE, null,null);
     }
 
     @Override

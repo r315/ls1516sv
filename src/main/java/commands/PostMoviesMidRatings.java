@@ -12,7 +12,7 @@ import utils.Utils;
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
+import exceptions.SQLInsertionException;
 
 public class PostMoviesMidRatings implements ICommand {
 	private static final String TITLE = "Rating of a movie";
@@ -52,7 +52,7 @@ public class PostMoviesMidRatings implements ICommand {
 		}	
 		
 		if(ri == null)
-			throw new SqlInsertionException("Rating insertion Fail");
+			throw new SQLInsertionException("Rating insertion Fail");
 		
 		return ri;
 	}

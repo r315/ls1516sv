@@ -8,6 +8,8 @@ import java.util.stream.Stream;
 
 
 public class HtmlElement{
+	public static final int FIRST_ELEMENT = 1 ;
+	public static final int SECOND_ELEMENT = 1 ;
 	private String tag = "";
 	private String content =""; 
 	private String attributes = "";

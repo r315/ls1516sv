@@ -11,7 +11,7 @@ import sqlserver.ConnectionFactory;
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
+import exceptions.SQLInsertionException;
 
 public class PostMovies implements ICommand {
 	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
@@ -63,7 +63,7 @@ public class PostMovies implements ICommand {
 	        }
 			// TODO: 01/06/2016 Clean Commands. Use Try with resources. re-throw sql exceptions and interpret them above. 
 			if(e.getErrorCode()==2627){
-				throw new SqlInsertionException("Information already exists");
+				throw new SQLInsertionException("Information already exists");
 			}
 		}finally{
 			if(movieinsert != null)
@@ -73,7 +73,7 @@ public class PostMovies implements ICommand {
 		}
 		
 		if(ri == null)
-			throw new SqlInsertionException("Movie insertion Failed");
+			throw new SQLInsertionException("Movie insertion Failed");
 		return ri;
     }
 

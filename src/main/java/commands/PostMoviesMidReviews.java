@@ -13,7 +13,7 @@ import utils.Utils;
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
+import exceptions.SQLInsertionException;
 
 /*
 POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the following parameters
@@ -67,7 +67,7 @@ public class PostMoviesMidReviews implements ICommand {
 		}	
 		
 		if(ri == null)
-			throw new SqlInsertionException("Rating insertion Fail");
+			throw new SQLInsertionException("Rating insertion Fail");
 		
 		return ri;
 	}
