@@ -86,4 +86,30 @@ public class GenericMoviesMidServlet extends HttpServlet {
                 os.close();
         }
     }
+
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String[] a= req.getPathInfo().split("/");
+        //1/reviews/1
+        //1/ratings
+        //1
+        //1/reviews
+        switch(a.length){
+            case 3:
+                if (a[2].equals("ratings"))
+                    new MoviesMidRatingsServlet().doPost(req, resp);
+                else if(a[2].equals("reviews"))
+                    new MoviesMidReviewsServlet().doPost(req, resp);
+                break;
+            default:
+                Charset utf8 = Charset.forName("utf-8");
+                resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
+                resp.setStatus(404);
+                String respBody="Error 404.";
+                byte[] respBodyBytes = respBody.getBytes(utf8);
+                resp.setContentLength(respBodyBytes.length);
+                OutputStream os = resp.getOutputStream();
+                os.write(respBodyBytes);
+                os.close();
+        }
+    }
 }

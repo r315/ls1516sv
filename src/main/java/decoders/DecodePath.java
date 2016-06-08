@@ -26,7 +26,7 @@ public class DecodePath {
         String [] pathS = path.split("/");
         Collection<String> resources = new ArrayList<>();
 
-        resources.addAll(Arrays.asList(pathS).subList(1, pathS.length));
+        if( pathS.length > 0) resources.addAll(Arrays.asList(pathS).subList(1,pathS.length));
         return resources;
     }
 }
