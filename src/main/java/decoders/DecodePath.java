@@ -1,6 +1,7 @@
 package decoders;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 import exceptions.InvalidCommandPathException;
@@ -25,8 +26,7 @@ public class DecodePath {
         String [] pathS = path.split("/");
         Collection<String> resources = new ArrayList<>();
 
-        for(int i = 1; i < pathS.length ; i++) // i=1 skip initial ""
-            resources.add(pathS[i]);
+        resources.addAll(Arrays.asList(pathS).subList(1, pathS.length));
         return resources;
     }
 }

@@ -81,7 +81,6 @@ public class GetCollectionsCid implements ICommand {
 
         if (!rs.next()) return new ResultInfo(TITLE, columns, data);
         String name = rs.getString("name");
-        String id = rs.getString("movie_id");
 
         if((rs.getString("movie_id") != null)) {
             do {
