@@ -14,9 +14,6 @@ import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 
-/**
- * Created by Luigi Sekuiya on 29/04/2016.
- */
 public class GetCollectionsCid implements ICommand {
     private static final String INFO = "GET /collections/{cid} - returns the details for the cid collection, namely all the movies in that collection.";
     private final String TITLE = "'s Collection"; //Adicionar titulo ao retornar
@@ -76,7 +73,6 @@ public class GetCollectionsCid implements ICommand {
 
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
-        columns.add("Collection ID");
         columns.add("Movie ID");
         columns.add("Movie Name");
         columns.add("Release Year");
@@ -85,13 +81,13 @@ public class GetCollectionsCid implements ICommand {
 
         if (!rs.next()) return new ResultInfo(TITLE, columns, data);
         String name = rs.getString("name");
+        String id = rs.getString("movie_id");
 
-        if(!(rs.getString("movie_id") != "null")) {
+        if((rs.getString("movie_id") != null)) {
             do {
                 ArrayList<String> line = new ArrayList<>();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(rs.getDate("release_year"));
-                line.add(rs.getString("collection_id"));
                 line.add(rs.getString("movie_id"));
                 line.add(rs.getString("title"));
                 line.add(Integer.toString(calendar.get(Calendar.YEAR)));
