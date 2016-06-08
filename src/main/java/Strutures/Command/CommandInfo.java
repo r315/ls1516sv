@@ -22,7 +22,6 @@ public class CommandInfo {
 		if(params==null)parameters=new HashMap<>();
 		else{
 			parameters = DecodeParameters.decodeParameters(params);
-
 		}
 
 		method = DecodeMethod.decode(m);

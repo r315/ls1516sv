@@ -38,9 +38,7 @@ public class MoviesServlet extends HttpServlet {
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
             ProduceTemplate(resultFormat, Optional.empty());
             respBody = resultFormat.getHtml();
-            //// TODO: 25/05/2016
         }catch(Exception e){
-            //// TODO: 19/05/2016
             resp.setStatus(404);
             respBody="Error 404.";
         }
@@ -65,7 +63,6 @@ public class MoviesServlet extends HttpServlet {
             resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
             resp.setStatus(303);
         }catch (Exception e){
-            // TODO: 31/05/2016 Retornar um campo a indicar o erro.
             Charset utf8 = Charset.forName("utf-8");
             resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
             resp.setStatus(200);
@@ -80,8 +77,8 @@ public class MoviesServlet extends HttpServlet {
                 ProduceTemplate(resultFormat, Optional.ofNullable(e.getMessage()));
                 respBody= resultFormat.getHtml();
             }catch (Exception c){
-                resp.setStatus(404);
-                respBody="Error 404.";
+                resp.setStatus(400);
+                respBody="Error 400.";
             }
             byte[] respBodyBytes = respBody.getBytes(utf8);
             resp.setContentLength(respBodyBytes.length);
@@ -135,10 +132,13 @@ public class MoviesServlet extends HttpServlet {
             resultFormat.addElementTo("fieldset",
                     new HtmlElement(
                             //String.format("<strong id=\"errorMessage\" style=\"color:red;\">%s</strong>", errorMessage.get())),0);
-                            "strong",
-                            errorMessage.get()),
-                            0
+                            "b",
+                            "").
+                                addChild(new HtmlElement("font","An Error has ocurred!").addAttributes("color","red")),
+                            1
                     );
+
+
         }
     }
 }
