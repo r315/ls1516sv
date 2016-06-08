@@ -23,11 +23,11 @@ public class DecodeParameters {
         String [] paramS = param.split("&");
         HashMap<String, String> parameters = new HashMap<>();
 
-        for(int i = 0; i < paramS.length; i++){
-            String [] aux = paramS[i].split("=");
-            if(aux.length!=2)throw new InvalidCommandParametersException();
-            aux[1]=aux[1].replace('+',' ');
-            parameters.put(aux[0],aux[1]);
+        for (String param1 : paramS) {
+            String[] aux = param1.split("=");
+            if (aux.length != 2) throw new InvalidCommandParametersException();
+            aux[1] = aux[1].replace('+', ' ');
+            parameters.put(aux[0], aux[1]);
         }
 
         return parameters;

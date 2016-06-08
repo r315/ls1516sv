@@ -110,7 +110,7 @@ public class GetMovies implements ICommand {
 
     private String orderBy(String sortBy) {
 
-        String orderBy = null;
+        String orderBy;
 
         switch(sortBy){
             case "addedDate":
