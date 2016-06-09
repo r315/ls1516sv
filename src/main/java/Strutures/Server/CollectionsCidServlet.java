@@ -5,6 +5,7 @@ import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
+import exceptions.InvalidCommandParametersException;
 import exceptions.PostException;
 import utils.Pair;
 
@@ -38,15 +39,15 @@ public class CollectionsCidServlet extends HttpServlet {
             resp.setStatus(200);
         } catch (Exception e) {
             //// TODO: 28/05/2016 better page
+            respBody = e.getMessage();
             resp.setStatus(404);
-            respBody = "Error 404.";
+
         }
        setResponseData(resp, respBody);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         String respBody = null;
         try {
@@ -61,19 +62,32 @@ public class CollectionsCidServlet extends HttpServlet {
             // cid is inserted on command by Manager on path decode
             resp.sendRedirect(String.format("/collections/%s",command.getData().get("cid")));
             resp.setStatus(303);
-        }catch (PostException e ){
+        }catch (InvalidCommandParametersException | PostException e ){
             try {
                 String cid = req.getPathInfo().split("/")[1];
+                String msg = "";
+
+                if(e instanceof PostException){
+                    switch(((PostException)e).getErrorCode()){
+                        case PostException.ENTRY_EXISTS:
+                            msg = "Movie Already Exists";break;
+                        case PostException.ENTRY_NOT_FOUND:
+                            msg = "Movie not found on database";break;
+                    }
+                }else
+                    msg = "Invalid ID!";
+
                 respBody = produceTemplate(new CommandInfo(new String[]{"GET",
                                 req.getServletPath()+"/"+cid}),
-                        cid, e.getMessage() ).getHtml();
+                        cid, msg ).getHtml();
+
             } catch (Exception e1) {
-                respBody = "Error 400.";
+                respBody = "Error creating error message!";
                 resp.setStatus(400);
             }
             resp.setStatus(200);
         }catch (Exception e ) {
-            respBody = "Error 400.";
+            respBody = e.getMessage();
             resp.setStatus(400);
         }
         setResponseData(resp, respBody);

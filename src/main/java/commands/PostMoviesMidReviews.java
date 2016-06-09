@@ -8,12 +8,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import exceptions.SqlInsertionException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
-import exceptions.SQLInsertionException;
+import exceptions.SqlInsertionException;
 
 /*
 POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the following parameters
@@ -67,7 +68,7 @@ public class PostMoviesMidReviews implements ICommand {
 		}	
 		
 		if(ri == null)
-			throw new SQLInsertionException("Rating insertion Fail");
+			throw new SqlInsertionException("Rating insertion Fail");
 		
 		return ri;
 	}

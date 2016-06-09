@@ -58,7 +58,7 @@ public class MoviesMidServlet extends HttpServlet {
             }
 
             //Generate and Add Reviews
-            resultFormat.resultInfo.removeColumn("ID");
+            //resultFormat.resultInfo.removeColumn("ID");
             resultFormat.generate();
             if (!pairs.isEmpty()) resultFormat.addList(pairs,"Reviews by");
 

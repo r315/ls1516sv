@@ -19,8 +19,6 @@ import exceptions.InvalidCommandParametersException;
  */
 public class PostCollectionsCidMovies implements ICommand {
     private static final String INFO = "POST /collections/{cid}/movies/ - adds a movie to the cid collection, given \"mid\".";
-    public static final int ENTRY_EXISTS = 2627;
-    public static final int ENTRY_NOT_FOUND = 547;
     private final String TITLE = "Movie inserted into Collection";
 
 
@@ -29,16 +27,9 @@ public class PostCollectionsCidMovies implements ICommand {
         int cid, mid;
         PreparedStatement pstmt;
 
-        if (data == null) throw new InvalidCommandParametersException();
-
-        try {
+        try(Connection conn = ConnectionFactory.getConn()) {
             cid = Utils.getInt(data.get("cid"));
             mid = Utils.getInt(data.get("mid"));
-        } catch (NumberFormatException e) {
-            throw new InvalidCommandParametersException();
-        }
-
-        try(Connection conn = ConnectionFactory.getConn()) {
             pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
@@ -47,15 +38,12 @@ public class PostCollectionsCidMovies implements ICommand {
             ResultInfo result = createRI();
             pstmt.close();
             return result;
-        }catch (SQLException e){//TODO: check bad id entry ex: wr324
-            switch(e.getErrorCode()){
-                case ENTRY_EXISTS:
-                    throw new PostException("Movie Already Exists");
-                case ENTRY_NOT_FOUND:
-                    throw new PostException("Movie not found on database");
-            }
+        }catch (SQLException e){
+            throw new PostException(e.getErrorCode());
+        }catch (NullPointerException | NumberFormatException e){
+            throw new InvalidCommandParametersException();
         }
-        return new ResultInfo(TITLE, null,null);
+        //return new ResultInfo(TITLE, null,null);
     }
 
     @Override
