@@ -34,12 +34,8 @@ public class Manager {
     }
 
     public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo) throws Exception{
-        IResultFormat resultFormat=null;
-            ICommand cmd = commandMap.get(commandInfo);
-            ResultInfo result =cmd.execute(commandInfo.getData());
-            //ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
-            resultFormat = headersMap.getResponseMethod(headerInfo).apply(result);
-        return resultFormat;
+        ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
+        return headersMap.getResponseMethod(headerInfo).apply(result);
     }
 
     public static void displayResponse(String response, HeaderInfo headerinfo){

@@ -4,6 +4,7 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
+import Strutures.ResponseFormat.Html.HtmlTree;
 import console.Manager;
 import utils.Pair;
 
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * Created by Luigi Sekuiya on 28/05/2016.
@@ -53,35 +56,26 @@ public class MoviesMidRatingsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        Charset utf8 = Charset.forName("utf-8");
+        resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
+        String respBody;
+
         try {
             String method = req.getMethod();
             String path = req.getRequestURI();
-            String query= req.getQueryString();
+
             HeaderInfo headerInfo = new HeaderInfo();
-            String params= String.format("title=%s&releaseYear=%s",req.getParameter("title"),req.getParameter("releaseYear"));
+            String params= String.format("rating=%s",req.getParameter("rating"));
             CommandInfo command = new CommandInfo(method, path,params);
-            HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
-            String ID= resultFormat.resultInfo.getGeneratedId();
-            resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
+            //HtmlResult resultFormat = (HtmlResult)
+            Manager.executeCommand(command, headerInfo);
+            String ID= command.getResources().stream().collect(Collectors.toList()).get(1);
+            resp.sendRedirect(String.format("/movies/%d/ratings",Integer.parseInt(ID)));
             resp.setStatus(303);
         }catch (Exception e){
-            Charset utf8 = Charset.forName("utf-8");
-            resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
-            resp.setStatus(200);
-            String respBody=null;
-            try{
-                String method="GET";
-                String path= req.getRequestURI();
-                String query= req.getQueryString();
-                HeaderInfo headerInfo = new HeaderInfo();
-                CommandInfo command = new CommandInfo(method,path,query);
-                HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
-                ProduceTemplate(resultFormat, Optional.ofNullable(e.getMessage()));
-                respBody= resultFormat.getHtml();
-            }catch (Exception c){
-                resp.setStatus(400);
-                respBody="Error 400.";
-            }
+            resp.setStatus(400);
+            respBody="Error 400."+e.getMessage();
             byte[] respBodyBytes = respBody.getBytes(utf8);
             resp.setContentLength(respBodyBytes.length);
             OutputStream os = resp.getOutputStream();
@@ -92,8 +86,10 @@ public class MoviesMidRatingsServlet extends HttpServlet {
 
     private void ProduceTemplate(HtmlResult resultFormat, Optional<String> errorMessage) throws Exception {
         ArrayList<String> values = resultFormat.resultInfo.getValues().iterator().next();
+        String movie_id=values.get(0);
+        String movie_name=values.get(1);
 
-        Pair<String,String> pair = new Pair<>(values.get(1),"/movies/"+values.get(0));
+        Pair<String,String> pair = new Pair<>(movie_name,"/movies/"+movie_id);
 
         resultFormat.resultInfo.removeColumn("ID");
         resultFormat.resultInfo.removeColumn("Titulo");
@@ -119,12 +115,17 @@ public class MoviesMidRatingsServlet extends HttpServlet {
                 )
         );
 
-        resultFormat.addForm(
-                String.format("Submit a rating to movie %s", values.get(0))
-                ,Arrays.asList(new Pair("method","POST"),new Pair("action",String.format("/movies/%s/ratings",values.get(0))))
+        resultFormat.addFormGeneric(
+                String.format("Submit a rating to movie %s", movie_name)
+                ,Arrays.asList(new Pair("method","POST"),new Pair("action",String.format("/movies/%s/ratings",movie_id)))
                 ,Arrays.asList(
-                        new Pair("Movie title",Arrays.asList(new Pair("name","title"),new Pair("type","text"),new Pair("required",null))),
-                        new Pair("Release Year",Arrays.asList(new Pair("name","releaseYear"),new Pair("type","text"),new Pair("required",null)))
+                        new HtmlElement("p","Rating:"),
+                        new HtmlElement("select").addAttributes("name","rating").
+                                addChild(new HtmlElement("option","1").addAttributes("value","1")).
+                                addChild(new HtmlElement("option","2").addAttributes("value","2")).
+                                addChild(new HtmlElement("option","3").addAttributes("value","3")).
+                                addChild(new HtmlElement("option","4").addAttributes("value","4")).
+                                addChild(new HtmlElement("option","5").addAttributes("value","5"))
                 )
         );
     }

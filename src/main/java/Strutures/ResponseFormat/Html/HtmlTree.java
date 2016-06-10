@@ -1,6 +1,7 @@
 package Strutures.ResponseFormat.Html;
 
 
+import pt.isel.ls.html.HtmlElem;
 import utils.Pair;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -134,6 +135,24 @@ public class HtmlTree {
 		fieldset.addChild(new HtmlElement("input")
 						.addAttributes("type","submit")
 						.addAttributes("value","Submit")
+		);
+
+		form.addChild(fieldset);
+		return form;
+	}
+
+	public static HtmlElement addFormGeneric(String legend, List<Pair<String,String>> formAtributes, List<HtmlElement> inputs){
+
+		HtmlElement form = htmlElementWithAtr("form",formAtributes);
+		HtmlElement fieldset = new HtmlElement("fieldset")
+				.addAttributes("style","width:300px;")
+				.addChild(new HtmlElement("legend", legend));
+
+		inputs.forEach( p -> fieldset.addChild(p));
+
+		fieldset.addChild(new HtmlElement("input")
+				.addAttributes("type","submit")
+				.addAttributes("value","Submit")
 		);
 
 		form.addChild(fieldset);

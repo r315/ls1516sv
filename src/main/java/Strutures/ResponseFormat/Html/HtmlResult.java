@@ -94,6 +94,12 @@ public class HtmlResult implements IResultFormat {
         page.addElementTo("body", HtmlTree.addForm(legend, formAtributes, inputs));
     }
 
+	public void addFormGeneric(String legend, List<Pair<String,String>> formAtributes, List<HtmlElement> inputs){
+		page.addElementTo("body", HtmlTree.p());
+		page.addElementTo("body", HtmlTree.p());
+		page.addElementTo("body", HtmlTree.addFormGeneric(legend, formAtributes, inputs));
+	}
+
     public void addElementTo(String tag, HtmlElement elem){
         page.addElementTo(tag,elem);
     }
