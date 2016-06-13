@@ -8,6 +8,6 @@ dependencies {
     testCompile fileTree(dir: 'vendor/test', include: '*.jar')
 }
 
-mainClassName = "console.MainApp"
+mainClassName = "console.HerokuMainApp"
 
 task stage(dependsOn: ['clean', 'installApp'])
