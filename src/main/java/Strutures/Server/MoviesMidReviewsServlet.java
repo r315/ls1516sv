@@ -2,6 +2,7 @@ package Strutures.Server;
 
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
+import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
 import utils.Pair;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by Luigi Sekuiya on 28/05/2016.
@@ -57,33 +59,25 @@ public class MoviesMidReviewsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.getParameterMap().forEach((k,v)-> {
-            System.out.print("key: "+k);
-            for (String s: v)
-                System.out.println(" Value: "+s);
-        });
-
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(303);
-            resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
-            resp.setStatus(303);
 
-            try {
-                String method = req.getMethod();
-                String path = req.getRequestURI();
-                String query = req.getQueryString();
-                Map<String, String[]> m= req.getParameterMap();
-                //resp.getHeaderNames().forEach(s-> System.out.println(s));
-                HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-                CommandInfo command = new CommandInfo(new String[]{method, path, query});
-                //System.out.println(m.get("title")[0]);
-                //System.out.println(m.get("releaseYear")[0]);
-                String params= String.format("title=%s&releaseYear=%s",m.get("title")[0],m.get("releaseYear")[0]);
+        try {
+            String method = req.getMethod();
+            String path = req.getRequestURI();
+
+            HeaderInfo headerInfo = new HeaderInfo();
+            String params= String.format("reviewerName=%s&rating=%s&reviewSummary=%s&review=%s",req.getParameter("name"),req.getParameter("rating"),req.getParameter("summary"),req.getParameter("review"));
+
+            CommandInfo command = new CommandInfo(method, path,params);
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
-            String ID= resultFormat.resultInfo.getValues().iterator().next().get(0);
-            resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
+
+            String mid = command.getResources().stream().collect(Collectors.toList()).get(1);
+            String rid = resultFormat.resultInfo.getGeneratedId();
+            resp.sendRedirect(String.format("/movies/%d/reviews/%d",Integer.parseInt(mid),Integer.parseInt(rid)));
+            resp.setStatus(303);
         }catch (Exception e ){
             // TODO: 31/05/2016
             resp.setStatus(404);
@@ -95,6 +89,7 @@ public class MoviesMidReviewsServlet extends HttpServlet {
 
         ArrayList<String> values = resultFormat.resultInfo.getValues().iterator().next();
         String mid = values.get(0);
+        String movie_name = values.get(1);
 
         Pair<String,String> pair = new Pair<>(values.get(1),"/movies/"+mid);
 
@@ -117,13 +112,28 @@ public class MoviesMidReviewsServlet extends HttpServlet {
                 )
         );
 
-        resultFormat.addForm("Legend"
-                ,Arrays.asList(new Pair("method","POST"),new Pair("action","/movies/"+mid+"/reviews"))
+        resultFormat.addFormGeneric(
+                String.format("Submit a review for movie %s", movie_name)
+                ,Arrays.asList(new Pair("method","POST"),new Pair("action",String.format("/movies/%s/reviews",mid)))
                 ,Arrays.asList(
-                        new Pair("Reviewer's Name",Arrays.asList(new Pair("name","name"),new Pair("type","text"),new Pair("required",null))),
-                        new Pair("Rating",Arrays.asList(new Pair("name","rating"),new Pair("type","text"),new Pair("required",null))),
-                        new Pair("Review's Summary",Arrays.asList(new Pair("name","summary"),new Pair("type","text"),new Pair("required",null))),
-                        new Pair("Review",Arrays.asList(new Pair("name","review"),new Pair("type","text"),new Pair("required",null)))
+                        new HtmlElement("br","Name:"),
+                        new HtmlElement("input").addAttributes("type","text").addAttributes("name","name").addAttributes("required",null),
+
+                        new HtmlElement("br","Rating:"),
+                        new HtmlElement("select").addAttributes("name","rating").
+                                addChild(new HtmlElement("option","1").addAttributes("value","1")).
+                                addChild(new HtmlElement("option","2").addAttributes("value","2")).
+                                addChild(new HtmlElement("option","3").addAttributes("value","3")).
+                                addChild(new HtmlElement("option","4").addAttributes("value","4")).
+                                addChild(new HtmlElement("option","5").addAttributes("value","5")),
+
+                        // TODO: 13/06/2016 For reasons unknown, textarea appear with two tabs already filled.
+
+                        new HtmlElement("br","Summary:"),
+                        new HtmlElement("textarea").addAttributes("name","summary").addAttributes("rows","3").addAttributes("cols","50").addAttributes("required",null),
+
+                        new HtmlElement("br","Review:"),
+                        new HtmlElement("textarea").addAttributes("name","review").addAttributes("rows","10").addAttributes("cols","50").addAttributes("required",null)
                 )
         );
 

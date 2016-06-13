@@ -14,7 +14,6 @@ import utils.Utils;
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
 
 /*
 POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the following parameters
