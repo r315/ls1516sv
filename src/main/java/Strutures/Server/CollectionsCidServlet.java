@@ -80,12 +80,11 @@ public class CollectionsCidServlet extends HttpServlet {
                 respBody = produceTemplate(new CommandInfo(new String[]{"GET",
                                 req.getServletPath()+"/"+cid}),
                         cid, msg ).getHtml();
-
+                resp.setStatus(200);
             } catch (Exception e1) {
                 respBody = "Error creating error message!";
                 resp.setStatus(400);
             }
-            resp.setStatus(200);
         }catch (Exception e ) {
             respBody = e.getMessage();
             resp.setStatus(400);

@@ -2,13 +2,19 @@ package console;
 
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by Luigi Sekuiya on 13/06/2016.
  */
 public class HerokuMainApp {
 
+    private static final Logger _logger = LoggerFactory.getLogger(HerokuMainApp.class);
+
     public static void main(String [] args){
+
+        System.setProperty("org.slf4j.simpleLogger.levelInBrackets","true");
 
         String port = System.getenv().get("PORT");
 
@@ -26,6 +32,8 @@ public class HerokuMainApp {
             System.out.println(e.getMessage());
             return;
         }
+
+        _logger.info("Application Started!!");
 
         while (true);
     }
