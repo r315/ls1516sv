@@ -3,6 +3,9 @@ package Strutures.ResponseFormat.Html;
 
 import pt.isel.ls.html.HtmlElem;
 import utils.Pair;
+
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -181,6 +184,21 @@ public class HtmlTree {
 
 	public HtmlElement addElementToDiv(String div, HtmlElement elem) {
 		return findById(div).addChild(elem);
+	}
+
+	static HtmlElement addPaging ( HashMap<String, String> paging ) {
+		String next,prev;
+
+		if (paging.get("prev") != null) prev = "<a href = \"" + paging.get("prev") + "\" >PREV</a>";
+		else prev = "PREV";
+
+		if (paging.get("next") != null) next = "<a href = \"" + paging.get("next") + "\" >NEXT</a>";
+		else next = "NEXT";
+
+
+		HtmlElement p = new HtmlElement("p",prev + "&nbsp;&nbsp;&nbsp;" + next).addAttributes("align","right");
+
+		return p;
 	}
 
 

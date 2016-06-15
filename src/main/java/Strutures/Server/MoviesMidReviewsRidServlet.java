@@ -4,6 +4,8 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
 
 import javax.servlet.http.HttpServlet;
@@ -20,11 +22,11 @@ import java.util.List;
  * Created by Luigi Sekuiya on 28/05/2016.
  */
 public class MoviesMidReviewsRidServlet extends HttpServlet {
+
+    private static final Logger _logger = LoggerFactory.getLogger(MoviesMidReviewsRidServlet.class);
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-        System.out.println("--New request was received --");
-        System.out.println(req.getRequestURI());
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
@@ -33,6 +35,9 @@ public class MoviesMidReviewsRidServlet extends HttpServlet {
         try{
             String method= req.getMethod();
             String path= req.getRequestURI();
+
+            _logger.info("New GET was received:" + path);
+
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
             CommandInfo command = new CommandInfo(new String[]{method,path});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);

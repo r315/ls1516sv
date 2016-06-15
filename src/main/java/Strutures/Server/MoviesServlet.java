@@ -5,7 +5,10 @@ import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
+import utils.Utils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,15 +18,11 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.*;
 
-/**
- * Created by Luigi Sekuiya on 28/05/2016.
- */
 public class MoviesServlet extends HttpServlet {
+    private static final Logger _logger = LoggerFactory.getLogger(MoviesServlet.class);
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //// TODO: 01/06/2016 Substituir por logger
-        System.out.println("--New request was received --");
-        System.out.println(req.getRequestURI());
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
@@ -33,10 +32,16 @@ public class MoviesServlet extends HttpServlet {
             String method= req.getMethod();
             String path= req.getRequestURI();
             String query= req.getQueryString();
+
+            _logger.info("New GET was received:" + path + (query == null ? "" : query));
+
+            if (query == null) query = "top=5";
+            else if (!query.contains("top=")) query += "&top=5";
+
             HeaderInfo headerInfo = new HeaderInfo();
             CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
-            ProduceTemplate(resultFormat, Optional.empty());
+            produceTemplate(resultFormat, query, Optional.empty());
             respBody = resultFormat.getHtml();
         }catch(Exception e){
             resp.setStatus(404);
@@ -51,6 +56,7 @@ public class MoviesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
         try {
             String method = req.getMethod();
             String path = req.getRequestURI();
@@ -60,13 +66,16 @@ public class MoviesServlet extends HttpServlet {
             CommandInfo command = new CommandInfo(method, path,params);
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
             String ID= resultFormat.resultInfo.getGeneratedId();
-            resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
+
+            _logger.info("New POST fulfilled:" + String.format("/movies/%d",Integer.parseInt(ID)));
+
             resp.setStatus(303);
+            resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
         }catch (Exception e){
             Charset utf8 = Charset.forName("utf-8");
             resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
             resp.setStatus(200);
-            String respBody=null;
+            String respBody;
             try{
                 String method="GET";
                 String path= req.getRequestURI();
@@ -74,7 +83,7 @@ public class MoviesServlet extends HttpServlet {
                 HeaderInfo headerInfo = new HeaderInfo();
                 CommandInfo command = new CommandInfo(method,path,query);
                 HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
-                ProduceTemplate(resultFormat, Optional.ofNullable(e.getMessage()));
+                produceTemplate(resultFormat, query, Optional.ofNullable(e.getMessage()));
                 respBody= resultFormat.getHtml();
             }catch (Exception c){
                 resp.setStatus(400);
@@ -88,7 +97,7 @@ public class MoviesServlet extends HttpServlet {
         }
     }
 
-    private void ProduceTemplate(HtmlResult resultFormat, Optional<String> errorMessage) throws Exception {
+    private void produceTemplate(HtmlResult resultFormat, String query, Optional<String> errorMessage) throws Exception {
         List<Pair<String,String>> pairs = new ArrayList<>();
 
         for (ArrayList<String> line : resultFormat.resultInfo.getValues()){
@@ -120,6 +129,8 @@ public class MoviesServlet extends HttpServlet {
                 )
         );
 
+        resultFormat.addPaging(Utils.paging(query, "/movies"));
+
         resultFormat.addForm("Insert a new Movie"
                 ,Arrays.asList(new Pair("method","POST"),new Pair("action","/movies"))
                 ,Arrays.asList(
@@ -131,7 +142,6 @@ public class MoviesServlet extends HttpServlet {
         if(errorMessage.isPresent()){
             resultFormat.addElementTo("fieldset",
                     new HtmlElement(
-                            //String.format("<strong id=\"errorMessage\" style=\"color:red;\">%s</strong>", errorMessage.get())),0);
                             "b",
                             "").
                                 addChild(new HtmlElement("font","An Error has ocurred!").addAttributes("color","red")),

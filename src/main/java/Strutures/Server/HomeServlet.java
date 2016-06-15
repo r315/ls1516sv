@@ -5,6 +5,8 @@ import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.IResultFormat;
 import console.Manager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
 
 import javax.servlet.http.HttpServlet;
@@ -22,14 +24,17 @@ import java.util.List;
  */
 public class HomeServlet extends HttpServlet {
 
-    public HomeServlet(){}
+    private static final Logger _logger = LoggerFactory.getLogger(HomeServlet.class);
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+
+        _logger.info("New GET was received:" + req.getRequestURI() + "aka Home");
+
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);
-        String respBody=null;
+        String respBody;
         try{
             HtmlResult resultFormat= new HtmlResult();
             resultFormat.generate();

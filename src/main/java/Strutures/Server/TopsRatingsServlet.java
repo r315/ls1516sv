@@ -1,6 +1,8 @@
 package Strutures.Server;
 
 import Strutures.ResponseFormat.Html.HtmlResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
 
 import javax.servlet.http.HttpServlet;
@@ -16,11 +18,12 @@ import java.util.Arrays;
  */
 public class TopsRatingsServlet extends HttpServlet {
 
+    private static final Logger _logger = LoggerFactory.getLogger(TopsRatingsServlet.class);
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        System.out.println("--New request was received --");
-        System.out.println(req.getRequestURI());
+        _logger.info("New GET was received:" + req.getRequestURI());
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
@@ -29,22 +32,7 @@ public class TopsRatingsServlet extends HttpServlet {
         try{
             HtmlResult resultFormat = new HtmlResult();
 
-            resultFormat.generate();
-            resultFormat.addNavigationLinks(
-                    Arrays.asList(
-                        new Pair<>("Home","/"),
-                        new Pair<>("Movies","/movies")
-                    )
-            );
-
-            resultFormat.addList(
-                    Arrays.asList(
-                        new Pair<>("Ratings Higher Average","/tops/5/ratings/higher/average"),
-                        new Pair<>("Ratings Lower Average","/tops/5/ratings/lower/average"),
-                        new Pair<>("Review Higher Count","/tops/5/reviews/higher/count"),
-                        new Pair<>("Review Lower Count","/tops/5/reviews/lower/count")
-                    ),"Tops"
-            );
+            produceTemplate(resultFormat);
 
             respBody = resultFormat.getHtml();
 
@@ -60,5 +48,24 @@ public class TopsRatingsServlet extends HttpServlet {
         OutputStream os = resp.getOutputStream();
         os.write(respBodyBytes);
         os.close();
+    }
+
+    private void produceTemplate(HtmlResult resultFormat) {
+        resultFormat.generate();
+        resultFormat.addNavigationLinks(
+                Arrays.asList(
+                    new Pair<>("Home","/"),
+                    new Pair<>("Movies","/movies")
+                )
+        );
+
+        resultFormat.addList(
+                Arrays.asList(
+                    new Pair<>("Ratings Higher Average","/tops/5/ratings/higher/average"),
+                    new Pair<>("Ratings Lower Average","/tops/5/ratings/lower/average"),
+                    new Pair<>("Review Higher Count","/tops/5/reviews/higher/count"),
+                    new Pair<>("Review Lower Count","/tops/5/reviews/lower/count")
+                ),"Tops"
+        );
     }
 }

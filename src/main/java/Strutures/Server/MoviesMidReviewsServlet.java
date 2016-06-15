@@ -5,7 +5,10 @@ import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
+import utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,11 +24,11 @@ import java.util.stream.Collectors;
  * Created by Luigi Sekuiya on 28/05/2016.
  */
 public class MoviesMidReviewsServlet extends HttpServlet {
+
+    private static final Logger _logger = LoggerFactory.getLogger(MoviesMidReviewsServlet.class);
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-        System.out.println("--New request was received --");
-        System.out.println(req.getRequestURI());
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
@@ -35,11 +38,17 @@ public class MoviesMidReviewsServlet extends HttpServlet {
             String method= req.getMethod();
             String path= req.getRequestURI();
             String query= req.getQueryString();
+
+            _logger.info("New GET was received:" + path + (query == null ? "" : query));
+
+            if (query == null) query = "top=5";
+            else if (!query.contains("top=")) query += "&top=5";
+
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
             CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
 
-            produceTemplate(resultFormat, Optional.empty());
+            produceTemplate(resultFormat, query, Optional.empty());
 
             respBody = resultFormat.getHtml();
 
@@ -76,8 +85,10 @@ public class MoviesMidReviewsServlet extends HttpServlet {
 
             String mid = command.getResources().stream().collect(Collectors.toList()).get(1);
             String rid = resultFormat.resultInfo.getGeneratedId();
+
+            _logger.info("New POST fulfilled:" + String.format("/movies/%d/reviews/%d",Integer.parseInt(mid),Integer.parseInt(rid)));
+
             resp.sendRedirect(String.format("/movies/%d/reviews/%d",Integer.parseInt(mid),Integer.parseInt(rid)));
-            resp.setStatus(303);
         }catch (Exception e ){
             // TODO: 31/05/2016
             resp.setStatus(404);
@@ -85,7 +96,7 @@ public class MoviesMidReviewsServlet extends HttpServlet {
 
     }
 
-    private void produceTemplate(HtmlResult resultFormat, Optional<String> errorMessage) throws Exception {
+    private void produceTemplate(HtmlResult resultFormat, String query, Optional<String> errorMessage) throws Exception {
 
         ArrayList<String> values = resultFormat.resultInfo.getValues().iterator().next();
         String mid = values.get(0);
@@ -111,6 +122,8 @@ public class MoviesMidReviewsServlet extends HttpServlet {
                         pair
                 )
         );
+
+        resultFormat.addPaging(Utils.paging(query, String.format("/movies/%s/reviews",mid)));
 
         resultFormat.addFormGeneric(
                 String.format("Submit a review for movie %s", movie_name)
