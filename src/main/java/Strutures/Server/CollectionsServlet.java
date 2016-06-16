@@ -54,7 +54,7 @@ public class CollectionsServlet extends HttpServlet{
             respBody=resultFormat.getHtml();
         }catch(Exception e){
             //// TODO: 19/05/2016
-            _logger.error("Exception:" + e.getMessage());
+            _logger.error("Exception:" + e.getClass().getName() + " | " +  e.getMessage());
             resp.setStatus(404);
             respBody="Error 404.";
         }

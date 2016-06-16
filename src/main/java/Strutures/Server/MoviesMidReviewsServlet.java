@@ -4,9 +4,11 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
+import Strutures.ResponseFormat.ResultInfo;
 import console.Manager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sqlserver.ConnectionFactory;
 import utils.Pair;
 import utils.Utils;
 
@@ -17,7 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -48,7 +56,7 @@ public class MoviesMidReviewsServlet extends HttpServlet {
             CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
 
-            produceTemplate(resultFormat, query, Optional.empty());
+            produceTemplate(resultFormat, query, command, Optional.empty());
 
             respBody = resultFormat.getHtml();
 
@@ -56,6 +64,7 @@ public class MoviesMidReviewsServlet extends HttpServlet {
             //// TODO: 25/05/2016
         }catch(Exception e){
             //// TODO: 19/05/2016
+            _logger.error("Exception:" + e.getClass().getName() + " | " +  e.getMessage());
             resp.setStatus(404);
             respBody="Error 404.";
         }
@@ -96,9 +105,12 @@ public class MoviesMidReviewsServlet extends HttpServlet {
 
     }
 
-    private void produceTemplate(HtmlResult resultFormat, String query, Optional<String> errorMessage) throws Exception {
+    private void produceTemplate(HtmlResult resultFormat, String query, CommandInfo command, Optional<String> errorMessage) throws Exception {
 
-        ArrayList<String> values = resultFormat.resultInfo.getValues().iterator().next();
+        ArrayList<String> values;
+
+        if (resultFormat.resultInfo.getValues().iterator().hasNext()) values = resultFormat.resultInfo.getValues().iterator().next();
+        else {values = getInfo(command, resultFormat.resultInfo);}
         String mid = values.get(0);
         String movie_name = values.get(1);
 
@@ -113,6 +125,8 @@ public class MoviesMidReviewsServlet extends HttpServlet {
         resultFormat.resultInfo.removeColumn("Movie's ID");
         resultFormat.resultInfo.removeColumn("Movie's Title");
         resultFormat.resultInfo.removeColumn("Review's ID");
+
+
         resultFormat.generate();
         resultFormat.addLinksToTable(pairs);
 
@@ -150,5 +164,19 @@ public class MoviesMidReviewsServlet extends HttpServlet {
                 )
         );
 
+    }
+
+    private ArrayList<String> getInfo(CommandInfo command, ResultInfo resultInfo) {
+        HashMap<String, String> param = command.getData();
+        ArrayList<String> info = new ArrayList<>();
+
+        info.add(param.get("mid"));
+
+        Pattern p = Pattern.compile("^(\\w+)'s Reviews");
+        Matcher m = p.matcher(resultInfo.getDisplayTitle());
+
+        if (m.find()) info.add(m.group(1));
+
+        return info;
     }
 }

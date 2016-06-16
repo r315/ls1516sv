@@ -147,7 +147,7 @@ public class CollectionsCidServlet extends HttpServlet {
         resultFormat.addForm("Add Movie to Collection"
                 ,Arrays.asList(
                         new Pair<String,String>("method","POST"),
-                        new Pair<String,String>("action",String.format("/collections/%s/movies",cid)))
+                        new Pair<String,String>("action",String.format("/collections/%s",cid)))
                 ,Arrays.asList(
                         new Pair<String,List<Pair<String,String>>>("Movie ID",Arrays.asList(
                                 new Pair<String,String>("name","mid"),
