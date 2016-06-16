@@ -172,7 +172,7 @@ public class MoviesMidReviewsServlet extends HttpServlet {
 
         info.add(param.get("mid"));
 
-        Pattern p = Pattern.compile("^(\\w+)'s Reviews");
+        Pattern p = Pattern.compile("^(.*?)'s Reviews");
         Matcher m = p.matcher(resultInfo.getDisplayTitle());
 
         if (m.find()) info.add(m.group(1));
