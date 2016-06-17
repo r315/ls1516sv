@@ -56,7 +56,9 @@ public class MoviesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
+        String respBody=null;
+        Charset utf8 = Charset.forName("utf-8");
+        resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         try {
             String method = req.getMethod();
             String path = req.getRequestURI();
@@ -72,10 +74,7 @@ public class MoviesServlet extends HttpServlet {
             resp.setStatus(303);
             resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
         }catch (Exception e){
-            Charset utf8 = Charset.forName("utf-8");
-            resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
             resp.setStatus(200);
-            String respBody;
             try{
                 String method="GET";
                 String path= req.getRequestURI();
@@ -89,12 +88,12 @@ public class MoviesServlet extends HttpServlet {
                 resp.setStatus(400);
                 respBody="Error 400.";
             }
-            byte[] respBodyBytes = respBody.getBytes(utf8);
-            resp.setContentLength(respBodyBytes.length);
-            OutputStream os = resp.getOutputStream();
-            os.write(respBodyBytes);
-            os.close();
         }
+        byte[] respBodyBytes = respBody.getBytes(utf8);
+        resp.setContentLength(respBodyBytes.length);
+        OutputStream os = resp.getOutputStream();
+        os.write(respBodyBytes);
+        os.close();
     }
 
     private void produceTemplate(HtmlResult resultFormat, String query, Optional<String> errorMessage) throws Exception {
@@ -140,15 +139,12 @@ public class MoviesServlet extends HttpServlet {
         );
 
         if(errorMessage.isPresent()){
-            resultFormat.addElementTo("fieldset",
-                    new HtmlElement(
-                            "b",
-                            "").
-                                addChild(new HtmlElement("font","An Error has ocurred!").addAttributes("color","red")),
-                            1
-                    );
-
-
+            resultFormat.addElementTo("fieldset"
+                    ,new HtmlElement("b").
+                            addChild(new HtmlElement("font",errorMessage.get())
+                                    .addAttributes("color","red"))
+                    ,1
+            );
         }
     }
 }

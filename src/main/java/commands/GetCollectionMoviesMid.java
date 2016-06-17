@@ -30,20 +30,18 @@ public class GetCollectionMoviesMid implements ICommand {
         } catch (NumberFormatException e) {
             throw new InvalidCommandVariableException();
         }
-        try(Connection conn = ConnectionFactory.getConn()) {
-            PreparedStatement pstmt = conn.prepareStatement("SELECT Collection.collection_id, Collection.name FROM Has\n" +
-                                                            "INNER JOIN Collection ON Has.collection_id = Collection.collection_id\n" +
-                                                            "WHERE movie_id=?");
+        try(
+                Connection conn = ConnectionFactory.getConn();
+                PreparedStatement pstmt = conn.prepareStatement(getQuery())
+        ){
+
             pstmt.setInt(1, mid);
 
             ResultSet rs = pstmt.executeQuery();
 
             ResultInfo result = createRI(rs);
 
-            pstmt.close();
-
             return result;
-
         }
     }
 
@@ -52,6 +50,11 @@ public class GetCollectionMoviesMid implements ICommand {
         return INFO;
     }
 
+    private String getQuery() {
+        return "SELECT Collection.collection_id, Collection.name FROM Has\n" +
+                "INNER JOIN Collection ON Has.collection_id = Collection.collection_id\n" +
+                "WHERE movie_id=?";
+    }
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("ID");

@@ -1,5 +1,11 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandVariableException;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,12 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandVariableException;
 
 public class GetCollectionsCid implements ICommand {
     private static final String INFO = "GET /collections/{cid} - returns the details for the cid collection, namely all the movies in that collection.";
@@ -32,7 +32,10 @@ public class GetCollectionsCid implements ICommand {
             top = skiptop.get("top");
         }
 
-        try(Connection conn = ConnectionFactory.getConn()) {
+        try(
+                Connection conn = ConnectionFactory.getConn();
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top, orderBy))
+        ){
             int cid;
 
             try {
@@ -41,7 +44,7 @@ public class GetCollectionsCid implements ICommand {
                 throw new InvalidCommandVariableException();
             }
 
-            PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top, orderBy));
+
             pstmt.setInt(1, cid);
             pstmt.setInt(2, skip);
 

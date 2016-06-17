@@ -1,16 +1,16 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
 
 /**
  * Created by Luigi Sekuiya on 29/04/2016.
@@ -34,15 +34,16 @@ public class GetCollections implements ICommand {
 
 
 
-        try(Connection conn = ConnectionFactory.getConn()) {
-            PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
+        try(
+                Connection conn = ConnectionFactory.getConn();
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
+        ){
+
             pstmt.setInt(1, skip);
 
             ResultSet rs = pstmt.executeQuery();
 
             ResultInfo result = createRI(rs);
-
-            pstmt.close();
 
             return result;
         }
