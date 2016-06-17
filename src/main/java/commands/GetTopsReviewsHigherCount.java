@@ -1,5 +1,9 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import sqlserver.ConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,24 +12,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import sqlserver.ConnectionFactory;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-
 public class GetTopsReviewsHigherCount implements ICommand {
 	private static final String INFO = "GET /tops/reviews/higher/count - returns the detail for the movie with most reviews.";
 	private final String TITLE = "Movie with most reviews";
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
-		try(Connection conn = ConnectionFactory.getConn()) {
-			Statement stmt = conn.createStatement();
+		try(Connection conn = ConnectionFactory.getConn();
+			Statement stmt = conn.createStatement()) {
 
 			ResultSet rs = stmt.executeQuery(getQuery());
 
 			ResultInfo result = createRI(rs);
-
-			stmt.close();
 
 			return result;
 		}

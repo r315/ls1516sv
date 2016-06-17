@@ -1,17 +1,17 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandParametersException;
+import exceptions.PostException;
+import sqlserver.ConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import sqlserver.ConnectionFactory;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
 
 public class PostMovies implements ICommand {
 	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
@@ -22,60 +22,44 @@ public class PostMovies implements ICommand {
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws Exception {
-		ResultInfo ri = null;	
-		if(data == null)
-			throw new InvalidCommandParametersException("Data is null");
-		
+		ResultInfo ri = null;
+		if (data == null)
+			throw new InvalidCommandParametersException();
+
 		String title = data.get("title");
 		String date = data.get("releaseYear");
-		PreparedStatement movieinsert = null;
-		PreparedStatement ratinginsert = null;
-		Connection conn = null;
 
-		if(title == null || date == null)
+		if (title == null || date == null)
 			throw new InvalidCommandParametersException();
-		
-		try{
-			conn = ConnectionFactory.getConn();
-			conn.setAutoCommit(false);
-			movieinsert = conn.prepareStatement(INSERT_MOVIE,PreparedStatement.RETURN_GENERATED_KEYS);
-			ratinginsert = conn.prepareStatement(INSERT_RATING);
-			
-			movieinsert.setString(1,title);			
-			movieinsert.setString(2,date+"0101");        
-			mid = movieinsert.executeUpdate();		
 
-			if(mid != 0){				
-				ri = createResultInfo(movieinsert.getGeneratedKeys());				
-				ratinginsert.setInt(1,mid);
-				ratinginsert.executeUpdate();	
+		try (Connection conn = ConnectionFactory.getConn();
+			 PreparedStatement movieInsert = conn.prepareStatement(INSERT_MOVIE, PreparedStatement.RETURN_GENERATED_KEYS);
+			 PreparedStatement ratingInsert = conn.prepareStatement(INSERT_RATING)
+		){
+
+			conn.setAutoCommit(false);
+			movieInsert.setString(1, title);
+			movieInsert.setString(2, date + "0101");
+			mid = movieInsert.executeUpdate();
+
+			if (mid != 0) {
+				ri = createResultInfo(movieInsert.getGeneratedKeys());
+				ratingInsert.setInt(1, mid);
+				ratingInsert.executeUpdate();
 				conn.commit();
 			}else{
 				conn.rollback();
-			}			
-		}catch(SQLException e){
-			if (conn != null) {
-	            try {	                
-	                conn.rollback();
-	            } catch(SQLException excep) {
-	                throw excep;
-	            }
-	        }
-			// TODO: 01/06/2016 Clean Commands. Use Try with resources. re-throw sql exceptions and interpret them above. 
-			if(e.getErrorCode()==2627){
-				throw new SqlInsertionException("Information already exists");
+				throw new SQLException("Invalid mID");
 			}
-		}finally{
-			if(movieinsert != null)
-				movieinsert.close();
-			if(ratinginsert != null)
-				ratinginsert.close();
+
+		}catch(SQLException e){
+			int errorCode= e.getErrorCode();
+			if(errorCode == PostException.ENTRY_EXISTS)
+				throw new PostException(errorCode,"Entry already exists!");
 		}
-		
-		if(ri == null)
-			throw new SqlInsertionException("Movie insertion Failed");
+
 		return ri;
-    }
+	}
 
 	@Override
 	public String getInfo() {
@@ -91,7 +75,6 @@ public class PostMovies implements ICommand {
 		mid = rs.getInt(1);
 		line.add(Integer.toString(mid));
 		rdata.add(line);
-
     	return new ResultInfo(TITLE,columns,rdata);
     }
 }

@@ -13,7 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Luigi Sekuiya on 28/05/2016.
@@ -51,10 +54,12 @@ public class MoviesServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String respBody=null;
+        Charset utf8 = Charset.forName("utf-8");
+        resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         try {
             String method = req.getMethod();
             String path = req.getRequestURI();
-            String query= req.getQueryString();
             HeaderInfo headerInfo = new HeaderInfo();
             String params= String.format("title=%s&releaseYear=%s",req.getParameter("title"),req.getParameter("releaseYear"));
             CommandInfo command = new CommandInfo(method, path,params);
@@ -63,10 +68,7 @@ public class MoviesServlet extends HttpServlet {
             resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
             resp.setStatus(303);
         }catch (Exception e){
-            Charset utf8 = Charset.forName("utf-8");
-            resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
             resp.setStatus(200);
-            String respBody=null;
             try{
                 String method="GET";
                 String path= req.getRequestURI();
@@ -80,12 +82,12 @@ public class MoviesServlet extends HttpServlet {
                 resp.setStatus(400);
                 respBody="Error 400.";
             }
-            byte[] respBodyBytes = respBody.getBytes(utf8);
-            resp.setContentLength(respBodyBytes.length);
-            OutputStream os = resp.getOutputStream();
-            os.write(respBodyBytes);
-            os.close();
         }
+        byte[] respBodyBytes = respBody.getBytes(utf8);
+        resp.setContentLength(respBodyBytes.length);
+        OutputStream os = resp.getOutputStream();
+        os.write(respBodyBytes);
+        os.close();
     }
 
     private void ProduceTemplate(HtmlResult resultFormat, Optional<String> errorMessage) throws Exception {
@@ -129,16 +131,12 @@ public class MoviesServlet extends HttpServlet {
         );
 
         if(errorMessage.isPresent()){
-            resultFormat.addElementTo("fieldset",
-                    new HtmlElement(
-                            //String.format("<strong id=\"errorMessage\" style=\"color:red;\">%s</strong>", errorMessage.get())),0);
-                            "b",
-                            "").
-                                addChild(new HtmlElement("font","An Error has ocurred!").addAttributes("color","red")),
-                            1
-                    );
-
-
+            resultFormat.addElementTo("fieldset"
+                    ,new HtmlElement("b").
+                            addChild(new HtmlElement("font",errorMessage.get())
+                                    .addAttributes("color","red"))
+                    ,1
+            );
         }
     }
 }

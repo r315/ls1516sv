@@ -1,18 +1,12 @@
 package Strutures.Command;
 
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
 import decoders.DecodeMethod;
 import decoders.DecodePath;
 import exceptions.InvalidCommandMethodException;
 import exceptions.InvalidCommandPathException;
 import exceptions.InvalidCommandTableException;
-import org.apache.commons.lang.NotImplementedException;
+import java.util.*;
+
 
 /**
  * Created by Red on 28/03/2016.
@@ -148,7 +142,9 @@ public class CommandMap {
             }
 
             @Override
-            public int size() {throw new NotImplementedException();}
+            public int size() throws UnsupportedOperationException{
+                throw new UnsupportedOperationException();
+            }
         };
     }
 
