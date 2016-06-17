@@ -6,6 +6,7 @@ import Strutures.ResponseFormat.ResultInfo;
 import utils.Pair;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -98,6 +99,11 @@ public class HtmlResult implements IResultFormat {
 		page.addElementTo("body", HtmlTree.p());
 		page.addElementTo("body", HtmlTree.p());
 		page.addElementTo("body", HtmlTree.addFormGeneric(legend, formAtributes, inputs));
+	}
+
+	public void addPaging(HashMap<String, String> paging){
+		page.addElementTo("body",HtmlTree.p());
+		page.addElementTo("body",HtmlTree.addPaging(paging));
 	}
 
     public void addElementTo(String tag, HtmlElement elem){

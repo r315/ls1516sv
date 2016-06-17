@@ -4,7 +4,11 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
+import utils.Utils;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,18 +24,26 @@ import java.util.List;
  */
 public class TopsRatingsReviewsServlet extends HttpServlet{
 
+    private static final Logger _logger = LoggerFactory.getLogger(TopsRatingsReviewsServlet.class);
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        System.out.println("--New request was received --");
-        System.out.println(req.getRequestURI());
-
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);
         String respBody;
         try{
+            String method= req.getMethod();
+            String path= req.getRequestURI();
+            String query= req.getQueryString();
+
+            _logger.info("New GET was received:" + path + (query == null ? "" : query));
+
+            if (query == null) query = "top=5";
+            else if (!query.contains("top=")) query += "&top=5";
+
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-            CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI(),req.getQueryString()});
+            CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat= (HtmlResult) Manager.executeCommand(command,headerInfo);
 
             //Add collections links to each column
@@ -54,6 +66,7 @@ public class TopsRatingsReviewsServlet extends HttpServlet{
             );
 
             resultFormat.addLinksToTable(pairs);
+
             respBody=resultFormat.getHtml();
         }catch(Exception e){
             //// TODO: 19/05/2016

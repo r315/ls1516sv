@@ -62,7 +62,7 @@ public class GetMoviesMidReviews implements ICommand {
     private String getQuery(Boolean topB, int top) {
         String query = "SELECT Movie.movie_id, Movie.title, Review.review_id, Review.name, Review.summary, Review.rating " +
                         "FROM Review " +
-                        "INNER JOIN Movie ON Review.movie_id=Movie.movie_id " +
+                        "RIGHT JOIN Movie ON Review.movie_id=Movie.movie_id " +
                         "WHERE Movie.movie_id = ? " +
                         "ORDER BY Movie.movie_id " +
                         "OFFSET ? ROWS";
@@ -84,18 +84,20 @@ public class GetMoviesMidReviews implements ICommand {
         if (!rs.next()) return new ResultInfo(TITLE, columns, data);
         String title = rs.getString("title");
 
-        do {
-            ArrayList<String> line = new ArrayList<>();
+        if((rs.getString("review_id") != null)) {
+            do {
+                ArrayList<String> line = new ArrayList<>();
 
-            line.add(rs.getString("movie_id"));
-            line.add(rs.getString("title"));
-            line.add(rs.getString("review_id"));
-            line.add(rs.getString("name"));
-            line.add(rs.getString("rating"));
-            line.add(rs.getString("summary"));
+                line.add(rs.getString("movie_id"));
+                line.add(rs.getString("title"));
+                line.add(rs.getString("review_id"));
+                line.add(rs.getString("name"));
+                line.add(rs.getString("rating"));
+                line.add(rs.getString("summary"));
 
-            data.add(line);
-        } while(rs.next());
+                data.add(line);
+            } while (rs.next());
+        }
         return new ResultInfo(title + TITLE, columns, data);
     }
 }

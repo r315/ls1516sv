@@ -7,7 +7,10 @@ import Strutures.ResponseFormat.IResultFormat;
 import console.Manager;
 import org.eclipse.jetty.client.HttpRequest;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
+import utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,52 +26,35 @@ import java.util.*;
  */
 public class CollectionsServlet extends HttpServlet{
 
-    public CollectionsServlet(){}
+    private static final Logger _logger = LoggerFactory.getLogger(CollectionsServlet.class);
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        System.out.println("--New request was received --");
-        System.out.println(req.getRequestURI());
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);
-        String respBody=null;
+        String respBody;
         try{
+            String method= req.getMethod();
+            String path= req.getRequestURI();
+            String query= req.getQueryString();
+
+            _logger.info("New GET was received:" + path + (query == null ? "" : query));
+
+            if (query == null) query = "top=5";
+            else if (!query.contains("top=")) query += "&top=5";
+
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
-            CommandInfo command = new CommandInfo(new String[]{req.getMethod(),req.getRequestURI(),req.getQueryString()});
+            CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat= (HtmlResult)Manager.executeCommand(command,headerInfo);
+            produceTemplate(resultFormat,query);
 
-            //Add collections links to each column
-            List<Pair<String,String>> pairs=new ArrayList<>();
-            for (ArrayList<String> line : resultFormat.resultInfo.getValues())
-                pairs.add(new Pair<>(line.get(1),"/collections/"+line.get(0)));
-
-            //Remove id column
-            List<String> list= resultFormat.resultInfo.removeColumn("ID");
-
-            resultFormat.generate();
-
-            //Set Navigation links
-            resultFormat.addNavigationLinks(
-                    Arrays.asList(
-                            new Pair<>("Home","/")
-                    )
-            );
-
-            resultFormat.addLinksToTable(pairs);
-
-            resultFormat.addForm("Add Collection"
-                    ,Arrays.asList(new Pair("method","POST"),new Pair("action","/collections"))
-                    ,Arrays.asList(
-                            new Pair("Collection title",Arrays.asList(new Pair("name","name"),new Pair("type","text"),new Pair("required",null))),
-                            new Pair("Description ",Arrays.asList(new Pair("name","description"),new Pair("type","text"),new Pair("required",null)))
-                    )
-            );
 
             respBody=resultFormat.getHtml();
         }catch(Exception e){
             //// TODO: 19/05/2016
+            _logger.error("Exception:" + e.getClass().getName() + " | " +  e.getMessage());
             resp.setStatus(404);
             respBody="Error 404.";
         }
@@ -78,7 +64,6 @@ public class CollectionsServlet extends HttpServlet{
         os.write(respBodyBytes);
         os.close();
     }
-
 
 
     @Override
@@ -99,11 +84,47 @@ public class CollectionsServlet extends HttpServlet{
                     new HeaderInfo(new String[]{}));
 
             String ID = resultFormat.resultInfo.getGeneratedId();
+
+            _logger.info("New POST fulfilled:" + String.format("/collections/%d",Integer.parseInt(ID)));
+
             resp.sendRedirect(String.format("/collections/%d",Integer.parseInt(ID)));
             resp.setStatus(303);
         }catch (Exception e ){
             // TODO: 31/05/2016
+            _logger.error("Exception:" + e.getMessage());
             resp.setStatus(404);
         }
     }
+
+    private void produceTemplate(HtmlResult resultFormat, String query) {
+        //Add collections links to each column
+        List<Pair<String,String>> pairs=new ArrayList<>();
+        for (ArrayList<String> line : resultFormat.resultInfo.getValues())
+            pairs.add(new Pair<>(line.get(1),"/collections/"+line.get(0)));
+
+        //Remove id column
+        List<String> list= resultFormat.resultInfo.removeColumn("ID");
+
+        resultFormat.generate();
+
+        //Set Navigation links
+        resultFormat.addNavigationLinks(
+                Arrays.asList(
+                        new Pair<>("Home","/")
+                )
+        );
+
+        resultFormat.addLinksToTable(pairs);
+
+        resultFormat.addPaging(Utils.paging(query, "/collections"));
+
+        resultFormat.addForm("Add Collection"
+                ,Arrays.asList(new Pair("method","POST"),new Pair("action","/collections"))
+                ,Arrays.asList(
+                        new Pair("Collection title",Arrays.asList(new Pair("name","name"),new Pair("type","text"),new Pair("required",null))),
+                        new Pair("Description ",Arrays.asList(new Pair("name","description"),new Pair("type","text"),new Pair("required",null)))
+                )
+        );
+    }
+
 }

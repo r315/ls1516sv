@@ -6,6 +6,8 @@ import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import console.Manager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
 
 import javax.servlet.http.HttpServlet;
@@ -25,11 +27,11 @@ import java.util.stream.Collectors;
  * Created by Luigi Sekuiya on 28/05/2016.
  */
 public class MoviesMidRatingsServlet extends HttpServlet {
+
+    private static final Logger _logger = LoggerFactory.getLogger(MoviesMidRatingsServlet.class);
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-        System.out.println("--New request was received --");
-        System.out.println(req.getRequestURI());
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
@@ -38,6 +40,9 @@ public class MoviesMidRatingsServlet extends HttpServlet {
         try{
             String method= req.getMethod();
             String path= req.getRequestURI();
+
+            _logger.info("New GET was received:" + path);
+
             HeaderInfo headerInfo = new HeaderInfo(new String[]{});
             CommandInfo command = new CommandInfo(new String[]{method,path});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
@@ -71,8 +76,11 @@ public class MoviesMidRatingsServlet extends HttpServlet {
             //HtmlResult resultFormat = (HtmlResult)
             Manager.executeCommand(command, headerInfo);
             String ID= command.getResources().stream().collect(Collectors.toList()).get(1);
-            resp.sendRedirect(String.format("/movies/%d/ratings",Integer.parseInt(ID)));
+
+            _logger.info("New POST fulfilled:" + String.format("/movies/%d/ratings",Integer.parseInt(ID)));
+
             resp.setStatus(303);
+            resp.sendRedirect(String.format("/movies/%d/ratings",Integer.parseInt(ID)));
         }catch (Exception e){
             resp.setStatus(400);
             respBody="Error 400."+e.getMessage();

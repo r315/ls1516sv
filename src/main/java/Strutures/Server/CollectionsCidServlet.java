@@ -7,7 +7,10 @@ import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
 import exceptions.InvalidCommandParametersException;
 import exceptions.PostException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Pair;
+import utils.Utils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,16 +29,24 @@ import java.util.Optional;
  */
 public class CollectionsCidServlet extends HttpServlet {
     private static final Charset utf8 = Charset.forName("utf-8");
+    private static final Logger _logger = LoggerFactory.getLogger(CollectionsCidServlet.class);
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        //System.out.println("--New request was received --");
-        //System.out.println(req.getRequestURI());
         resp.setContentType(String.format("text/html; charset=%s", utf8.name()));
-        String respBody = null;
+        String respBody;
         try {
-            respBody = produceTemplate(new CommandInfo(new String[]{req.getMethod(), req.getRequestURI()}),
-                    req.getPathInfo().substring(1),"" ).getHtml();
+            String method= req.getMethod();
+            String path= req.getRequestURI();
+            String query= req.getQueryString();
+
+            _logger.info("New GET was received:" + path + (query == null ? "" : query));
+
+            if (query == null) query = "top=5";
+            else if (!query.contains("top=")) query += "&top=5";
+
+            respBody = produceTemplate(new CommandInfo(new String[]{method, path, query}),
+                    req.getPathInfo().substring(1),"",query ).getHtml();
             resp.setStatus(200);
         } catch (Exception e) {
             //// TODO: 28/05/2016 better page
@@ -60,6 +71,8 @@ public class CollectionsCidServlet extends HttpServlet {
                     new HeaderInfo(new String[]{}));
 
             // cid is inserted on command by Manager on path decode
+            _logger.info("New POST fulfilled:" + String.format("/collections/%s",command.getData().get("cid")));
+
             resp.sendRedirect(String.format("/collections/%s",command.getData().get("cid")));
             resp.setStatus(303);
         }catch (InvalidCommandParametersException | PostException e ){
@@ -78,8 +91,8 @@ public class CollectionsCidServlet extends HttpServlet {
                     msg = "Invalid ID!";
 
                 respBody = produceTemplate(new CommandInfo(new String[]{"GET",
-                                req.getServletPath()+"/"+cid}),
-                        cid, msg ).getHtml();
+                                req.getServletPath()+"/"+cid,req.getQueryString()}),
+                        cid, msg, req.getQueryString() ).getHtml();
                 resp.setStatus(200);
             } catch (Exception e1) {
                 respBody = "Error creating error message!";
@@ -104,7 +117,7 @@ public class CollectionsCidServlet extends HttpServlet {
         return  null;
     }
 
-    private HtmlResult produceTemplate(CommandInfo ci, String cid,  String error) throws Exception {
+    private HtmlResult produceTemplate(CommandInfo ci, String cid,  String error, String query) throws Exception {
 
         HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(ci, new HeaderInfo(new String[]{}));
 
@@ -128,10 +141,13 @@ public class CollectionsCidServlet extends HttpServlet {
         );
 
         resultFormat.addLinksToTable(pairs);
+
+        resultFormat.addPaging(Utils.paging(query, String.format("/collections/%s",cid)));
+
         resultFormat.addForm("Add Movie to Collection"
                 ,Arrays.asList(
                         new Pair<String,String>("method","POST"),
-                        new Pair<String,String>("action",String.format("/collections/%s/movies",cid)))
+                        new Pair<String,String>("action",String.format("/collections/%s",cid)))
                 ,Arrays.asList(
                         new Pair<String,List<Pair<String,String>>>("Movie ID",Arrays.asList(
                                 new Pair<String,String>("name","mid"),

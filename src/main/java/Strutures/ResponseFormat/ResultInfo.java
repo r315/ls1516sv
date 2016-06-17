@@ -35,6 +35,10 @@ public class ResultInfo {
         this.title= titles;
     }
 
+    public void setDisplayTitle(String displayTitle){
+        this.displayTitle = displayTitle;
+    }
+
     public void setValues(Collection<ArrayList<String>> data){this.data=data;}
 
     public String getDisplayTitle() {return this.displayTitle == null ? "": this.displayTitle;}
