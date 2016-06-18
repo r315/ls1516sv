@@ -50,10 +50,10 @@ public class CollectionsCidServlet extends HttpServlet {
                     req.getPathInfo().substring(1),"",query ).getHtml();
 
             resp.setStatus(200);
-        } catch (Exception e) {
-            respBody = e.getMessage();
+        } catch (InvalidCommandException | SQLException e){
+            respBody = "Error 404.";
             resp.setStatus(404);
-            _logger.error(ERROR_TAG, respBody);
+            _logger.error("Fail to get collection: " + e.getMessage());
         }
        setResponseData(resp, respBody);
     }
@@ -62,50 +62,46 @@ public class CollectionsCidServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         String respBody = null;
+        String errmsg = "";
+
         try {
-            CommandInfo command = new CommandInfo(new String[]{req.getMethod(),
+            CommandInfo command = new CommandInfo(new String[]{
+                    req.getMethod(),
                     req.getRequestURI(),
                     String.format("mid=%s",
                             req.getParameter("mid"))});
 
-            HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(
-                    command,
-                    new HeaderInfo(new String[]{}));
-
+            Manager.executeCommand(command, new HeaderInfo(new String[]{}));
             // cid is inserted on command by Manager on path decode
             _logger.info("New POST fulfilled:" + String.format("/collections/%s",command.getData().get("cid")));
 
             resp.sendRedirect(String.format("/collections/%s",command.getData().get("cid")));
             resp.setStatus(303);
-        }catch (PostException e ){
-            try {
-                String cid = req.getPathInfo().substring(1);
-                String msg = "";
-
-                if(e instanceof PostException)
-                    msg = e.getMessage();
+        }catch (InvalidCommandException | PostException e ){
+                String cid = req.getPathInfo().split("/")[1];
+                if(e instanceof PostException )
+                    errmsg = e.getMessage();
                 else
-                    msg = "Invalid ID!";
-
+                    errmsg = "Invalid ID!";
+            try {
                 respBody = produceTemplate(new String[]{"GET",
-                                req.getServletPath()+"/"+cid,req.getQueryString()},
-                        cid, msg, req.getQueryString() ).getHtml();
-                resp.setStatus(200);
-            } catch (Exception e1) {
+                                String.format("/collections/%s", cid)},
+                                cid,
+                                errmsg,
+                                req.getQueryString())
+                        .getHtml();
+            } catch (InvalidCommandException | SQLException e1) {
                 respBody = e.getMessage();
                 resp.setStatus(500);
-                _logger.error(ERROR_TAG, respBody);
+                _logger.error("Error: " + respBody);
             }
+            resp.setStatus(200);
+
         } catch (SQLException e) {
-            //TODO For RED catch exceptions
-        } catch (InvalidCommandException e) {
-            //TODO For RED catch exceptions
-        }
-        /*catch (Exception e ) {
             respBody = e.getMessage();
             resp.setStatus(500);
-            _logger.error(ERROR_TAG, respBody);
-        }*/
+            _logger.error("Error inserting movie on collection:" + respBody);
+        }
         setResponseData(resp, respBody);
     }
 
@@ -121,12 +117,16 @@ public class CollectionsCidServlet extends HttpServlet {
         return  null;
     }
 
-    private HtmlResult produceTemplate(String [] param, String cid,  String error, String query){
+    private HtmlResult produceTemplate(String [] param, String cid,  String error, String query) throws InvalidCommandException, SQLException {
 
         if (query == null) query = "top=5";
         else if (!query.contains("top=")) query += "&top=5";
 
-        HtmlResult resultFormat = doQuerytoDataBase(param,query);
+        HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(new CommandInfo(param[0],param[1],query), new HeaderInfo(new String[]{}));
+
+        if(resultFormat.resultInfo.getValues().isEmpty()) {
+            throw new InvalidCommandException("Invalid Pages");
+        }
 
         //Add collections links to each column
         List<Pair<String, String>> pairs = new ArrayList<>();
@@ -154,7 +154,7 @@ public class CollectionsCidServlet extends HttpServlet {
         resultFormat.addForm("Add Movie to Collection"
                 ,Arrays.asList(
                         new Pair<String,String>("method","POST"),
-                        new Pair<String,String>("action",String.format("/collections/%s",cid)))
+                        new Pair<String,String>("action",String.format("/collections/%s/movies",cid)))
                 ,Arrays.asList(
                         new Pair<String,List<Pair<String,String>>>("Movie ID",Arrays.asList(
                                 new Pair<String,String>("name","mid"),
@@ -169,17 +169,5 @@ public class CollectionsCidServlet extends HttpServlet {
                             new HtmlElement("font", error).addAttributes("color", "red"))
                     ,HtmlElement.SECOND_ELEMENT);
         return resultFormat;
-    }
-
-    private HtmlResult doQuerytoDataBase(String[] param, String query){
-        HtmlResult resultFormat;
-
-        try {
-            resultFormat = (HtmlResult) Manager.executeCommand(new CommandInfo(param[0],param[1],query), new HeaderInfo(new String[]{}));
-        } catch (InvalidCommandException | SQLException e) {
-            _logger.error(ERROR_TAG, e.getMessage());
-            resultFormat = new HtmlResult(new ResultInfo(false));
-        }
-        return  resultFormat;
     }
 }
