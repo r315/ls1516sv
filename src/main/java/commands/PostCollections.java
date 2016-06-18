@@ -4,6 +4,7 @@ import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
+import exceptions.PostException;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
@@ -16,7 +17,6 @@ import java.util.HashMap;
 public class PostCollections implements ICommand {
     private static final String INFO = "POST /collections - creates a new collection and returns its identifier, given the parameters \"name\" and \"description\".";
     private final String TITLE = "Collection Created";
-
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
