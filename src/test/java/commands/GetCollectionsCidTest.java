@@ -69,9 +69,9 @@ public class GetCollectionsCidTest {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        ArrayList<String> line1 = new ArrayList<>(); line1.add("1"); line1.add("1"); line1.add("Star Wars IV"); line1.add("1977");
-        ArrayList<String> line2 = new ArrayList<>(); line2.add("1"); line2.add("2"); line2.add("Star Wars V"); line2.add("1980");
-        ArrayList<String> line3 = new ArrayList<>(); line3.add("1"); line3.add("3"); line3.add("Star Wars VI"); line3.add("1983");
+        ArrayList<String> line1 = new ArrayList<>(); line1.add("1"); line1.add("Star Wars IV"); line1.add("1977");
+        ArrayList<String> line2 = new ArrayList<>(); line2.add("2"); line2.add("Star Wars V"); line2.add("1980");
+        ArrayList<String> line3 = new ArrayList<>(); line3.add("3"); line3.add("Star Wars VI"); line3.add("1983");
 
         data.add(line1); data.add(line2); data.add(line3);
 
