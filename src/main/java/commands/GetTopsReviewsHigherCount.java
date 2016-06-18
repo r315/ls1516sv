@@ -50,7 +50,6 @@ public class GetTopsReviewsHigherCount implements ICommand {
 
 		ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-		// TODO: mid doesn't exist
 		rs.next();
 		ArrayList<String> line = new ArrayList<>();
 		Calendar calendar = Calendar.getInstance();
