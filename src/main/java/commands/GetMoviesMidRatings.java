@@ -34,7 +34,7 @@ public class GetMoviesMidRatings implements ICommand {
 
             try {
                 mID = Utils.getInt(data.get("mid"));
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | NullPointerException e) {
                 throw new InvalidCommandVariableException();
             }
 

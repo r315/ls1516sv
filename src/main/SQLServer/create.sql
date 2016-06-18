@@ -33,7 +33,7 @@ CREATE TABLE Rating(
 
 CREATE TABLE Collection(
 	collection_id int IDENTITY(1,1) PRIMARY KEY,
-	name varchar(50) NOT NULL,
+	name varchar(50) UNIQUE NOT NULL,
 	description varchar(200) NOT NULL
 )
 

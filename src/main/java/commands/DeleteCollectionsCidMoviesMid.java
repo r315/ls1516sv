@@ -32,12 +32,9 @@ public class DeleteCollectionsCidMoviesMid implements ICommand {
             try {
                 mid = Utils.getInt(data.get("mid"));
                 cid = Utils.getInt(data.get("cid"));
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | NullPointerException e) {
                 throw new InvalidCommandVariableException();
             }
-
-            // TODO: cid & mid doesn't exist
-
 
             select.setInt(1,cid);
             select.setInt(2,mid);

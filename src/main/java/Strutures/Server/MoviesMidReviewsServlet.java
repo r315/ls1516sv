@@ -56,10 +56,14 @@ public class MoviesMidReviewsServlet extends HttpServlet {
             CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
 
-            produceTemplate(resultFormat, query, command, Optional.empty());
+            if (resultFormat.resultInfo.getValues().isEmpty()){
+                resp.setStatus(404);
+                respBody="Error 404.";
+            } else {
+                produceTemplate(resultFormat, query, command, Optional.empty());
 
-            respBody = resultFormat.getHtml();
-
+                respBody = resultFormat.getHtml();
+            }
 
             //// TODO: 25/05/2016
         }catch(Exception e){

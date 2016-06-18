@@ -58,8 +58,8 @@ public class GetMoviesMid implements ICommand {
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("ID");
-        columns.add("Titulo");
-        columns.add("Ano de Lançamento");
+        columns.add("Title");
+        columns.add("Release Year");
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 

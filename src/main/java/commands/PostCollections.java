@@ -40,6 +40,14 @@ public class PostCollections implements ICommand {
             ResultInfo result = createRI(rs);
 
             return result;
+        }catch (SQLException e){
+            int err = e.getErrorCode();
+            if(err == PostException.ENTRY_EXISTS)
+                throw new PostException(err,"Collection Already Exists!");
+            else
+                throw new PostException(err,e.getMessage());
+        }catch (NullPointerException | NumberFormatException e){
+            throw new InvalidCommandParametersException("Bad parameters");
         }
     }
 
