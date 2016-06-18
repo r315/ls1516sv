@@ -4,7 +4,9 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
+import Strutures.ResponseFormat.ResultInfo;
 import console.Manager;
+import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 import exceptions.PostException;
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +33,7 @@ import java.util.Optional;
 public class CollectionsCidServlet extends HttpServlet {
     private static final Charset utf8 = Charset.forName("utf-8");
     private static final Logger _logger = LoggerFactory.getLogger(CollectionsCidServlet.class);
+    private static final String ERROR_TAG = "Exception";
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -42,17 +46,14 @@ public class CollectionsCidServlet extends HttpServlet {
 
             _logger.info("New GET was received:" + path + (query == null ? "" : query));
 
-            if (query == null) query = "top=5";
-            else if (!query.contains("top=")) query += "&top=5";
-
-            respBody = produceTemplate(new CommandInfo(new String[]{method, path, query}),
+            respBody = produceTemplate(new String[]{method, path, query},
                     req.getPathInfo().substring(1),"",query ).getHtml();
+
             resp.setStatus(200);
         } catch (Exception e) {
-            //// TODO: 28/05/2016 better page
             respBody = e.getMessage();
             resp.setStatus(404);
-
+            _logger.error(ERROR_TAG, respBody);
         }
        setResponseData(resp, respBody);
     }
@@ -64,7 +65,8 @@ public class CollectionsCidServlet extends HttpServlet {
         try {
             CommandInfo command = new CommandInfo(new String[]{req.getMethod(),
                     req.getRequestURI(),
-                    String.format("mid=%s",req.getParameter("mid"))});
+                    String.format("mid=%s",
+                            req.getParameter("mid"))});
 
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(
                     command,
@@ -75,33 +77,35 @@ public class CollectionsCidServlet extends HttpServlet {
 
             resp.sendRedirect(String.format("/collections/%s",command.getData().get("cid")));
             resp.setStatus(303);
-        }catch (InvalidCommandParametersException | PostException e ){
+        }catch (PostException e ){
             try {
-                String cid = req.getPathInfo().split("/")[1];
+                String cid = req.getPathInfo().substring(1);
                 String msg = "";
 
-                if(e instanceof PostException){
-                    switch(((PostException)e).getErrorCode()){
-                        case PostException.ENTRY_EXISTS:
-                            msg = "Movie Already Exists";break;
-                        case PostException.ENTRY_NOT_FOUND:
-                            msg = "Movie not found on database";break;
-                    }
-                }else
+                if(e instanceof PostException)
+                    msg = e.getMessage();
+                else
                     msg = "Invalid ID!";
 
-                respBody = produceTemplate(new CommandInfo(new String[]{"GET",
-                                req.getServletPath()+"/"+cid,req.getQueryString()}),
+                respBody = produceTemplate(new String[]{"GET",
+                                req.getServletPath()+"/"+cid,req.getQueryString()},
                         cid, msg, req.getQueryString() ).getHtml();
                 resp.setStatus(200);
             } catch (Exception e1) {
-                respBody = "Error creating error message!";
-                resp.setStatus(400);
+                respBody = e.getMessage();
+                resp.setStatus(500);
+                _logger.error(ERROR_TAG, respBody);
             }
-        }catch (Exception e ) {
-            respBody = e.getMessage();
-            resp.setStatus(400);
+        } catch (SQLException e) {
+            //TODO For RED catch exceptions
+        } catch (InvalidCommandException e) {
+            //TODO For RED catch exceptions
         }
+        /*catch (Exception e ) {
+            respBody = e.getMessage();
+            resp.setStatus(500);
+            _logger.error(ERROR_TAG, respBody);
+        }*/
         setResponseData(resp, respBody);
     }
 
@@ -117,9 +121,12 @@ public class CollectionsCidServlet extends HttpServlet {
         return  null;
     }
 
-    private HtmlResult produceTemplate(CommandInfo ci, String cid,  String error, String query) throws Exception {
+    private HtmlResult produceTemplate(String [] param, String cid,  String error, String query){
 
-        HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(ci, new HeaderInfo(new String[]{}));
+        if (query == null) query = "top=5";
+        else if (!query.contains("top=")) query += "&top=5";
+
+        HtmlResult resultFormat = doQuerytoDataBase(param,query);
 
         //Add collections links to each column
         List<Pair<String, String>> pairs = new ArrayList<>();
@@ -162,5 +169,17 @@ public class CollectionsCidServlet extends HttpServlet {
                             new HtmlElement("font", error).addAttributes("color", "red"))
                     ,HtmlElement.SECOND_ELEMENT);
         return resultFormat;
+    }
+
+    private HtmlResult doQuerytoDataBase(String[] param, String query){
+        HtmlResult resultFormat;
+
+        try {
+            resultFormat = (HtmlResult) Manager.executeCommand(new CommandInfo(param[0],param[1],query), new HeaderInfo(new String[]{}));
+        } catch (InvalidCommandException | SQLException e) {
+            _logger.error(ERROR_TAG, e.getMessage());
+            resultFormat = new HtmlResult(new ResultInfo(false));
+        }
+        return  resultFormat;
     }
 }

@@ -40,7 +40,11 @@ public class PostCollectionsCidMovies implements ICommand {
             pstmt.close();
             return result;
         }catch (SQLException e){
-            throw new PostException(e.getErrorCode());
+            int err = e.getErrorCode();
+            if(err == PostException.ENTRY_EXISTS)
+                throw new PostException(err,"Movie Already Exists!");
+            else
+                throw new PostException(err,"Movie not found on database!");
         }catch (NullPointerException | NumberFormatException e){
             throw new InvalidCommandParametersException();
         }

@@ -4,6 +4,7 @@ import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
+import exceptions.PostException;
 import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
@@ -27,6 +28,9 @@ public class PostCollections implements ICommand {
             throw new InvalidCommandParametersException();
 
         try(Connection conn = ConnectionFactory.getConn()) {
+            name = data.get("name");
+            desc = data.get("description");
+
             PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, name);
             pstmt.setString(2, desc);
@@ -40,7 +44,14 @@ public class PostCollections implements ICommand {
             pstmt.close();
 
             return result;
-
+        }catch (SQLException e){
+            int err = e.getErrorCode();
+            if(err == PostException.ENTRY_EXISTS)
+                throw new PostException(err,"Collection Already Exists!");
+            else
+                throw new PostException(err,e.getMessage());
+        }catch (NullPointerException | NumberFormatException e){
+            throw new InvalidCommandParametersException("Bad parameters");
         }
     }
 
