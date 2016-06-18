@@ -4,6 +4,7 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
+import exceptions.InvalidCommandException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.Pair;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,13 +67,12 @@ public class MoviesMidReviewsRidServlet extends HttpServlet {
 
             respBody = resultFormat.getHtml();
 
-
-            //// TODO: 25/05/2016
-        }catch(Exception e){
-            //// TODO: 19/05/2016
-            resp.setStatus(404);
-            respBody="Error 404.";
+        } catch (InvalidCommandException | SQLException e) {
+            respBody = e.getMessage();
+            resp.setStatus(500);
+            _logger.error("Error:" + e.getClass().getName() + " | " + respBody);
         }
+
         byte[] respBodyBytes = respBody.getBytes(utf8);
         resp.setContentLength(respBodyBytes.length);
         OutputStream os = resp.getOutputStream();

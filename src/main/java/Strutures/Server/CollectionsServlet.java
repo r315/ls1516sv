@@ -34,7 +34,6 @@ public class CollectionsServlet extends HttpServlet{
 
     private static final Logger _logger = LoggerFactory.getLogger(CollectionsServlet.class);
     private static Charset utf8 = Charset.forName("utf-8");
-    private String ERROR_TAG = "Exception";
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -50,13 +49,12 @@ public class CollectionsServlet extends HttpServlet{
             _logger.info("New GET was received:" + path + (query == null ? "" : query));
 
             respBody = produceTemplate(new String[]{method, path},"",query).getHtml();
-
             resp.setStatus(200);
-        }catch(Exception e){
-            //// TODO: 19/05/2016
-            _logger.error("Exception:" + e.getClass().getName() + " | " +  e.getMessage());
+
+        }catch(InvalidCommandException | SQLException e){
+            respBody = "Error 404.";
             resp.setStatus(404);
-            respBody="Error 404.";
+            _logger.error("Exception:" + e.getClass().getName() + " | " +  e.getMessage());
         }
         setResponseData(resp,respBody);
     }
@@ -87,31 +85,27 @@ public class CollectionsServlet extends HttpServlet{
 
             resp.sendRedirect(String.format("/collections/%d",Integer.parseInt(ID)));
             resp.setStatus(303);
+
         }catch (PostException e){
             try {
                 respBody = produceTemplate(new String[]{"GET",req.getServletPath()},
-                        e.getMessage(), req.getQueryString() )
+                            e.getMessage(), req.getQueryString() )
                         .getHtml();
-            } catch (Exception e1) {
+
+            } catch (InvalidCommandException | SQLException e1) {
                 respBody = e.getMessage();
                 resp.setStatus(500);
-                _logger.error(ERROR_TAG, respBody);
+                _logger.error("Error: " + respBody);
             }
             resp.setStatus(200);
-        } catch (SQLException e) {
-            //TODO For RED catch exceptions
-        } catch (InvalidCommandException e) {
-            //TODO For RED catch exceptions
+
+        } catch (InvalidCommandException | SQLException e) {
+            respBody = e.getMessage();
+            resp.setStatus(500);
+            _logger.error("Error creating collection: " + e.getMessage());
         }
-//        catch (Exception e) {
-//            respBody = e.getMessage();
-//            resp.setStatus(500);
-//            _logger.error("Exception:" + e.getMessage());
-//            resp.setStatus(500);
-//        }
         setResponseData(resp, respBody);
     }
-
 
     private void setResponseData(HttpServletResponse resp, String page) throws IOException {
         byte[] respBodyBytes = page.getBytes(utf8);
@@ -121,13 +115,12 @@ public class CollectionsServlet extends HttpServlet{
         os.close();
     }
 
-    private HtmlResult produceTemplate(String [] param, String error, String query) {
-
+    private HtmlResult produceTemplate(String [] param, String error, String query) throws InvalidCommandException, SQLException {
 
         if (query == null) query = "top=5";
         else if (!query.contains("top=")) query += "&top=5";
 
-        HtmlResult resultFormat = doQuerytoDataBase(param, query);
+        HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(new CommandInfo(param[0],param[1],query), new HeaderInfo(new String[]{}));
 
         //Add collections links to each column
         List<Pair<String,String>> pairs=new ArrayList<>();
@@ -165,17 +158,4 @@ public class CollectionsServlet extends HttpServlet{
                     ,HtmlElement.SECOND_ELEMENT);
         return resultFormat;
     }
-
-    private HtmlResult doQuerytoDataBase(String[] param, String query){
-        HtmlResult resultFormat;
-
-        try {
-            resultFormat = (HtmlResult) Manager.executeCommand(new CommandInfo(param[0],param[1],query), new HeaderInfo(new String[]{}));
-        } catch (InvalidCommandException | SQLException e) {
-            _logger.error(ERROR_TAG, e.getMessage());
-            resultFormat = new HtmlResult(new ResultInfo(false));
-        }
-        return  resultFormat;
-    }
-
 }

@@ -12,6 +12,8 @@ import commands.*;
 import exceptions.InvalidCommandException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import java.util.Map;
  * Created by Red on 18/05/2016.
  */
 public class Manager {
+    private static final Logger log = LoggerFactory.getLogger(Manager.class);
     public static CommandMap commandMap;
     public static HeaderMap headersMap;
     private static Server server;
@@ -33,7 +36,7 @@ public class Manager {
             commandMap = createMap();
             headersMap = createHeadersMap();
         }catch(Exception e){
-            //// TODO: 19/05/2016
+           log.error("Fail to initialize Manager");
         }
     }
 
@@ -66,7 +69,7 @@ public class Manager {
         try{
             server.start();
         }catch(Exception e){
-            //// TODO: 19/05/2016
+            log.error("Fail to start server!");
         }finally {
             isActive=true;
         }
@@ -76,7 +79,7 @@ public class Manager {
         try{
             server.stop();
         }catch(Exception e){
-            //// TODO: 25/05/2016
+            log.error("Fail to stop server!");
         }finally {
             isActive=false;
         }
@@ -84,19 +87,6 @@ public class Manager {
 
     public static void ServerSetHandler(ServletHandler handler){
         server.setHandler(handler);
-    }
-
-
-
-    public static void ServerJoin(){
-        try{
-            server.stop();
-            server.join();
-        }catch(Exception e){
-            //// TODO: 19/05/2016
-        }finally {
-            isActive=false;
-        }
     }
 
     public static CommandMap createMap() throws Exception{
