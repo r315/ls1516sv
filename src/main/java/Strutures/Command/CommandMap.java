@@ -2,9 +2,11 @@ package Strutures.Command;
 
 import decoders.DecodeMethod;
 import decoders.DecodePath;
+import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandMethodException;
 import exceptions.InvalidCommandPathException;
 import exceptions.InvalidCommandTableException;
+
 import java.util.*;
 
 
@@ -54,7 +56,7 @@ public class CommandMap {
     }
 
     public ICommand get(CommandInfo cmdInfo)
-            throws InvalidCommandMethodException, InvalidCommandTableException, InvalidCommandPathException {
+            throws InvalidCommandException {
 
         if (cmdInfo == null) return null;
         HashMap<String, DataNode> tablesMap = commandsMap.get(cmdInfo.getMethod());

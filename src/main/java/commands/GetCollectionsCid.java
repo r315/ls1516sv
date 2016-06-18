@@ -2,6 +2,7 @@ package commands;
 
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
@@ -19,7 +20,7 @@ public class GetCollectionsCid implements ICommand {
     private final String TITLE = "'s Collection"; //Adicionar titulo ao retornar
 
     @Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         Boolean topB = false;
         int skip = 0, top = 1;
         String orderBy = "title";

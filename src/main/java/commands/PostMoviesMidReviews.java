@@ -1,5 +1,12 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,13 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-
-import exceptions.SqlInsertionException;
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandParametersException;
 
 /*
 POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the following parameters
@@ -32,7 +32,7 @@ public class PostMoviesMidReviews implements ICommand {
 	// TODO: Rollback
 
 	@Override
-	public ResultInfo execute(HashMap<String, String> data) throws Exception{
+	public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException{
 		ResultInfo ri = null;
 		
 		if(data == null)
@@ -59,16 +59,11 @@ public class PostMoviesMidReviews implements ICommand {
 			
 			int res = pstmt.executeUpdate();
 
-			if(res != 0){
+			if(res != 0)
 				ri = createResultInfo( pstmt.getGeneratedKeys());
-			
-			}			
+
 			pstmt.close();
-		}	
-		
-		if(ri == null)
-			throw new SqlInsertionException("Rating insertion Fail");
-		
+		}
 		return ri;
 	}
 

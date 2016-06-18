@@ -5,6 +5,8 @@ import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
+import exceptions.InvalidCommandException;
+import exceptions.PostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.Pair;
@@ -16,7 +18,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class MoviesServlet extends HttpServlet {
     private static final Logger _logger = LoggerFactory.getLogger(MoviesServlet.class);
@@ -27,7 +33,7 @@ public class MoviesServlet extends HttpServlet {
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);
-        String respBody;
+        String respBody=null;
         try{
             String method= req.getMethod();
             String path= req.getRequestURI();
@@ -35,17 +41,24 @@ public class MoviesServlet extends HttpServlet {
 
             _logger.info("New GET was received:" + path + (query == null ? "" : query));
 
-            if (query == null) query = "top=5";
-            else if (!query.contains("top=")) query += "&top=5";
+            if (query == null)
+                query = "top=5";
+            else if (!query.contains("top="))
+                query += "&top=5";
 
             HeaderInfo headerInfo = new HeaderInfo();
             CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
             produceTemplate(resultFormat, query, Optional.empty());
             respBody = resultFormat.getHtml();
-        }catch(Exception e){
+        }catch(InvalidCommandException e){
+            _logger.error(e.getMessage());
             resp.setStatus(404);
             respBody="Error 404.";
+        }catch(SQLException e){
+            _logger.error(e.getMessage());
+            resp.setStatus(500);
+            respBody="Error 500.";
         }
         byte[] respBodyBytes = respBody.getBytes(utf8);
         resp.setContentLength(respBodyBytes.length);
@@ -62,7 +75,6 @@ public class MoviesServlet extends HttpServlet {
         try {
             String method = req.getMethod();
             String path = req.getRequestURI();
-            String query= req.getQueryString();
             HeaderInfo headerInfo = new HeaderInfo();
             String params= String.format("title=%s&releaseYear=%s",req.getParameter("title"),req.getParameter("releaseYear"));
             CommandInfo command = new CommandInfo(method, path,params);
@@ -73,7 +85,7 @@ public class MoviesServlet extends HttpServlet {
 
             resp.setStatus(303);
             resp.sendRedirect(String.format("/movies/%d",Integer.parseInt(ID)));
-        }catch (Exception e){
+        }catch (PostException e){
             resp.setStatus(200);
             try{
                 String method="GET";
@@ -82,13 +94,33 @@ public class MoviesServlet extends HttpServlet {
                 HeaderInfo headerInfo = new HeaderInfo();
                 CommandInfo command = new CommandInfo(method,path,query);
                 HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
+
+                if (query == null)
+                    query = "top=5";
+                else if (!query.contains("top="))
+                    query += "&top=5";
+
                 produceTemplate(resultFormat, query, Optional.ofNullable(e.getMessage()));
                 respBody= resultFormat.getHtml();
-            }catch (Exception c){
-                resp.setStatus(400);
-                respBody="Error 400.";
+            }catch(InvalidCommandException e1){
+                _logger.error(e1.getMessage());
+                resp.setStatus(404);
+                respBody="Error 404.";
+            }catch(SQLException e1){
+                _logger.error(e1.getMessage());
+                resp.setStatus(500);
+                respBody="Error 500.";
             }
+        }catch(InvalidCommandException e){
+            _logger.error(e.getMessage());
+            resp.setStatus(404);
+            respBody="Error 404.";
+        }catch(SQLException e){
+            _logger.error(e.getMessage());
+            resp.setStatus(500);
+            respBody="Error 500.";
         }
+
         byte[] respBodyBytes = respBody.getBytes(utf8);
         resp.setContentLength(respBodyBytes.length);
         OutputStream os = resp.getOutputStream();
@@ -96,7 +128,7 @@ public class MoviesServlet extends HttpServlet {
         os.close();
     }
 
-    private void produceTemplate(HtmlResult resultFormat, String query, Optional<String> errorMessage) throws Exception {
+    private void produceTemplate(HtmlResult resultFormat, String query, Optional<String> errorMessage) {
         List<Pair<String,String>> pairs = new ArrayList<>();
 
         for (ArrayList<String> line : resultFormat.resultInfo.getValues()){
@@ -131,7 +163,7 @@ public class MoviesServlet extends HttpServlet {
         resultFormat.addPaging(Utils.paging(query, "/movies"));
 
         resultFormat.addForm("Insert a new Movie"
-                ,Arrays.asList(new Pair("method","POST"),new Pair("action","/movies"))
+                ,Arrays.asList(new Pair("method","POST"),new Pair("action",String.format("/movies?%s",query)))
                 ,Arrays.asList(
                         new Pair("Movie title",Arrays.asList(new Pair("name","title"),new Pair("type","text"),new Pair("required",null))),
                         new Pair("Release Year",Arrays.asList(new Pair("name","releaseYear"),new Pair("type","text"),new Pair("required",null)))
