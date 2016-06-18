@@ -44,9 +44,9 @@ public class PostCollectionsCidMovies implements ICommand {
         }catch (SQLException e){
             int err = e.getErrorCode();
             if(err == PostException.ENTRY_EXISTS)
-                throw new PostException(err,"Movie Already Exists!");
+                throw new PostException(err,"Movie Already Exist in collection!");
             else
-                throw new PostException(err,"Movie not found on database!");
+                throw new PostException(err,"Movie not found!");
         }catch (NullPointerException | NumberFormatException e){
             throw new InvalidCommandParametersException();
         }
