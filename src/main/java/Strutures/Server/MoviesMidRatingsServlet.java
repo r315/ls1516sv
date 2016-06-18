@@ -110,19 +110,6 @@ public class MoviesMidRatingsServlet extends HttpServlet {
                 )
         );
 
-        resultFormat.addNavigationLinks(
-                Arrays.asList(
-                        new Pair<>("Sort by Date","/movies?sortBy=addedDate"),
-                        new Pair<>("Sort by Date Desc","/movies?sortBy=addedDateDesc"),
-                        new Pair<>("Sort by Year","/movies?sortBy=year"),
-                        new Pair<>("Sort by Year Desc","/movies?sortBy=yearDesc"),
-                        new Pair<>("Sort by Title","/movies?sortBy=title"),
-                        new Pair<>("Sort by Title Desc","/movies?sortBy=titleDesc"),
-                        new Pair<>("Sort by Rating","/movies?sortBy=rating"),
-                        new Pair<>("Sort by Rating Desc","/movies?sortBy=ratingDesc")
-                )
-        );
-
         resultFormat.addFormGeneric(
                 String.format("Submit a rating to movie %s", movie_name)
                 ,Arrays.asList(new Pair("method","POST"),new Pair("action",String.format("/movies/%s/ratings",movie_id)))
