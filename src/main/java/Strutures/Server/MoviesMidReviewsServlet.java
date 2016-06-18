@@ -56,7 +56,7 @@ public class MoviesMidReviewsServlet extends HttpServlet {
             CommandInfo command = new CommandInfo(new String[]{method,path,query});
             HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(command,headerInfo);
 
-            if (resultFormat.resultInfo.getValues().isEmpty()){
+            if (resultFormat.resultInfo.getDisplayTitle().equals("'s Reviews")){
                 resp.setStatus(404);
                 respBody="Error 404.";
             } else {
