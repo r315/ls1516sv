@@ -1,5 +1,6 @@
 package Strutures.Server;
 
+import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        _logger.info("New GET was received:" + req.getRequestURI() + "Home");
+        _logger.info("New GET was received:" + req.getRequestURI() + " - Home");
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
@@ -40,6 +41,9 @@ public class HomeServlet extends HttpServlet {
                     new Pair<>("Top Ratings","/tops/ratings")
                 )
             );
+            resultFormat.addElementTo("body",
+                    new HtmlElement("div","João Duarte | Luís Almeida | Hugo Reis").
+                        addAttributes("style","position:absolute;bottom:0;width:99%;text-align:center"));
             respBody= resultFormat.getHtml();
         }catch(Exception e){
             //// TODO: 19/05/2016
