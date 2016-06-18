@@ -1,19 +1,23 @@
 package console;
 
-import Strutures.Command.*;
+import Strutures.Command.CommandInfo;
+import Strutures.Command.CommandMap;
+import Strutures.Command.HeaderInfo;
+import Strutures.Command.HeaderMap;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.Plain.TextResult;
 import Strutures.ResponseFormat.ResultInfo;
 import commands.*;
+import exceptions.InvalidCommandException;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Created by Red on 18/05/2016.
@@ -33,7 +37,9 @@ public class Manager {
         }
     }
 
-    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo) throws Exception{
+    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo)
+            throws SQLException, InvalidCommandException {
+
         ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
         return headersMap.getResponseMethod(headerInfo).apply(result);
     }

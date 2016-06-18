@@ -1,5 +1,12 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandVariableException;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,18 +14,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-
 public class GetMoviesMidReviewsRid implements ICommand {
     private static final String INFO = "GET /movies/{mid}/reviews/{rid} - returns the full information for the review rid of the movie identified by mid.";
     private final String TITLE = "'s Review by "; //Movie title before, Username after
 
     @Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         try(Connection conn = ConnectionFactory.getConn()) {
             int mID, rID;
 

@@ -2,6 +2,7 @@ package commands;
 
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
@@ -22,7 +23,7 @@ public class GetCollectionMoviesMid implements ICommand {
     private final String TITLE = "Movie Inserted";
 
     @Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         int mid;
 
         try {

@@ -1,5 +1,12 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandVariableException;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,19 +16,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-
 
 public class GetMoviesMidRatings implements ICommand {
     private static final String INFO = "GET /movies/{mid}/ratings - returns the rating information for the movie identified by mid.";
     private final String TITLE = "'s Ratings"; //Adicionar titulo ao retornar
 
     @Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         // TODO: data doesn't exist (nullpointerexception) 
         
         try(Connection conn = ConnectionFactory.getConn()) {

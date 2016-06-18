@@ -1,5 +1,11 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
+import sqlserver.ConnectionFactory;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,18 +13,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import sqlserver.ConnectionFactory;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandParametersException;
-
 public class PostCollections implements ICommand {
     private static final String INFO = "POST /collections - creates a new collection and returns its identifier, given the parameters \"name\" and \"description\".";
     private final String TITLE = "Collection Created";
 
 
     @Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         String name = data.get("name");
         String desc = data.get("description");
 

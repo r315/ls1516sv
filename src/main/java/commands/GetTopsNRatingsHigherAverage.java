@@ -1,5 +1,12 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandVariableException;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,18 +16,12 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandVariableException;
-
 public class GetTopsNRatingsHigherAverage implements ICommand {
 	private static final String INFO = "GET /tops/{n}/ratings/higher/average - returns a list with the n movies with higher average ratings, sorted decreasingly.";
 	private final String TITLE = " Movies with higher average ratings"; //Add n before
 
 	@Override
-	public ResultInfo execute(HashMap<String, String> data) throws Exception {
+	public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
 		Boolean topB = false;
 		int skip = 0, top = 1, n;
 

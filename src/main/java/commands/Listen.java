@@ -5,10 +5,12 @@ import Strutures.Server.*;
 import console.Manager;
 import Strutures.ResponseFormat.ResultInfo;
 
+import exceptions.InvalidCommandException;
 import org.eclipse.jetty.servlet.ServletHandler;
 import utils.Utils;
 
 
+import java.sql.SQLException;
 import java.util.HashMap;
 
 /**
@@ -18,7 +20,7 @@ public class Listen implements ICommand{
     private static final String INFO= "Listen - Application starts listening to http requests";
 
     @Override
-    public ResultInfo execute(HashMap<String, String> prmts) throws Exception {
+    public ResultInfo execute(HashMap<String, String> prmts) throws InvalidCommandException, SQLException {
         int port;
         try{
             port = Utils.getInt(prmts.get("port"));

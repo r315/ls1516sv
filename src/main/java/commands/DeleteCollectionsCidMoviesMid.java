@@ -21,7 +21,7 @@ public class DeleteCollectionsCidMoviesMid implements ICommand {
     private final String TITLE = "Movie deleted from Collection";
 
     @Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws SQLException, InvalidCommandVariableException {
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement select = conn.prepareStatement(getQuerySelect());

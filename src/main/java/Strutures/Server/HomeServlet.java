@@ -1,10 +1,6 @@
 package Strutures.Server;
 
-import Strutures.Command.CommandInfo;
-import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
-import Strutures.ResponseFormat.IResultFormat;
-import console.Manager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.Pair;
@@ -15,9 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by Red on 27/05/2016.
@@ -29,7 +23,7 @@ public class HomeServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        _logger.info("New GET was received:" + req.getRequestURI() + "aka Home");
+        _logger.info("New GET was received:" + req.getRequestURI() + "Home");
 
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));

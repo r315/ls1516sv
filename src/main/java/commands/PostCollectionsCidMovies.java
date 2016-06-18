@@ -1,18 +1,19 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
+import exceptions.PostException;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import exceptions.PostException;
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandParametersException;
 
 /**
  * Created by Luigi Sekuiya on 29/04/2016.
@@ -23,7 +24,7 @@ public class PostCollectionsCidMovies implements ICommand {
 
 
     @Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         int cid, mid;
         PreparedStatement pstmt;
 

@@ -2,6 +2,7 @@ package commands;
 
 import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 import exceptions.PostException;
 import sqlserver.ConnectionFactory;
@@ -21,7 +22,7 @@ public class PostMovies implements ICommand {
 	int mid;
 	
 	@Override
-    public ResultInfo execute(HashMap<String, String> data) throws Exception {
+    public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
 		ResultInfo ri = null;
 		if (data == null)
 			throw new InvalidCommandParametersException();
@@ -55,7 +56,7 @@ public class PostMovies implements ICommand {
 		}catch(SQLException e){
 			int errorCode= e.getErrorCode();
 			if(errorCode == PostException.ENTRY_EXISTS)
-				throw new PostException(errorCode,"Entry already exists!");
+				throw new PostException(errorCode,"Movie already exists!");
 		}
 
 		return ri;
