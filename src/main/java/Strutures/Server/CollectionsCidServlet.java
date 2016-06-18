@@ -124,8 +124,8 @@ public class CollectionsCidServlet extends HttpServlet {
 
         HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(new CommandInfo(param[0],param[1],query), new HeaderInfo(new String[]{}));
 
-        if(resultFormat.resultInfo.getValues().isEmpty()) {
-            throw new InvalidCommandException("Invalid Pages");
+        if(resultFormat.resultInfo.getDisplayTitle().equals("'s Collection")) {
+            throw new InvalidCommandException(String.format("Colection %s doesn't exists!",cid));
         }
 
         //Add collections links to each column
