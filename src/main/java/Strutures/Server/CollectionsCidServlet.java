@@ -124,7 +124,7 @@ public class CollectionsCidServlet extends HttpServlet {
 
         HtmlResult resultFormat = (HtmlResult) Manager.executeCommand(new CommandInfo(param[0],param[1],query), new HeaderInfo(new String[]{}));
 
-        if(resultFormat.resultInfo.getDisplayTitle().equals("'s Collection")) {
+        if(resultFormat.resultInfo.getDisplayTitle().equals(" Collection")) {
             throw new InvalidCommandException(String.format("Colection %s doesn't exists!",cid));
         }
 

@@ -17,7 +17,7 @@ import java.util.HashMap;
 
 public class GetCollectionsCid implements ICommand {
     private static final String INFO = "GET /collections/{cid} - returns the details for the cid collection, namely all the movies in that collection.";
-    private final String TITLE = "'s Collection"; //Adicionar titulo ao retornar
+    private final String TITLE = " Collection"; //Adicionar titulo ao retornar
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
