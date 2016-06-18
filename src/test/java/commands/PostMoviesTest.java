@@ -1,19 +1,18 @@
 package commands;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import Strutures.ResponseFormat.ResultInfo;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import sqlserver.ConnectionFactory;
-import Strutures.ResponseFormat.ResultInfo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class PostMoviesTest {
 
@@ -25,6 +24,8 @@ public class PostMoviesTest {
 			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('x','20000101')");
 
 			stmt.executeUpdate("DELETE Rating");
+
+			stmt.executeUpdate("DELETE Review");
 
 			stmt.executeUpdate("DELETE Movie");
 

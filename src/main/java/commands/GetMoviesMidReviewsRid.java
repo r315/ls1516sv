@@ -20,7 +20,10 @@ public class GetMoviesMidReviewsRid implements ICommand {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        try(Connection conn = ConnectionFactory.getConn()) {
+        try(
+                Connection conn = ConnectionFactory.getConn();
+                PreparedStatement pstmt = conn.prepareStatement(getQuery())
+        ) {
             int mID, rID;
 
             try {
@@ -30,15 +33,12 @@ public class GetMoviesMidReviewsRid implements ICommand {
                 throw new InvalidCommandVariableException();
             }
 
-            PreparedStatement pstmt = conn.prepareStatement(getQuery());
             pstmt.setInt(1, mID);
             pstmt.setInt(2, rID);
 
             ResultSet rs = pstmt.executeQuery();
 
             ResultInfo result = createRI(rs);
-
-            pstmt.close();
 
             return result;
         }

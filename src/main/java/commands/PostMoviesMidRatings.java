@@ -1,18 +1,17 @@
 package commands;
 
+import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandParametersException;
+import sqlserver.ConnectionFactory;
+import utils.Utils;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import sqlserver.ConnectionFactory;
-import utils.Utils;
-import Strutures.Command.ICommand;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandParametersException;
-import exceptions.SqlInsertionException;
 
 public class PostMoviesMidRatings implements ICommand {
 	private static final String TITLE = "Rating of a movie";
@@ -30,30 +29,27 @@ public class PostMoviesMidRatings implements ICommand {
 		ResultInfo ri = null;
 		if(data == null)
 			throw new InvalidCommandParametersException("Data is null");
-		
-		try(Connection conn = ConnectionFactory.getConn())
-		{
-			String rID;
-			int mID;
-			try{
-				rID= getRating(data.get("rating"));
-				mID = Utils.getInt(data.get("mid"));
-			}catch(NumberFormatException| NullPointerException e){
-				throw new InvalidCommandParametersException();
-			}
 
-			PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);
+		String rID;
+		int mID;
+		try{
+			rID= getRating(data.get("rating"));
+			mID = Utils.getInt(data.get("mid"));
+		}catch(NumberFormatException| NullPointerException e){
+			throw new InvalidCommandParametersException();
+		}
+
+		try(
+				Connection conn = ConnectionFactory.getConn();
+				PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);
+		){
+
 			pstmt.setInt(1,mID);
 			int res = pstmt.executeUpdate();
-
-			if(res != 0)
-				ri = createResultInfo(pstmt.getGeneratedKeys());
+			ri = createResultInfo(pstmt.getGeneratedKeys());
 			pstmt.close();
 		}	
-		
-		if(ri == null)
-			throw new SqlInsertionException("Rating insertion Fail");
-		
+
 		return ri;
 	}
 

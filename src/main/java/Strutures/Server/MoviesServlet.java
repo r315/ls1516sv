@@ -33,7 +33,7 @@ public class MoviesServlet extends HttpServlet {
         Charset utf8 = Charset.forName("utf-8");
         resp.setContentType(String.format("text/html; charset=%s",utf8.name()));
         resp.setStatus(200);
-        String respBody=null;
+        String respBody;
         try{
             String method= req.getMethod();
             String path= req.getRequestURI();
@@ -102,6 +102,12 @@ public class MoviesServlet extends HttpServlet {
 
                 produceTemplate(resultFormat, query, Optional.ofNullable(e.getMessage()));
                 respBody= resultFormat.getHtml();
+                //// TODO: 18/06/2016 use a method to write into stream instead of duplicating code
+                byte[] respBodyBytes = respBody.getBytes(utf8);
+                resp.setContentLength(respBodyBytes.length);
+                OutputStream os = resp.getOutputStream();
+                os.write(respBodyBytes);
+                os.close();
             }catch(InvalidCommandException e1){
                 _logger.error(e1.getMessage());
                 resp.setStatus(404);
@@ -120,12 +126,6 @@ public class MoviesServlet extends HttpServlet {
             resp.setStatus(500);
             respBody="Error 500.";
         }
-
-        byte[] respBodyBytes = respBody.getBytes(utf8);
-        resp.setContentLength(respBodyBytes.length);
-        OutputStream os = resp.getOutputStream();
-        os.write(respBodyBytes);
-        os.close();
     }
 
     private void produceTemplate(HtmlResult resultFormat, String query, Optional<String> errorMessage) {

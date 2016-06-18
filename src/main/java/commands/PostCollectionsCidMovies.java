@@ -26,12 +26,14 @@ public class PostCollectionsCidMovies implements ICommand {
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         int cid, mid;
-        PreparedStatement pstmt;
 
-        try(Connection conn = ConnectionFactory.getConn()) {
+        try(
+                Connection conn = ConnectionFactory.getConn();
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
             cid = Utils.getInt(data.get("cid"));
             mid = Utils.getInt(data.get("mid"));
-            pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
+
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
             pstmt.executeUpdate();

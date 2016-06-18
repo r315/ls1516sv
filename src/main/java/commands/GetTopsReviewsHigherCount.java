@@ -18,8 +18,10 @@ public class GetTopsReviewsHigherCount implements ICommand {
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
-		try(Connection conn = ConnectionFactory.getConn();
-			Statement stmt = conn.createStatement()) {
+		try(
+				Connection conn = ConnectionFactory.getConn();
+				Statement stmt = conn.createStatement()
+		) {
 
 			ResultSet rs = stmt.executeQuery(getQuery());
 

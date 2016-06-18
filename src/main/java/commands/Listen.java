@@ -7,6 +7,8 @@ import Strutures.ResponseFormat.ResultInfo;
 
 import exceptions.InvalidCommandException;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.Utils;
 
 
@@ -18,6 +20,7 @@ import java.util.HashMap;
  */
 public class Listen implements ICommand{
     private static final String INFO= "Listen - Application starts listening to http requests";
+    private static final Logger _logger = LoggerFactory.getLogger(Listen.class);
 
     @Override
     public ResultInfo execute(HashMap<String, String> prmts) throws InvalidCommandException, SQLException {
@@ -25,10 +28,10 @@ public class Listen implements ICommand{
         try{
             port = Utils.getInt(prmts.get("port"));
         }catch(NullPointerException e){
-            System.out.println("Missing port parameter.");
+            _logger.error("Missing port parameter. Server won't start.");
             return new ResultInfo(false);
         }catch (NumberFormatException n){
-            System.out.println("Invalid port parameter.");
+            _logger.error("Invalid port parameter. Server won't start.");
             return new ResultInfo(false);
         }
 
@@ -38,19 +41,10 @@ public class Listen implements ICommand{
         ServletHandler handler = new ServletHandler();
         Manager.ServerSetHandler(handler);
         AssociateHandlers(handler);
+
         //Starts listening to requests
         Manager.ServerStart();
-        //wait for server to initialize
-        //Optional
-        try{
-            Thread.sleep(10);
-        }catch(InterruptedException e){
-            System.out.println("Server could not initialize.");
-        }
-        //System.out.println("Http Server started listening requests on port: "+port);
 
-        //// TODO: 19/05/2016
-        //Change return to ResultInfo
         return new ResultInfo(false);
     }
 

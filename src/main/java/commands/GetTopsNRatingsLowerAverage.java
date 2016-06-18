@@ -42,17 +42,17 @@ public class GetTopsNRatingsLowerAverage implements ICommand {
 			top = skiptop.get("top");
 		}
 
-		try(Connection conn = ConnectionFactory.getConn()) {
+		try(
+				Connection conn = ConnectionFactory.getConn();
+				PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
+		){
 
-			PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
 			pstmt.setInt(1, n);
 			pstmt.setInt(2, skip);
 
 			ResultSet rs = pstmt.executeQuery();
 
 			ResultInfo result = printRS(rs, n);
-
-			pstmt.close();
 
 			return result;
 		}

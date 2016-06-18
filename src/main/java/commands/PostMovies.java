@@ -43,20 +43,16 @@ public class PostMovies implements ICommand {
 			movieInsert.setString(2, date + "0101");
 			mid = movieInsert.executeUpdate();
 
-			if (mid != 0) {
-				ri = createResultInfo(movieInsert.getGeneratedKeys());
-				ratingInsert.setInt(1, mid);
-				ratingInsert.executeUpdate();
-				conn.commit();
-			}else{
-				conn.rollback();
-				throw new SQLException("Invalid mID");
-			}
+			ri = createResultInfo(movieInsert.getGeneratedKeys());
+			ratingInsert.setInt(1, mid);
+			ratingInsert.executeUpdate();
+			conn.commit();
 
 		}catch(SQLException e){
 			int errorCode= e.getErrorCode();
 			if(errorCode == PostException.ENTRY_EXISTS)
 				throw new PostException(errorCode,"Movie already exists!");
+			else throw e;
 		}
 
 		return ri;

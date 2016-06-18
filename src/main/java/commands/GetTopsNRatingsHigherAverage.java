@@ -33,7 +33,7 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 
 		if (n < 0) throw new InvalidCommandVariableException();
 
-		if (data != null) {
+		if (data != null){
 			topB = (data.get("top") != null);
 			HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
 
@@ -44,17 +44,17 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 		n -= skip;
 		if (n < 1) n=1;
 
-		try(Connection conn = ConnectionFactory.getConn()) {
+		try(
+				Connection conn = ConnectionFactory.getConn();
+				PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
+		){
 
-			PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
 			pstmt.setInt(1, skip);
 			pstmt.setInt(2, n);
 
 			ResultSet rs = pstmt.executeQuery();
 
 			ResultInfo result = createRI(rs, n);
-
-			pstmt.close();
 
 			return result;
 		}

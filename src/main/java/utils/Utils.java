@@ -1,14 +1,14 @@
 package utils;
 
-import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import console.Manager;
 import exceptions.InvalidCommandParametersException;
+
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Luigi Sekuiya on 22/04/2016.
@@ -47,7 +47,7 @@ public class Utils {
         return map;
     }
 
-    public static HashMap<String, String> paging (String query, String link) {
+    public static HashMap<String, String> paging(String query, String link){
 
         //"(skip=)(\\d+)" StringBuffer result = new StringBuffer();
 

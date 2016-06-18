@@ -31,7 +31,11 @@ public class GetMoviesMidReviews implements ICommand {
             top = skiptop.get("top");
         }
 
-        try(Connection conn = ConnectionFactory.getConn()) {
+        try(
+                Connection conn = ConnectionFactory.getConn();
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
+
+        ) {
             int mID;
 
             try {
@@ -40,15 +44,12 @@ public class GetMoviesMidReviews implements ICommand {
                 throw new InvalidCommandVariableException();
             }
 
-            PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
             pstmt.setInt(1, mID);
             pstmt.setInt(2, skip);
 
             ResultSet rs = pstmt.executeQuery();
 
             ResultInfo result = createRI(rs);
-
-            pstmt.close();
 
             return result;
         }

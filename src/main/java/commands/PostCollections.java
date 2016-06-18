@@ -26,8 +26,10 @@ public class PostCollections implements ICommand {
         if(name == null || desc == null)
             throw new InvalidCommandParametersException();
 
-        try(Connection conn = ConnectionFactory.getConn()) {
-            PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
+        try(
+                Connection conn = ConnectionFactory.getConn();
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
+        ) {
             pstmt.setString(1, name);
             pstmt.setString(2, desc);
 
@@ -37,10 +39,7 @@ public class PostCollections implements ICommand {
 
             ResultInfo result = createRI(rs);
 
-            pstmt.close();
-
             return result;
-
         }
     }
 
