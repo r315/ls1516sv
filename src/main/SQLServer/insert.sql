@@ -39,8 +39,8 @@ INSERT INTO Collection (name,description) VALUES ('CollectionOne','The very firs
 INSERT INTO Collection (name,description) VALUES ('CollectionTwo','The one that comes after');
 INSERT INTO Collection (name,description) VALUES ('CollectionThree','The one that shouldnt be');
 
-INSERT INTO Collection (name,description) VALUES ('Saw triology','the first 3');
-INSERT INTO Collection (name,description) VALUES ('Saw triology','The next ones');
+INSERT INTO Collection (name,description) VALUES ('Saw Triology','the first 3');
+INSERT INTO Collection (name,description) VALUES ('Saw The Next 3','The next ones');
 INSERT INTO Collection (name,description) VALUES ('Saw','All of them');
 
 INSERT INTO Has (collection_id,movie_id) VALUES ('1','1');

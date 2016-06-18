@@ -64,8 +64,6 @@ public class MoviesMidReviewsServlet extends HttpServlet {
 
                 respBody = resultFormat.getHtml();
             }
-
-            //// TODO: 25/05/2016
         }catch(Exception e){
             //// TODO: 19/05/2016
             _logger.error("Exception:" + e.getClass().getName() + " | " +  e.getMessage());
@@ -158,7 +156,7 @@ public class MoviesMidReviewsServlet extends HttpServlet {
                                 addChild(new HtmlElement("option","4").addAttributes("value","4")).
                                 addChild(new HtmlElement("option","5").addAttributes("value","5")),
 
-                        // TODO: 13/06/2016 For reasons unknown, textarea appear with two tabs already filled.
+                        // TODO: 13/06/2016 Due to a small bug in the creating of the HTML, textarea appears with several tabs by default.
 
                         new HtmlElement("br","Summary:"),
                         new HtmlElement("textarea").addAttributes("name","summary").addAttributes("rows","3").addAttributes("cols","50").addAttributes("required",null),
