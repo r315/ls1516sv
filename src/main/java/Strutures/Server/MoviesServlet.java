@@ -114,8 +114,8 @@ public class MoviesServlet extends HttpServlet {
                 respBody="Error 404.";
             }catch(SQLException e1){
                 _logger.error(e1.getMessage());
-                resp.setStatus(500);
-                respBody="Error 500.";
+                resp.setStatus(400);
+                respBody="Error 400.";
             }
         }catch(InvalidCommandException e){
             _logger.error(e.getMessage());

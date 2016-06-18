@@ -52,6 +52,8 @@ public class PostMovies implements ICommand {
 			int errorCode= e.getErrorCode();
 			if(errorCode == PostException.ENTRY_EXISTS)
 				throw new PostException(errorCode,"Movie already exists!");
+			if(e.getErrorCode() == PostException.DATE_OR_TIME_CONVERTION_FAILED)
+				throw new PostException(errorCode,"Invalid Date!");
 			else throw e;
 		}
 
