@@ -29,7 +29,6 @@ public class Manager {
     public static CommandMap commandMap;
     public static HeaderMap headersMap;
     private static Server server;
-    private static boolean isActive;
 
     public static void Init(){
         try {
@@ -70,8 +69,6 @@ public class Manager {
             server.start();
         }catch(Exception e){
             log.error("Fail to start server!");
-        }finally {
-            isActive=true;
         }
     }
 
@@ -80,8 +77,6 @@ public class Manager {
             server.stop();
         }catch(Exception e){
             log.error("Fail to stop server!");
-        }finally {
-            isActive=false;
         }
     }
 
