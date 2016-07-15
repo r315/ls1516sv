@@ -38,7 +38,10 @@ public class PostMoviesMidReviews implements ICommand {
 		if(data == null)
 			throw new InvalidCommandParametersException("Data is null");
 		
-		try(Connection conn = ConnectionFactory.getConn())
+		try(
+				Connection conn = ConnectionFactory.getConn();
+				PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS)
+		)
 		{
 			Collection<String> values = new ArrayList<String>(); 
 			values.add(data.get("reviewerName"));
@@ -50,7 +53,6 @@ public class PostMoviesMidReviews implements ICommand {
 			if(values.size() != NPARAM)
 				throw new InvalidCommandParametersException();
 
-			PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS);			
 			pstmt.setInt(1, Utils.getInt(data.get("mid")));
 			pstmt.setString(2,(String) values.toArray()[0]);
 			pstmt.setString(3,(String) values.toArray()[1]);
@@ -61,8 +63,6 @@ public class PostMoviesMidReviews implements ICommand {
 
 			if(res != 0)
 				ri = createResultInfo( pstmt.getGeneratedKeys());
-
-			pstmt.close();
 		}
 		return ri;
 	}

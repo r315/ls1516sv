@@ -47,8 +47,7 @@ public class PostMoviesMidRatings implements ICommand {
 			pstmt.setInt(1,mID);
 			int res = pstmt.executeUpdate();
 			ri = createResultInfo(pstmt.getGeneratedKeys());
-			pstmt.close();
-		}	
+		}
 
 		return ri;
 	}
