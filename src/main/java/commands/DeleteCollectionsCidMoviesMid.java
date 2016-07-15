@@ -27,14 +27,8 @@ public class DeleteCollectionsCidMoviesMid implements ICommand {
                 PreparedStatement select = conn.prepareStatement(getQuerySelect());
                 PreparedStatement delete = conn.prepareStatement(getQueryDelete())
         ){
-            int mid, cid;
-
-            try {
-                mid = Utils.getInt(data.get("mid"));
-                cid = Utils.getInt(data.get("cid"));
-            } catch (NumberFormatException | NullPointerException e) {
-                throw new InvalidCommandVariableException();
-            }
+            int mid = Utils.getInt(data.get("mid"));
+            int cid = Utils.getInt(data.get("cid"));
 
             select.setInt(1,cid);
             select.setInt(2,mid);
@@ -46,11 +40,11 @@ public class DeleteCollectionsCidMoviesMid implements ICommand {
 
             delete.executeUpdate();
 
-            ResultInfo result = createRI(rs);
+            return createRI(rs);
 
-            return result;
-            
-        }
+            } catch (NumberFormatException e) {
+                throw new InvalidCommandVariableException();
+            }
     }
 
     @Override

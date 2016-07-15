@@ -23,13 +23,10 @@ public class GetTopsRatingsHigherAverage implements ICommand {
                 Connection conn = ConnectionFactory.getConn();
                 Statement stmt = conn.createStatement()
         ) {
-            ResultSet rs = stmt.executeQuery(getQuery());
+            ResultSet rs = stmt.executeQuery(getQuery(true));
 
-            ResultInfo result  = createRI(rs);
-
-            return result;
+            return createRI(rs, TITLE);
         }
-
     }
 
     @Override
@@ -37,29 +34,29 @@ public class GetTopsRatingsHigherAverage implements ICommand {
         return INFO;
     }
 
-    private String getQuery() {
-            return "SELECT TOP 1 Movie.*, ((one * 1. + two * 2 + three * 3 + four * 4 + five * 5) / nullif((one + two + three + four + five),0)) as rating FROM Movie\n" +
-                    "LEFT JOIN (\n" +
-                    "SELECT movie_id, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five\n" +
-                    "FROM\n" +
-                    "(\n" +
-                    "SELECT Rating.movie_id, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5]\n" +
-                    "FROM Rating\n" +
-                    "FULL JOIN (\n" +
-                    "SELECT movie_id, [1], [2], [3], [4], [5]\n" +
-                    "FROM\n" +
-                    "(SELECT movie_id, rating FROM Review GROUP BY rating, movie_ID) AS SourceTable\n" +
-                    "PIVOT\n" +
-                    "(\n" +
-                    "COUNT(SourceTable.rating)\n" +
-                    "FOR rating IN ([1], [2], [3], [4], [5])\n" +
-                    ") AS SourceTable) AS reviewRatings ON reviewRatings.movie_id = Rating.movie_id\n" +
-                    "GROUP BY Rating.movie_id, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5]\n" +
-                    ") AS average) AS ratings ON ratings.movie_id = Movie.movie_id\n" +
-                    "ORDER BY rating DESC";
+    static String getQuery(boolean DESC) {
+        return "SELECT TOP 1 Movie.*, ((one * 1. + two * 2 + three * 3 + four * 4 + five * 5) / nullif((one + two + three + four + five),0)) as rating FROM Movie\n" +
+                "LEFT JOIN (\n" +
+                "SELECT movie_id, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five\n" +
+                "FROM\n" +
+                "(\n" +
+                "SELECT Rating.movie_id, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5]\n" +
+                "FROM Rating\n" +
+                "FULL JOIN (\n" +
+                "SELECT movie_id, [1], [2], [3], [4], [5]\n" +
+                "FROM\n" +
+                "(SELECT movie_id, rating FROM Review GROUP BY rating, movie_ID) AS SourceTable\n" +
+                "PIVOT\n" +
+                "(\n" +
+                "COUNT(SourceTable.rating)\n" +
+                "FOR rating IN ([1], [2], [3], [4], [5])\n" +
+                ") AS SourceTable) AS reviewRatings ON reviewRatings.movie_id = Rating.movie_id\n" +
+                "GROUP BY Rating.movie_id, Rating.one, Rating.two, Rating.three, Rating.four, Rating.five, [1], [2], [3], [4], [5]\n" +
+                ") AS average) AS ratings ON ratings.movie_id = Movie.movie_id\n" +
+                "ORDER BY rating" + (DESC ? " DESC" : "");
     }
 
-    private ResultInfo createRI(ResultSet rs) throws SQLException {
+    static ResultInfo createRI(ResultSet rs, String title) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Title");
         columns.add("Release Year");
@@ -67,7 +64,7 @@ public class GetTopsRatingsHigherAverage implements ICommand {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        if (!rs.next()) return new ResultInfo(TITLE, columns, data);
+        if (!rs.next()) return new ResultInfo(title, columns, data);
 
         ArrayList<String> line = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
@@ -79,7 +76,7 @@ public class GetTopsRatingsHigherAverage implements ICommand {
 
         data.add(line);
 
-        return new ResultInfo(TITLE, columns, data);
+        return new ResultInfo(title, columns, data);
     }
 
 }

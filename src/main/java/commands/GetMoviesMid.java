@@ -22,27 +22,20 @@ public class GetMoviesMid implements ICommand {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery()))
         {
-
-            int mid;
-            try {
-                mid = Utils.getInt(data.get("mid"));
-            } catch (NumberFormatException e) {
-                throw new InvalidCommandVariableException();
-            }
-
+            int mid = Utils.getInt(data.get("mid"));
 
             pstmt.setInt(1, mid);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
+            return createRI(rs);
 
-            return result;
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandVariableException();
         }
     }
 

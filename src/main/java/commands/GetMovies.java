@@ -4,8 +4,10 @@ import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import sqlserver.ConnectionFactory;
+import utils.Pair;
 import utils.Utils;
 
+import java.security.InvalidParameterException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,37 +21,33 @@ import java.util.Locale;
 public class GetMovies implements ICommand {
     private static final String INFO = "GET /movies - returns a list with all movies.";
     private final String TITLE = "Movies List";
+    private static final HashMap<String,String> convertSort = convertOrder();
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        Boolean topB = false;
-        int skip = 0, top = 1;
-        String orderBy = "title";
+        String topS = data.get("top");
 
-        if (data != null) {
-            topB = (data.get("top") != null);
-            HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
+        Boolean topB = (topS != null);
+        int skip, top;
 
-            skip = skiptop.get("skip");
-            top = skiptop.get("top");
+        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
 
-            if (data.get("sortBy") != null) orderBy = orderBy(data.get("sortBy"));
-        }
+        skip = skiptop.value1;
+        top = skiptop.value2;
 
-
+        String orderBy = data.get("sortBy");
+        if (orderBy == null) orderBy = "title";
+        else if ((orderBy = convertSort.get(orderBy)) == null) throw new InvalidParameterException();
 
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top, orderBy))
         ){
-
             pstmt.setInt(1, skip);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
-
-            return result;
+            return createRI(rs);
         }
 
     }
@@ -110,39 +108,19 @@ public class GetMovies implements ICommand {
         return new ResultInfo(TITLE, columns, data);
     }
 
-    private String orderBy(String sortBy) {
+    private static HashMap<String,String> convertOrder() {
+        HashMap<String,String> convertSort = new HashMap<>();
 
-        String orderBy;
+        convertSort.put("addedDate","movie_id");
+        convertSort.put("addedDateDesc","movie_id DESC");
+        convertSort.put("year","release_year");
+        convertSort.put("yearDesc","release_year DESC");
+        convertSort.put("title","title");
+        convertSort.put("titleDesc","title DESC");
+        convertSort.put("rating","rating");
+        convertSort.put("ratingDesc","rating DESC");
 
-        switch(sortBy){
-            case "addedDate":
-                orderBy = "movie_id";
-                break;
-            case "addedDateDesc":
-                orderBy = "movie_id DESC";
-                break;
-            case "year":
-                orderBy = "release_year";
-                break;
-            case "yearDesc":
-                orderBy = "release_year DESC";
-                break;
-            case "title":
-                orderBy = "title";
-                break;
-            case "titleDesc":
-                orderBy = "title DESC";
-                break;
-            case "rating":
-                orderBy = "rating";
-                break;
-            case "ratingDesc":
-                orderBy = "rating DESC";
-                break;
-            default: orderBy = "title";
-        }
-
-        return orderBy;
+        return convertSort;
     }
 
 }

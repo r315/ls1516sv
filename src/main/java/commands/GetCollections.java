@@ -4,6 +4,7 @@ import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import sqlserver.ConnectionFactory;
+import utils.Pair;
 import utils.Utils;
 
 import java.sql.Connection;
@@ -22,31 +23,25 @@ public class GetCollections implements ICommand {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        Boolean topB = false;
-        int skip = 0, top = 1;
+        String topS = data.get("top");
 
-        if (data != null) {
-            topB = (data.get("top") != null);
-            HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
+        Boolean topB = (topS != null);
+        int skip, top;
 
-            skip = skiptop.get("skip");
-            top = skiptop.get("top");
-        }
+        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
 
-
+        skip = skiptop.value1;
+        top = skiptop.value2;
 
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
         ){
-
             pstmt.setInt(1, skip);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
-
-            return result;
+            return createRI(rs);
         }
 
     }

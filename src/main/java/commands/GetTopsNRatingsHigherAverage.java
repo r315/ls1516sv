@@ -5,6 +5,7 @@ import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
+import utils.Pair;
 import utils.Utils;
 
 import java.sql.Connection;
@@ -22,41 +23,35 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-		Boolean topB = false;
-		int skip = 0, top = 1, n;
+		String topS = data.get("top");
 
-		try {
-			n = Utils.getInt(data.get("n"));
-		} catch (NumberFormatException e) {
-			throw new InvalidCommandVariableException();
-		}
+		Boolean topB = (topS != null);
+		int skip, top;
 
-		if (n < 0) throw new InvalidCommandVariableException();
+		Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
 
-		if (data != null){
-			topB = (data.get("top") != null);
-			HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
-
-			skip = skiptop.get("skip");
-			top = skiptop.get("top");
-		}
-
-		n -= skip;
-		if (n < 1) n=1;
+		skip = skiptop.value1;
+		top = skiptop.value2;
 
 		try(
 				Connection conn = ConnectionFactory.getConn();
 				PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
 		){
+			int n = Utils.getInt(data.get("n"));
+			if (n < 0) throw new InvalidCommandVariableException();
+
+			n -= skip;
+			if (n < 1) n=1;
 
 			pstmt.setInt(1, skip);
 			pstmt.setInt(2, n);
 
 			ResultSet rs = pstmt.executeQuery();
 
-			ResultInfo result = createRI(rs, n);
+			return createRI(rs, n, TITLE);
 
-			return result;
+		} catch (NumberFormatException e) {
+			throw new InvalidCommandVariableException();
 		}
 
 	}
@@ -93,7 +88,7 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 		return query;
 	}
 
-	private ResultInfo createRI(ResultSet rs, int n) throws SQLException {
+	static ResultInfo createRI(ResultSet rs, int n, String title) throws SQLException {
 		ArrayList<String> columns = new ArrayList<>();
 		columns.add("ID");
 		columns.add("Title");
@@ -115,7 +110,7 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 			data.add(line);
 		}
 
-		return new ResultInfo(n + TITLE, columns, data);
+		return new ResultInfo(n + title, columns, data);
 	}
 
 }

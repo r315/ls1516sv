@@ -23,29 +23,19 @@ public class GetMoviesMidRatings implements ICommand {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        // TODO: data doesn't exist (nullpointerexception) 
-
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery())
         ){
+            int mid = Utils.getInt(data.get("mid"));
 
-            int mID;
-
-            try {
-                mID = Utils.getInt(data.get("mid"));
-            } catch (NumberFormatException | NullPointerException e) {
-                throw new InvalidCommandVariableException();
-            }
-
-
-            pstmt.setInt(1, mID);
+            pstmt.setInt(1, mid);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
-
-            return result;
+            return createRI(rs);
+        } catch (NumberFormatException | NullPointerException e) {
+            throw new InvalidCommandVariableException();
         }
 
     }

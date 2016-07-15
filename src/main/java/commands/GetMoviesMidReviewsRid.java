@@ -24,23 +24,17 @@ public class GetMoviesMidReviewsRid implements ICommand {
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery())
         ) {
-            int mID, rID;
+            int mid = Utils.getInt(data.get("mid")), rid = Utils.getInt(data.get("rid"));
 
-            try {
-                mID = Utils.getInt(data.get("mid"));
-                rID = Utils.getInt(data.get("rid"));
-            } catch (NumberFormatException e) {
-                throw new InvalidCommandVariableException();
-            }
-
-            pstmt.setInt(1, mID);
-            pstmt.setInt(2, rID);
+            pstmt.setInt(1, mid);
+            pstmt.setInt(2, rid);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
+            return createRI(rs);
 
-            return result;
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandVariableException();
         }
     }
 
