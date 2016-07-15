@@ -4,7 +4,6 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlResult;
-import Strutures.ResponseFormat.Html.HtmlTree;
 import console.Manager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,16 +17,13 @@ import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
- * Created by Luigi Sekuiya on 28/05/2016.
+ * Created by Red on 16/07/2016.
  */
-public class MoviesMidRatingsServlet extends HttpServlet {
-
+public class Servlet extends HttpServlet {
     private static final Logger _logger = LoggerFactory.getLogger(MoviesMidRatingsServlet.class);
 
     @Override
