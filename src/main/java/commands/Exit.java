@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import console.Manager;
 
@@ -9,7 +9,7 @@ import java.util.HashMap;
 /**
  * Created by Red on 26/04/2016.
  */
-public class Exit implements ICommand{
+public class Exit extends CommandBase {
     private final String INFO = "EXIT / - ends the application.";
 
     @Override

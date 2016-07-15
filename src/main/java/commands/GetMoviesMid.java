@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 
-public class GetMoviesMid implements ICommand {
+public class GetMoviesMid extends CommandBase {
     private static final String INFO = "GET /movies/{mid} - returns the detailed information for the movie identified by mid.";
     private final String TITLE = " Information"; //Adicionar titulo ao retornar
 

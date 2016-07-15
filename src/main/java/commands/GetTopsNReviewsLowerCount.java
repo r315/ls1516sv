@@ -1,13 +1,17 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
+
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -15,7 +19,7 @@ import java.util.HashMap;
 /**
  * Created by Luigi Sekuiya on 25/05/2016.
  */
-public class GetTopsNReviewsLowerCount implements ICommand {
+public class GetTopsNReviewsLowerCount extends CommandBase {
     private static final String INFO = "GET /tops/{n}/reviews/lower/count - returns a list with the n movies with lower review count.";
     private final String TITLE = " Movies with lower review count"; //Add n before
 

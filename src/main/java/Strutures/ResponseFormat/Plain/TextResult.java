@@ -13,13 +13,8 @@ import java.util.Map;
 public class TextResult implements IResultFormat {
 
     private String response;
-    private ResultInfo resultInfo;
 
-    public TextResult(ResultInfo ri){
-        resultInfo=ri;
-    }
-
-    public String generate(){
+    public String generate(ResultInfo resultInfo){
         if(resultInfo.getValues().isEmpty()){
             //System.out.println("No results found.");
             response="No results found.";

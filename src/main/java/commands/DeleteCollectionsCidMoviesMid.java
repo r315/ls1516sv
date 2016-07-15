@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 /**
  * Created by Luigi Sekuiya on 30/04/2016.
  */
-public class DeleteCollectionsCidMoviesMid implements ICommand {
+public class DeleteCollectionsCidMoviesMid extends CommandBase {
     private static final String INFO = "DELETE /collections/{cid}/movies/{mid} - removes the movie mid from the collections cid.";
     private final String TITLE = "Movie deleted from Collection";
 

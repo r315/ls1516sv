@@ -22,7 +22,7 @@ public class CommandMap {
         this.commandsMap=new HashMap<String, HashMap<String,DataNode>>();
     }
 
-    public boolean add(String sCommand, ICommand iCommand)
+    public boolean add(String sCommand, CommandBase iCommand)
             throws InvalidCommandPathException, InvalidCommandMethodException{
         //TODO make optional iCommand
         if(sCommand==null || iCommand==null) return false;
@@ -55,7 +55,7 @@ public class CommandMap {
         return true;
     }
 
-    public ICommand get(CommandInfo cmdInfo)
+    public CommandBase get(CommandInfo cmdInfo)
             throws InvalidCommandException {
 
         if (cmdInfo == null) return null;
@@ -100,11 +100,11 @@ public class CommandMap {
         throw new InvalidCommandPathException();
     }
 
-    public Set<ICommand> getCommands() {
-        return new AbstractSet<ICommand>(){
+    public Set<CommandBase> getCommands() {
+        return new AbstractSet<CommandBase>(){
             @Override
-            public Iterator<ICommand> iterator(){
-                return new Iterator<ICommand>(){
+            public Iterator<CommandBase> iterator(){
+                return new Iterator<CommandBase>(){
                     Iterator<HashMap<String,DataNode>> method_it=commandsMap.values().iterator();
                     Iterator<DataNode> dataNode_it= null;
                     CNode curr=null;
@@ -135,7 +135,7 @@ public class CommandMap {
                     }
 
                     @Override
-                    public ICommand next(){
+                    public CommandBase next(){
                         if (!hasNext()) throw new NoSuchElementException();
                         checked=false;
                         return curr.getCommand();

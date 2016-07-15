@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import sqlserver.ConnectionFactory;
 
@@ -13,7 +13,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class GetTopsRatingsHigherAverage implements ICommand {
+public class GetTopsRatingsHigherAverage extends CommandBase {
     private static final String INFO = "GET /tops/ratings/higher/average - returns the detail for the movie with the higher average rating.";
     private final String TITLE = "Movie with higher average rating";
 

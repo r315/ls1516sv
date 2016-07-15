@@ -1,5 +1,6 @@
 package utils;
 
+import Strutures.Command.CommandBase;
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.Html.HtmlResult;
@@ -47,6 +48,7 @@ public class Utils {
         return map;
     }
 
+    //TODO: Check this method
     public static HashMap<String, String> paging(String query, String link){
 
         //"(skip=)(\\d+)" StringBuffer result = new StringBuffer();
@@ -78,23 +80,25 @@ public class Utils {
 
             HeaderInfo headerInfo = new HeaderInfo();
             CommandInfo command;
-            HtmlResult resultFormat;
+            CommandBase commandBase;
 
             if ( prevSkip != null) {
-
                 command = new CommandInfo("GET", link, String.format("top=%s&skip=%s", top, prevSkip));
-                resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
+                //resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
+                commandBase = Manager.commandMap.get(command);
+                commandBase.execute(command.getData());
 
-                if (resultFormat.resultInfo.getValues().isEmpty()) paging.put("prev", null);
+                if (commandBase.getResultInfo().getValues().isEmpty()) paging.put("prev", null);
                 //else paging.put("prev", String.format("%s?top=%s&skip=%s", link, top, prevSkip));
                 else paging.put("prev",String.format("%s?%s", link, pagingFormat(query, prevSkip, top)));
             } else paging.put("prev", null);
             //Next
 
             command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
-            resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
+            commandBase = Manager.commandMap.get(command);
+            commandBase.execute(command.getData());
 
-            if (resultFormat.resultInfo.getValues().isEmpty()) paging.put("next", null);
+            if (commandBase.getResultInfo().getValues().isEmpty()) paging.put("next", null);
             //else paging.put("next", String.format("%s?top=%s&skip=%s", link, top, nextSkip));
             else paging.put("next",String.format("%s?%s", link, pagingFormat(query, nextSkip, top)));
         }catch (Exception e){

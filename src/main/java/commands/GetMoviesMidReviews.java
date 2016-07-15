@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GetMoviesMidReviews implements ICommand {
+public class GetMoviesMidReviews extends CommandBase {
     private static final String INFO = "GET /movies/{mid}/reviews - returns all the reviews for the movie identified by mid.";
     private final String TITLE = "'s Reviews"; //Adicionar titulo ao retornar
 

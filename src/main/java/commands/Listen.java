@@ -1,16 +1,14 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
+import Strutures.ResponseFormat.ResultInfo;
 import Strutures.Server.*;
 import console.Manager;
-import Strutures.ResponseFormat.ResultInfo;
-
 import exceptions.InvalidCommandException;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import utils.Utils;
-
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,7 +16,7 @@ import java.util.HashMap;
 /**
  * Created by Red on 18/05/2016.
  */
-public class Listen implements ICommand{
+public class Listen extends CommandBase {
     private static final String INFO= "Listen - Application starts listening to http requests";
     private static final Logger _logger = LoggerFactory.getLogger(Listen.class);
 

@@ -15,15 +15,10 @@ import java.util.List;
 
 public class HtmlResult implements IResultFormat {
 	private HtmlTree page;
-	public ResultInfo resultInfo;
 
 	public HtmlResult(){ page = new HtmlTree();	}
-	public HtmlResult(ResultInfo ri){
-		resultInfo=ri;
-	}
 
-	
-	public String generate() {
+	public String generate(ResultInfo resultInfo) {
 		if (resultInfo == null) {
 			return getHtml(); //blankPage
 		}

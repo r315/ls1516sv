@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
-public class GetMoviesMidRatings implements ICommand {
+public class GetMoviesMidRatings extends CommandBase {
     private static final String INFO = "GET /movies/{mid}/ratings - returns the rating information for the movie identified by mid.";
     private final String TITLE = "'s Ratings"; //Adicionar titulo ao retornar
 

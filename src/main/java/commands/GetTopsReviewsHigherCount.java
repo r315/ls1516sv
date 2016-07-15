@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import sqlserver.ConnectionFactory;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class GetTopsReviewsHigherCount implements ICommand {
+public class GetTopsReviewsHigherCount extends CommandBase {
 	private static final String INFO = "GET /tops/reviews/higher/count - returns the detail for the movie with most reviews.";
 	private final String TITLE = "Movie with most reviews";
 

@@ -24,7 +24,7 @@ public class MainApp {
 				}
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
-				String result= Manager.executeCommand(command,headerInfo).generate();
+				String result= Manager.executeCommand(command).getResult("accept:text/html");
 				if(result!=null)Manager.displayResponse(result,headerInfo);
 
 				}catch(Exception e){

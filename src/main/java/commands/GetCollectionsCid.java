@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-public class GetCollectionsCid implements ICommand {
+public class GetCollectionsCid extends CommandBase {
     private static final String INFO = "GET /collections/{cid} - returns the details for the cid collection, namely all the movies in that collection.";
     private final String TITLE = " Collection"; //Adicionar titulo ao retornar
 

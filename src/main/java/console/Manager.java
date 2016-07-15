@@ -1,9 +1,6 @@
 package console;
 
-import Strutures.Command.CommandInfo;
-import Strutures.Command.CommandMap;
-import Strutures.Command.HeaderInfo;
-import Strutures.Command.HeaderMap;
+import Strutures.Command.*;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.Plain.TextResult;
@@ -14,11 +11,13 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import templates.GetMoviesHtml;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,11 +39,18 @@ public class Manager {
         }
     }
 
-    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo)
-            throws SQLException, InvalidCommandException {
+//    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo)
+//            throws SQLException, InvalidCommandException {
+//
+//        ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
+//        return headersMap.getResponseMethod(headerInfo).apply(result);
+//    }
 
-        ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
-        return headersMap.getResponseMethod(headerInfo).apply(result);
+    public static CommandBase executeCommand(CommandInfo commandInfo)
+            throws SQLException, InvalidCommandException {
+        CommandBase cmdbase = commandMap.get(commandInfo);
+        cmdbase.execute(commandInfo.getData());
+        return cmdbase;
     }
 
     public static void displayResponse(String response, HeaderInfo headerinfo){
@@ -91,13 +97,18 @@ public class Manager {
 
     public static CommandMap createMap() throws Exception{
         CommandMap map=new CommandMap();
+        HashMap<String, IResultFormat> headermap = new HashMap<>();
+        headermap.put("accept:text/plain",new GetMoviesHtml());
+
+
         map.add("POST /movies",new PostMovies());
         map.add("POST /movies/{mid}/ratings",new PostMoviesMidRatings());
         map.add("POST /movies/{mid}/reviews",new PostMoviesMidReviews());
         map.add("POST /collections",new PostCollections());
         map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
 
-        map.add("GET /movies",new GetMovies());
+        map.add("GET /movies",new GetMovies(headermap));
+
         map.add("GET /movies/{mid}",new GetMoviesMid());
         map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());
         map.add("GET /movies/{mid}/reviews",new GetMoviesMidReviews());

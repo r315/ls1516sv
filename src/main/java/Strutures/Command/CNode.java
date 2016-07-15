@@ -8,10 +8,10 @@ import java.util.Iterator;
  */
 public class CNode {
     private Collection<String> resources;
-    ICommand command;
+    CommandBase command;
     private CNode next;
 
-    public CNode(Collection<String> resources,ICommand command){
+    public CNode(Collection<String> resources,CommandBase command){
         this.resources=resources;
         this.command=command;
     }
@@ -36,7 +36,7 @@ public class CNode {
         return resources.size();
     }
 
-    public ICommand getCommand(){
+    public CommandBase getCommand(){
         return command;
     }
 }

@@ -1,6 +1,7 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
+import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import sqlserver.ConnectionFactory;
@@ -16,9 +17,15 @@ import java.util.HashMap;
 import java.util.Locale;
 
 
-public class GetMovies implements ICommand {
+public class GetMovies extends CommandBase {
     private static final String INFO = "GET /movies - returns a list with all movies.";
     private final String TITLE = "Movies List";
+
+
+    public GetMovies(HashMap<String,IResultFormat> hdrmap)
+    {
+        super(hdrmap);
+    }
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
@@ -47,9 +54,9 @@ public class GetMovies implements ICommand {
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
+            resultInfo = createRI(rs);
 
-            return result;
+            return resultInfo;
         }
 
     }

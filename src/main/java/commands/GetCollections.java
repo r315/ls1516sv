@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import sqlserver.ConnectionFactory;
@@ -16,7 +16,7 @@ import java.util.HashMap;
 /**
  * Created by Luigi Sekuiya on 29/04/2016.
  */
-public class GetCollections implements ICommand {
+public class GetCollections extends CommandBase {
     private static final String INFO = "GET /collections - returns the list of collections, using the insertion order.";
     private final String TITLE = "Collections list";
 

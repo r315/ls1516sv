@@ -1,6 +1,6 @@
 package commands;
 
-import Strutures.Command.ICommand;
+import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 /**
  * Created by Luigi Sekuiya on 29/04/2016.
  */
-public class PostCollectionsCidMovies implements ICommand {
+public class PostCollectionsCidMovies extends CommandBase {
     private static final String INFO = "POST /collections/{cid}/movies/ - adds a movie to the cid collection, given \"mid\".";
     private final String TITLE = "Movie inserted into Collection";
 
