@@ -1,17 +1,15 @@
 package commands;
 
 import Strutures.Command.ICommand;
+import Strutures.ResponseFormat.ResultInfo;
 import Strutures.Server.*;
 import console.Manager;
-import Strutures.ResponseFormat.ResultInfo;
-
 import exceptions.InvalidCommandException;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.Utils;
 
-
+import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -26,15 +24,17 @@ public class Listen implements ICommand{
     public ResultInfo execute(HashMap<String, String> prmts) throws InvalidCommandException, SQLException {
         int port;
         try{
-            port = Utils.getInt(prmts.get("port"));
-        }catch(NullPointerException e){
-            _logger.error("Missing port parameter. Server won't start.");
-            return new ResultInfo(false);
+            String aux_port= prmts.get("port");
+            if(aux_port==null){
+                _logger.error("Invalid port parameter. Server won't start.");
+                throw new InvalidParameterException();
+            }
+
+            port = Integer.parseInt(aux_port);
         }catch (NumberFormatException n){
             _logger.error("Invalid port parameter. Server won't start.");
-            return new ResultInfo(false);
+            throw new InvalidParameterException();
         }
-
         Manager.ServerCreate(port);
 
         //Create a handler for each functionality
