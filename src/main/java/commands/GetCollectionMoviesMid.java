@@ -14,9 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 28/05/2016.
- */
 public class GetCollectionMoviesMid implements ICommand {
 
     private static final String INFO = "POST /collections/having/movie/{mid2}";

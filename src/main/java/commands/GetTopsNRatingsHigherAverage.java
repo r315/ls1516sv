@@ -35,7 +35,7 @@ public class GetTopsNRatingsHigherAverage implements ICommand {
 
 		try(
 				Connection conn = ConnectionFactory.getConn();
-				PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
+				PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
 		){
 			int n = Utils.getInt(data.get("n"));
 			if (n < 0) throw new InvalidCommandVariableException();

@@ -8,10 +8,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class GetTopsRatingsLowerAverage implements ICommand {
 	private static final String INFO = "GET /tops/ratings/lower/average - returns the detail for the movie with the lower average rating.";

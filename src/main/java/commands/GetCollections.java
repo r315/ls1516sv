@@ -14,9 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 29/04/2016.
- */
 public class GetCollections implements ICommand {
     private static final String INFO = "GET /collections - returns the list of collections, using the insertion order.";
     private final String TITLE = "Collections list";

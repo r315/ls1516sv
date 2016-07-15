@@ -8,14 +8,12 @@ import sqlserver.ConnectionFactory;
 import utils.Pair;
 import utils.Utils;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.Calendar;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 25/05/2016.
- */
 public class GetTopsNReviewsLowerCount implements ICommand {
     private static final String INFO = "GET /tops/{n}/reviews/lower/count - returns a list with the n movies with lower review count.";
     private final String TITLE = " Movies with lower review count"; //Add n before
