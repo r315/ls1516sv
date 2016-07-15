@@ -21,12 +21,6 @@ public class GetMovies extends CommandBase {
     private static final String INFO = "GET /movies - returns a list with all movies.";
     private final String TITLE = "Movies List";
 
-
-    public GetMovies(HashMap<String,IResultFormat> hdrmap)
-    {
-        super(hdrmap);
-    }
-
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         Boolean topB = false;
@@ -54,7 +48,7 @@ public class GetMovies extends CommandBase {
 
             ResultSet rs = pstmt.executeQuery();
 
-            resultInfo = createRI(rs);
+            ResultInfo resultInfo = createRI(rs);
 
             return resultInfo;
         }

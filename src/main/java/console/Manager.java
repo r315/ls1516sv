@@ -33,24 +33,16 @@ public class Manager {
     public static void Init(){
         try {
             commandMap = createMap();
-            headersMap = createHeadersMap();
         }catch(Exception e){
            log.error("Fail to initialize Manager");
         }
     }
 
-//    public static IResultFormat executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo)
-//            throws SQLException, InvalidCommandException {
-//
-//        ResultInfo result = commandMap.get(commandInfo).execute(commandInfo.getData());
-//        return headersMap.getResponseMethod(headerInfo).apply(result);
-//    }
-
-    public static CommandBase executeCommand(CommandInfo commandInfo)
+    public static String executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo)
             throws SQLException, InvalidCommandException {
         CommandBase cmdbase = commandMap.get(commandInfo);
-        cmdbase.execute(commandInfo.getData());
-        return cmdbase;
+        ResultInfo result = cmdbase.execute(commandInfo.getData());
+        return cmdbase.getResult(headerInfo,result);
     }
 
     public static void displayResponse(String response, HeaderInfo headerinfo){
@@ -97,9 +89,6 @@ public class Manager {
 
     public static CommandMap createMap() throws Exception{
         CommandMap map=new CommandMap();
-        HashMap<String, IResultFormat> headermap = new HashMap<>();
-        headermap.put("accept:text/plain",new GetMoviesHtml());
-
 
         map.add("POST /movies",new PostMovies());
         map.add("POST /movies/{mid}/ratings",new PostMoviesMidRatings());
@@ -107,7 +96,8 @@ public class Manager {
         map.add("POST /collections",new PostCollections());
         map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
 
-        map.add("GET /movies",new GetMovies(headermap));
+        map.add("GET /movies",new GetMovies()
+                .addResultFormat("text/html",new GetMoviesHtml()));
 
         map.add("GET /movies/{mid}",new GetMoviesMid());
         map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());
@@ -129,13 +119,6 @@ public class Manager {
         map.add("LISTEN /", new Listen());
         map.add("EXIT /",new Exit());
         map.add("OPTION /",new Options());
-        return map;
-    }
-
-    public static HeaderMap createHeadersMap(){
-        HeaderMap map=new HeaderMap();
-        map.addResponseMethod("text/html",  ri-> new HtmlResult(ri));
-        map.addResponseMethod("text/plain", ri-> new TextResult(ri));
         return map;
     }
 

@@ -8,5 +8,5 @@ import java.util.Map;
  * Created by Red on 18/05/2016.
  */
 public interface IResultFormat {
-    String generate(ResultInfo ri) throws Exception;
+    String generate(ResultInfo ri);
 }

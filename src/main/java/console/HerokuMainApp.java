@@ -24,7 +24,7 @@ public class HerokuMainApp {
         try {
             HeaderInfo headerInfo = new HeaderInfo(userArgs);
             CommandInfo command = new CommandInfo(userArgs);
-            String result= Manager.executeCommand(command).getResult("accept:text/html");
+            String result= Manager.executeCommand(command,headerInfo);
             if(result!=null)Manager.displayResponse(result,headerInfo);
 
         }catch(Exception e){
