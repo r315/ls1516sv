@@ -26,7 +26,6 @@ import java.util.Map;
 public class Manager {
     private static final Logger log = LoggerFactory.getLogger(Manager.class);
     public static CommandMap commandMap;
-    public static HeaderMap headersMap;
     private static Server server;
     private static boolean isActive;
 
