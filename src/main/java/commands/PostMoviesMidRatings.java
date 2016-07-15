@@ -41,7 +41,7 @@ public class PostMoviesMidRatings implements ICommand {
 
 		try(
 				Connection conn = ConnectionFactory.getConn();
-				PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);
+				PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS)
 		){
 
 			pstmt.setInt(1,mID);

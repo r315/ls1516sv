@@ -10,14 +10,10 @@ import utils.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 29/04/2016.
- */
 public class PostCollectionsCidMovies implements ICommand {
     private static final String INFO = "POST /collections/{cid}/movies/ - adds a movie to the cid collection, given \"mid\".";
     private final String TITLE = "Movie inserted into Collection";
@@ -36,11 +32,11 @@ public class PostCollectionsCidMovies implements ICommand {
 
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
+
             pstmt.executeUpdate();
-            ResultSet rs = pstmt.getGeneratedKeys();
-            ResultInfo result = createRI();
-            pstmt.close();
-            return result;
+
+            return createRI();
+
         }catch (SQLException e){
             int err = e.getErrorCode();
             if(err == PostException.ENTRY_EXISTS)
@@ -50,7 +46,6 @@ public class PostCollectionsCidMovies implements ICommand {
         }catch (NullPointerException | NumberFormatException e){
             throw new InvalidCommandParametersException();
         }
-        //return new ResultInfo(TITLE, null,null);
     }
 
     @Override

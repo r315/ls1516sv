@@ -75,7 +75,7 @@ public class Manager {
 
     public static void ServerStop(){
         try{
-            server.stop();
+            if (server != null) server.stop();
         }catch(Exception e){
             log.error("Fail to stop server!");
         }
