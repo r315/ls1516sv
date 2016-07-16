@@ -41,14 +41,13 @@ public class PostMoviesMidRatings extends CommandBase {
 
 		try(
 				Connection conn = ConnectionFactory.getConn();
-				PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS);
+				PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS)
 		){
 
 			pstmt.setInt(1,mID);
 			int res = pstmt.executeUpdate();
 			ri = createResultInfo(pstmt.getGeneratedKeys());
-			pstmt.close();
-		}	
+		}
 
 		return ri;
 	}

@@ -5,56 +5,47 @@ import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
+import utils.Pair;
 import utils.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class GetTopsNRatingsLowerAverage extends CommandBase {
 	private static final String INFO = "GET /tops/{n}/ratings/lower/average - returns a list with the n movies with the lower average ratings, sorted decreasingly.";
 	private final String TITLE = " Movies with lower average ratings"; //Add n before
 
-
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-		Boolean topB = false;
-		int skip = 0, top = 1, n;
+		String topS = data.get("top");
 
-		try {
-			n = Utils.getInt(data.get("n"));
-		} catch (NumberFormatException e) {
-			throw new InvalidCommandVariableException();
-		}
+		Boolean topB = (topS != null);
+		int skip, top;
 
-		if (n < 0) throw new InvalidCommandVariableException();
+		Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
 
-		if (data != null) {
-			topB = (data.get("top") != null);
-			HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
-
-			skip = skiptop.get("skip");
-			top = skiptop.get("top");
-		}
+		skip = skiptop.value1;
+		top = skiptop.value2;
 
 		try(
 				Connection conn = ConnectionFactory.getConn();
-				PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top));
+				PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
 		){
+			int n = Utils.getInt(data.get("n"));
+			if (n < 0) throw new InvalidCommandVariableException();
 
 			pstmt.setInt(1, n);
 			pstmt.setInt(2, skip);
 
 			ResultSet rs = pstmt.executeQuery();
 
-			ResultInfo result = printRS(rs, n);
+			return GetTopsNRatingsHigherAverage.createRI(rs, n, TITLE);
 
-			return result;
+		} catch (NumberFormatException e) {
+			throw new InvalidCommandVariableException();
 		}
 
 	}
@@ -88,31 +79,6 @@ public class GetTopsNRatingsLowerAverage extends CommandBase {
 						") AS tudo ORDER BY rating DESC OFFSET ? ROWS";
 		if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
 		return query;
-	}
-
-	private ResultInfo printRS(ResultSet rs, int n) throws SQLException {
-		ArrayList<String> columns = new ArrayList<>();
-		columns.add("ID");
-		columns.add("Title");
-		columns.add("Release Year");
-		columns.add("Average Rating");
-
-		ArrayList<ArrayList<String>> data = new ArrayList<>();
-
-		while(rs.next()) {
-			ArrayList<String> line = new ArrayList<>();
-			Calendar calendar = Calendar.getInstance();
-			calendar.setTime(rs.getDate("release_year"));
-
-			line.add(rs.getString("movie_id"));
-			line.add(rs.getString("title"));
-			line.add(Integer.toString(calendar.get(Calendar.YEAR)));
-			line.add(String.format(Locale.FRENCH,"%.2f", rs.getFloat("rating")));
-
-			data.add(line);
-		}
-
-		return new ResultInfo(n + TITLE, columns, data);
 	}
 
 }

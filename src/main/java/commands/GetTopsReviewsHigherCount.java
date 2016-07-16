@@ -25,9 +25,7 @@ public class GetTopsReviewsHigherCount extends CommandBase {
 
 			ResultSet rs = stmt.executeQuery(getQuery());
 
-			ResultInfo result = createRI(rs);
-
-			return result;
+			return createRI(rs);
 		}
 	}
 

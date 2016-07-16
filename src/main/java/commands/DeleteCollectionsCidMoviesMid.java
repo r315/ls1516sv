@@ -13,9 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 30/04/2016.
- */
 public class DeleteCollectionsCidMoviesMid extends CommandBase {
     private static final String INFO = "DELETE /collections/{cid}/movies/{mid} - removes the movie mid from the collections cid.";
     private final String TITLE = "Movie deleted from Collection";
@@ -27,14 +24,8 @@ public class DeleteCollectionsCidMoviesMid extends CommandBase {
                 PreparedStatement select = conn.prepareStatement(getQuerySelect());
                 PreparedStatement delete = conn.prepareStatement(getQueryDelete())
         ){
-            int mid, cid;
-
-            try {
-                mid = Utils.getInt(data.get("mid"));
-                cid = Utils.getInt(data.get("cid"));
-            } catch (NumberFormatException | NullPointerException e) {
-                throw new InvalidCommandVariableException();
-            }
+            int mid = Utils.getInt(data.get("mid"));
+            int cid = Utils.getInt(data.get("cid"));
 
             select.setInt(1,cid);
             select.setInt(2,mid);
@@ -46,11 +37,11 @@ public class DeleteCollectionsCidMoviesMid extends CommandBase {
 
             delete.executeUpdate();
 
-            ResultInfo result = createRI(rs);
+            return createRI(rs);
 
-            return result;
-            
-        }
+            } catch (NumberFormatException e) {
+                throw new InvalidCommandVariableException();
+            }
     }
 
     @Override

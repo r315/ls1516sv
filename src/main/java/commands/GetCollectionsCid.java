@@ -5,6 +5,7 @@ import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
+import utils.Pair;
 import utils.Utils;
 
 import java.sql.Connection;
@@ -21,30 +22,21 @@ public class GetCollectionsCid extends CommandBase {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        Boolean topB = false;
-        int skip = 0, top = 1;
-        String orderBy = "title";
+        String topS = data.get("top");
 
-        if (data != null) {
-            topB = (data.get("top") != null);
-            HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
+        Boolean topB = (topS != null);
+        int skip, top;
 
-            skip = skiptop.get("skip");
-            top = skiptop.get("top");
-        }
+        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
+
+        skip = skiptop.value1;
+        top = skiptop.value2;
 
         try(
                 Connection conn = ConnectionFactory.getConn();
-                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top, orderBy))
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
         ){
-            int cid;
-
-            try {
-                cid = Utils.getInt(data.get("cid"));
-            } catch (NumberFormatException e) {
-                throw new InvalidCommandVariableException();
-            }
-
+            int cid = Utils.getInt(data.get("cid"));
 
             pstmt.setInt(1, cid);
             pstmt.setInt(2, skip);
@@ -56,6 +48,9 @@ public class GetCollectionsCid extends CommandBase {
             pstmt.close();
 
             return result;
+
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandVariableException();
         }
     }
 
@@ -64,7 +59,7 @@ public class GetCollectionsCid extends CommandBase {
         return INFO;
     }
 
-    private String getQuery(Boolean topB, int top, String orderBy) {
+    private String getQuery(Boolean topB, int top) {
         String query = "SELECT Collection.*, Movie.* FROM Movie " +
                 "INNER JOIN Has ON Has.movie_id = Movie.movie_id " +
                 "RIGHT JOIN Collection ON Collection.collection_id = Has.collection_id " +
