@@ -8,6 +8,7 @@ import console.Manager;
 import exceptions.InvalidCommandParametersException;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -18,6 +19,16 @@ public class Utils {
 
     public static int getInt (Object value) throws NumberFormatException, NullPointerException{
         return Integer.parseInt(getString(value));
+    }
+
+    public static String reconQuery (HashMap<String,String> param) {
+        String query = "";
+
+        for (String key : param.keySet()) {
+            query += String.format("%s=%s&",key,param.get(key));
+        }
+
+        return query.substring(0,query.length()-2);
     }
 
     public static String getString (Object value) throws NullPointerException{
