@@ -47,14 +47,9 @@ public class Listen extends CommandBase {
     }
 
     private static void AssociateHandlers(ServletHandler handler){
-        handler.addServletWithMapping(TopsRatingsServlet.class, "/tops/ratings");
-        handler.addServletWithMapping(MoviesServlet.class, "/movies");
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
-        handler.addServletWithMapping(CollectionsServlet.class, "/collections");
         handler.addServletWithMapping(HomeServlet.class, "");
-        handler.addServletWithMapping(TopsRatingsReviewsServlet.class, "/tops/*");
-        handler.addServletWithMapping(CollectionsCidServlet.class, "/collections/*");
-        handler.addServletWithMapping(GenericMoviesMidServlet.class, "/movies/*");
+        handler.addServletWithMapping(Servlet.class, "/*");
     }
 
     @Override

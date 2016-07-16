@@ -1,10 +1,8 @@
 package Strutures.ResponseFormat.Html;
 
 
-import pt.isel.ls.html.HtmlElem;
 import utils.Pair;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiPredicate;
@@ -200,6 +198,5 @@ public class HtmlTree {
 
 		return p;
 	}
-
 
 }

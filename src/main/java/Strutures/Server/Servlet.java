@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * Created by Red on 16/07/2016.
  */
 public class Servlet extends HttpServlet {
-    private static final Logger _logger = LoggerFactory.getLogger(MoviesMidRatingsServlet.class);
+    private static final Logger _logger = LoggerFactory.getLogger(Servlet.class);
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
