@@ -12,12 +12,15 @@ import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import templates.GetMoviesHtml;
+import templates.ResultFormat;
+import utils.Pair;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +44,7 @@ public class Manager {
             throws SQLException, InvalidCommandException {
         CommandBase cmdbase = commandMap.get(commandInfo);
         ResultInfo result = cmdbase.execute(commandInfo.getData());
-        return cmdbase.getResult(headerInfo,result);
+        return cmdbase.getResult(commandInfo,headerInfo,result);
     }
 
     public static void displayResponse(String response, HeaderInfo headerinfo){
@@ -86,6 +89,12 @@ public class Manager {
         server.setHandler(handler);
     }
 
+    private static CommandBase commandWithTemplate(CommandBase cb, ResultFormat rf ){
+        cb.addResultFormat("text/plain",new TextResult());
+        cb.addResultFormat("text/html", rf);
+        return cb;
+    }
+
     public static CommandMap createMap() throws Exception{
         CommandMap map=new CommandMap();
 
@@ -95,8 +104,7 @@ public class Manager {
         map.add("POST /collections",new PostCollections());
         map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
 
-        map.add("GET /movies",new GetMovies()
-                .addResultFormat("text/html",new GetMoviesHtml()));
+        map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
 
         map.add("GET /movies/{mid}",new GetMoviesMid());
         map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());

@@ -1,7 +1,9 @@
 package Strutures.ResponseFormat.Plain;
 
+import Strutures.Command.CommandInfo;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import templates.ResultFormat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -10,11 +12,11 @@ import java.util.Map;
 /**
  * Created by Red on 24/04/2016.
  */
-public class TextResult implements IResultFormat {
+public class TextResult extends ResultFormat {
 
     private String response;
 
-    public String generate(ResultInfo resultInfo){
+    public String generate(CommandInfo commandInfo, ResultInfo resultInfo){
         if(resultInfo.getValues().isEmpty()){
             //System.out.println("No results found.");
             response="No results found.";
