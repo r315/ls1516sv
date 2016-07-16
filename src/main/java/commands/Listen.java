@@ -48,7 +48,6 @@ public class Listen extends CommandBase {
 
     private static void AssociateHandlers(ServletHandler handler){
         handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
-        handler.addServletWithMapping(HomeServlet.class, "");
         handler.addServletWithMapping(Servlet.class, "/*");
     }
 
