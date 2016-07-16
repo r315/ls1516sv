@@ -4,7 +4,7 @@ import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
-import exceptions.InvalidParameterException;
+import exceptions.InvalidCommandParametersException;
 import sqlserver.ConnectionFactory;
 import utils.Pair;
 import utils.Utils;
@@ -38,7 +38,7 @@ public class GetMovies extends CommandBase {
 
         String orderBy = data.get("sortBy");
         if (orderBy == null) orderBy = "title";
-        else if ((orderBy = convertSort.get(orderBy)) == null) throw new InvalidParameterException();
+        else if ((orderBy = convertSort.get(orderBy)) == null) throw new InvalidCommandParametersException();
 
         try(
                 Connection conn = ConnectionFactory.getConn();

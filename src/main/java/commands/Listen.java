@@ -5,7 +5,7 @@ import Strutures.ResponseFormat.ResultInfo;
 import Strutures.Server.*;
 import console.Manager;
 import exceptions.InvalidCommandException;
-import exceptions.InvalidParameterException;
+import exceptions.InvalidCommandParametersException;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +27,13 @@ public class Listen extends CommandBase {
             String aux_port= prmts.get("port");
             if(aux_port==null){
                 _logger.error("Invalid port parameter. Server won't start.");
-                throw new InvalidParameterException();
+                throw new InvalidCommandParametersException();
             }
 
             port = Integer.parseInt(aux_port);
         }catch (NumberFormatException n){
             _logger.error("Invalid port parameter. Server won't start.");
-            throw new InvalidParameterException();
+            throw new InvalidCommandParametersException();
         }
         Manager.ServerCreate(port);
 
