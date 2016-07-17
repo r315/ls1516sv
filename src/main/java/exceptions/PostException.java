@@ -10,6 +10,7 @@ public class PostException extends SQLException {
     public static final int ENTRY_EXISTS = 2627;
     public static final int ENTRY_NOT_FOUND = 547;
     public static final int DATE_OR_TIME_CONVERTION_FAILED = 241;
+    public static final int STRING_IS_TOO_LONG = 8152;
 
     public PostException(String s) { super(s); }
     public PostException(int e) {
