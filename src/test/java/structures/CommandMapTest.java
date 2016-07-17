@@ -1,17 +1,14 @@
 package structures;
 
+import Strutures.Command.CommandBase;
 import Strutures.Command.CommandInfo;
-import Strutures.Command.CommandMap;
-import Strutures.Command.ICommand;
 import Strutures.ResponseFormat.ResultInfo;
-import console.Manager;
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import commands.GetMoviesMid;
 import commands.PostMovies;
+import console.Manager;
+import junit.framework.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class CommandMapTest {
 
@@ -24,21 +21,21 @@ public class CommandMapTest {
 	@Test
 	public void GetCommandsTest() throws Exception{
 		int i =0;
-		for (ICommand cmd : Manager.commandMap.getCommands()) ++i;
+		for (CommandBase cmd : Manager.commandMap.getCommands()) ++i;
 		Assert.assertEquals(23,i);
 	}
 
 	@Test
 	public void should_Get_GetMoviesMid_ICommand_Test()throws Exception{
 		CommandInfo command=new CommandInfo(new String[]{"GET","/movies/1"});
-		ICommand cmd=Manager.commandMap.get(command);
+		CommandBase cmd=Manager.commandMap.get(command);
 		Assert.assertTrue(cmd instanceof GetMoviesMid);
 	}
 
 	@Test
 	public void should_Get_ResultInfo_GetMoviesMid_Test() throws Exception{
 		CommandInfo command=new CommandInfo(new String[]{"GET","/movies/1"});
-		ICommand cmd=Manager.commandMap.get(command);
+		CommandBase cmd=Manager.commandMap.get(command);
 		Assert.assertTrue(cmd instanceof GetMoviesMid);
 		ResultInfo result = cmd.execute(command.getData());
 		int a=0;
