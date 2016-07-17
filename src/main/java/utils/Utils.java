@@ -25,7 +25,7 @@ public class Utils {
 
     public static String reconQuery (Map<String,String> map){
         String result="";
-        if(map.isEmpty())return "";
+        if(map.isEmpty())return result;
         for (Map.Entry s:map.entrySet())
             result += String.format("%s=%s&",s.getKey(),s.getValue());
         return result.substring(0,result.length()-1);
@@ -33,12 +33,9 @@ public class Utils {
 
     public static String decodeParametersMap (Map<String,String[]> map){
         String result="";
-        map.forEach((k,v)->{
-            result.concat(k);
-            result.concat("=");
-            result.concat(v[0]);//todo generic algorithm for multiple parameters with same key/HTMLname
-            result.concat("&");
-        });
+        if(map.isEmpty())return result;
+        for (Map.Entry s:map.entrySet())
+            result += String.format("%s=%s&",s.getKey(),s.getValue());
         return result.substring(0,result.length()-1);
     }
 

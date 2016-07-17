@@ -83,9 +83,19 @@ public class Manager {
         server.setHandler(handler);
     }
 
-    private static CommandBase commandWithTemplate(CommandBase cb, IResultFormat rf ){
+    private static CommandBase commandWithTemplate(CommandBase cb, IResultFormat rf){
         cb.addResultFormat("text/plain",new TextResult());
         cb.addResultFormat("text/html", rf);
+        return cb;
+    }
+
+    private static CommandBase commandTemplateText(CommandBase cb){
+        cb.addResultFormat("text/plain",new TextResult());
+        return cb;
+    }
+
+    private static CommandBase commandTemplateHtml(CommandBase cb, IResultFormat rf){
+        cb.addResultFormat("text/html",rf);
         return cb;
     }
 
@@ -98,7 +108,7 @@ public class Manager {
         map.add("POST /collections",new PostCollections());
         map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
 
-        map.add("GET /",commandWithTemplate(new Home(), new HomeHtml()));
+        map.add("GET /",commandTemplateHtml(new Home(), new HomeHtml()));
         map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
         map.add("GET /movies/{mid}",commandWithTemplate(new GetMoviesMid(),new MoviesxMidHtml()));
         map.add("GET /movies/{mid}/ratings",commandWithTemplate(new GetMoviesMidRatings(),new MoviesMidRatingsHtml()));
@@ -108,6 +118,7 @@ public class Manager {
         map.add("GET /collections",commandWithTemplate(new GetCollections(), new CollectionsHtml()));
         map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new CollectionsCidHtml()));
 
+        map.add("GET /tops/ratings",commandTemplateHtml(new TopsRatings(),new GetTopsRatingsHtml()));
         map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
         map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());
         map.add("GET /tops/ratings/lower/average",new GetTopsRatingsLowerAverage());
@@ -116,11 +127,11 @@ public class Manager {
         map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
         map.add("GET /tops/{n}/reviews/lower/count", new GetTopsNReviewsLowerCount());
 
-        map.add("DELETE /collections/{cid}/movies/{mid}",new DeleteCollectionsCidMoviesMid());
+        map.add("DELETE /collections/{cid}/movies/{mid}",commandTemplateText(new DeleteCollectionsCidMoviesMid()));
 
-        map.add("LISTEN /", new Listen());
-        map.add("EXIT /",new Exit());
-        map.add("OPTION /",new Options());
+        map.add("OPTION /", commandWithTemplate(new Options(),new GenericHtml()));
+        map.add("LISTEN /", commandTemplateText(new Listen()));
+        map.add("EXIT /",commandTemplateText(new Exit()));
         return map;
     }
 
