@@ -6,7 +6,7 @@ import Strutures.ResponseFormat.ResultInfo;
 
 import java.util.stream.Collectors;
 
-public class PostMoviesMidReviewHtml implements IResultFormat {
+public class PostMoviesMidReviewsHtml implements IResultFormat {
 
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
