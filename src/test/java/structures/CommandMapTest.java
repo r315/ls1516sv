@@ -22,7 +22,7 @@ public class CommandMapTest {
 	public void GetCommandsTest() throws Exception{
 		int i =0;
 		for (CommandBase cmd : Manager.commandMap.getCommands()) ++i;
-		Assert.assertEquals(23,i);
+		Assert.assertEquals(25,i);
 	}
 
 	@Test
