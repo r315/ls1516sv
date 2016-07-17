@@ -41,6 +41,7 @@ public class GetMoviesMidReviewsHtml implements IResultFormat {
         ri.removeColumn("Review's ID");
 
         HtmlTree page = new HtmlTree();
+        page.addData(ri);
         page.addLinksToTable(pairs);
         page.addNavigationLinks(
                 Arrays.asList(
@@ -49,14 +50,14 @@ public class GetMoviesMidReviewsHtml implements IResultFormat {
                 )
         );
 
-        //page.addPaging(Utils.paging(query, String.format("/movies/%s/reviews", mid)));
+        page.addPaging(Utils.paging(Utils.reconQuery(ci.getData()), String.format("/movies/%s/reviews", mid)));
 
         page.addFormGeneric(
                 String.format("Submit a review for movie %s", movie_name)
                 , Arrays.asList(new Pair("method", "POST"), new Pair("action", String.format("/movies/%s/reviews", mid)))
                 , Arrays.asList(
                         new HtmlElement("br", "Name:"),
-                        new HtmlElement("input").addAttributes("type", "text").addAttributes("name", "name").addAttributes("required", null),
+                        new HtmlElement("input").addAttributes("type", "text").addAttributes("name", "reviewerName").addAttributes("required", null),
 
                         new HtmlElement("br", "Rating:"),
                         new HtmlElement("select").addAttributes("name", "rating").
@@ -69,7 +70,7 @@ public class GetMoviesMidReviewsHtml implements IResultFormat {
                         // TODO: 13/06/2016 Due to a small bug in the creating of the HTML, textarea appears with several tabs by default.
 
                         new HtmlElement("br", "Summary:"),
-                        new HtmlElement("textarea").addAttributes("name", "summary").addAttributes("rows", "3").addAttributes("cols", "50").addAttributes("required", null),
+                        new HtmlElement("textarea").addAttributes("name", "reviewSummary").addAttributes("rows", "3").addAttributes("cols", "50").addAttributes("required", null),
 
                         new HtmlElement("br", "Review:"),
                         new HtmlElement("textarea").addAttributes("name", "review").addAttributes("rows", "10").addAttributes("cols", "50").addAttributes("required", null)

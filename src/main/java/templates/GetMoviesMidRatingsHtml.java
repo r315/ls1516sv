@@ -27,6 +27,7 @@ public class GetMoviesMidRatingsHtml implements IResultFormat {
         ri.removeColumn("Titulo");
 
         HtmlTree page = new HtmlTree();
+        page.addData(ri);
 
         page.addNavigationLinks(
                 Arrays.asList(

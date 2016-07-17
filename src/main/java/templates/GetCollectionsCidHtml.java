@@ -6,6 +6,7 @@ import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
 import utils.Pair;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,8 +42,7 @@ public class GetCollectionsCidHtml implements IResultFormat {
 
         page.addLinksToTable(pairs);
 
-        //TODO fix paging
-        //page.addPaging(Utils.paging(query, String.format("/collections/%s", cid)));
+        page.addPaging(Utils.paging(Utils.reconQuery(ci.getData()), String.format("/collections/%s", cid)));
 
         page.addFormGeneric("Add Movie to Collection",
                 Arrays.asList(

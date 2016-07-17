@@ -41,8 +41,7 @@ public class GetCollectionsHtml implements IResultFormat {
 
         page.addLinksToTable(pairs);
 
-        //TODO fix paging
-        //page.addPaging(Utils.paging(query, "/collections"));
+        page.addPaging(Utils.paging(Utils.reconQuery(ci.getData()), "/collections"));
 
         page.addFormGeneric("Add Collection",
                 Arrays.asList(

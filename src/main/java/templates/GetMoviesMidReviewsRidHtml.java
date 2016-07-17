@@ -28,6 +28,7 @@ public class GetMoviesMidReviewsRidHtml implements IResultFormat {
         ri.removeColumn("Review's ID");
 
         HtmlTree page = new HtmlTree();
+        page.addData(ri);
         page.addLinksToTable(pairs);
         page.addNavigationLinks(
                 Arrays.asList(
