@@ -34,8 +34,8 @@ public class Utils {
     public static String decodeParametersMap (Map<String,String[]> map){
         String result="";
         if(map.isEmpty())return result;
-        for (Map.Entry s:map.entrySet())
-            result += String.format("%s=%s&",s.getKey(),s.getValue());
+        for (Map.Entry<String,String[]> s:map.entrySet())
+            result += String.format("%s=%s&",s.getKey(),s.getValue()[0]);
         return result.substring(0,result.length()-1);
     }
 

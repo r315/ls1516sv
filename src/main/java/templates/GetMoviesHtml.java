@@ -67,7 +67,7 @@ public class GetMoviesHtml implements IResultFormat {
                         new HtmlElement("input").addAttributes("type","text").addAttributes("name","title").addAttributes("required",null),
 
                         new HtmlElement("br", "Release year:"),
-                        new HtmlElement("input").addAttributes("type","text").addAttributes("name","releaseyear").addAttributes("required",null)
+                        new HtmlElement("input").addAttributes("type","text").addAttributes("name","releaseYear").addAttributes("required",null)
                 )
         );
 
