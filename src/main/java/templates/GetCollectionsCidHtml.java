@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class CollectionsCidHtml implements IResultFormat {
+public class GetCollectionsCidHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
         String cid = ci.getData().get("cid");

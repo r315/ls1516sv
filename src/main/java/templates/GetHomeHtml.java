@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class HomeHtml implements IResultFormat {
+public class GetHomeHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
             HtmlTree page = new HtmlTree();

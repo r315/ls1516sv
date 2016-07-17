@@ -24,7 +24,6 @@ public class Manager {
     private static final Logger log = LoggerFactory.getLogger(Manager.class);
     public static CommandMap commandMap;
     private static Server server;
-    private static boolean isActive;
 
     public static void Init(){
         try {
@@ -45,11 +44,13 @@ public class Manager {
         Map<String,String> headers= headerinfo.getHeadersMap();
         String filename= headers.get("file-name");
         if(filename==null){//write to console
+            //// TODO: 14/07/2016 logger
             System.out.println(response);
         }else {//write response into a file
             try{
                 writeToFile(filename,response);
             }catch(IOException e){
+                //// TODO: 14/07/2016 logger
                 System.out.println("Error writing into file");
             }
         }
@@ -64,18 +65,14 @@ public class Manager {
             server.start();
         }catch(Exception e){
             log.error("Fail to start server!");
-        }finally {
-            isActive=true;
         }
     }
 
     public static void ServerStop(){
         try{
-            server.stop();
+            if (server != null) server.stop();
         }catch(Exception e){
             log.error("Fail to stop server!");
-        }finally {
-            isActive=false;
         }
     }
 

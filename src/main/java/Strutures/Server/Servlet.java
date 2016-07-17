@@ -34,7 +34,7 @@ public class Servlet extends HttpServlet {
             else if (!query.contains("top=")) query += "&top=5";
             CommandInfo command = new CommandInfo(method, path, query);
             respBody = Manager.executeCommand(command,new HeaderInfo());
-            InfoStatusCode(resp, 200, "New GET was received:" + path + (query == null ? "" : query));
+            InfoStatusCode(resp, 200, String.format("New GET was received: %s?%s",path,query));
         }catch(Exception e){
             respBody=ErrorStatusCode(resp, 404, e.getMessage());
         }
@@ -51,7 +51,7 @@ public class Servlet extends HttpServlet {
             String query= Utils.decodeParametersMap(req.getParameterMap());
             CommandInfo command = new CommandInfo(method,path,query);
             String redirect_path= Manager.executeCommand(command, new HeaderInfo());
-            InfoStatusCode(resp, 303, "New POST fulfilled:" + path + (query == null ? "" : query));
+            InfoStatusCode(resp, 303, String.format("New POST fulfilled: %s?%s",path,query));
             resp.sendRedirect(redirect_path);
         }catch(Exception e) {
             if(e instanceof SQLException) {
