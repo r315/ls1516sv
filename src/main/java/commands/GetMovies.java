@@ -1,7 +1,6 @@
 package commands;
 
 import Strutures.Command.CommandBase;
-import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;

@@ -68,10 +68,12 @@ public class GetCollectionsTest {
 
         ResultInfo result = new ResultInfo(null,title,data);
 
+        HashMap<String, String> param = new HashMap<>();
+
         /* --- */
 
         GetCollections stuff = new GetCollections();
-        ResultInfo rs = stuff.execute(null);
+        ResultInfo rs = stuff.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
