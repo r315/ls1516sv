@@ -11,6 +11,8 @@ import Strutures.ResponseFormat.ResultInfo;
 public class GenericHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
+        if(!ri.generateresult) return "";
+
         HtmlTree page = new HtmlTree();
 
         page.addData(ri);
