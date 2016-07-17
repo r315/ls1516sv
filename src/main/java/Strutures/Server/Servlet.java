@@ -3,6 +3,7 @@ package Strutures.Server;
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import console.Manager;
+import exceptions.InvalidCommandException;
 import exceptions.PostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.sql.SQLException;
 
 /**
  * Created by Red on 16/07/2016.
@@ -36,7 +36,11 @@ public class Servlet extends HttpServlet {
             respBody = Manager.executeCommand(command,new HeaderInfo());
             InfoStatusCode(resp, 200, String.format("New GET was received: %s?%s",path,query));
         }catch(Exception e){
-            respBody=ErrorStatusCode(resp, 404, e.getMessage());
+            if(e instanceof InvalidCommandException){
+                respBody=ErrorStatusCode(resp, 404, e.getMessage());
+            }else{
+                respBody=ErrorStatusCode(resp, 500, e.getMessage());
+            }
         }
         doResponse(resp,respBody);
     }
@@ -54,14 +58,10 @@ public class Servlet extends HttpServlet {
             InfoStatusCode(resp, 303, String.format("New POST fulfilled: %s?%s",path,query));
             resp.sendRedirect(redirect_path);
         }catch(Exception e) {
-            if(e instanceof SQLException) {
-                if(e instanceof PostException){
-                    respBody=ErrorStatusCode(resp, 400, e.getMessage());
-                }else {
-                    respBody=ErrorStatusCode(resp, 500, e.getMessage());
-                }
+            if(e instanceof PostException || e instanceof InvalidCommandException){
+                respBody=ErrorStatusCode(resp, 400, e.getMessage());
             }else{
-                respBody=ErrorStatusCode(resp, 404, e.getMessage());
+                respBody=ErrorStatusCode(resp, 500, e.getMessage());
             }
             doResponse(resp,respBody);
         }
