@@ -2,13 +2,12 @@ package structures;
 
 import java.util.*;
 
+import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import org.junit.Test;
 
-import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.ResultInfo;
 import utils.Pair;
-
 
 public class HtmlTreeTest {
     public static HtmlTree htmlTree;
@@ -70,23 +69,21 @@ public class HtmlTreeTest {
                         new Pair<String, String>("action", "/movies")),
 
                 Arrays.asList(
-                        new Pair<String, List<Pair<String, String>>>(
-                                "Movie Name", commonAtributes()),
-
-                        new Pair<String, List<Pair<String, String>>>(
-                                "Release Year",
-                                commonAtributes()))
+                        new HtmlElement("br","Movie Name"),
+                        inputElement("name"),
+                        new HtmlElement("br","Release Year"),
+                        inputElement("description"))
         );
 
         System.out.println("Form insertion \n" + htmlTree.getHtml());
     }
 
 
-    private List<Pair<String, String>> commonAtributes() {
-        return Arrays.asList(
-                new Pair<String, String>("type", "text"),
-                new Pair<String, String>("name", "title"),
-                new Pair<String, String>("required", null));
+    private HtmlElement inputElement(String name) {
+        return new HtmlElement("input")
+                .addAttributes("name", name)
+                .addAttributes("type", "text")
+                .addAttributes("required", null);
     }
 
     private ResultInfo createResultInfo(int r, int c){

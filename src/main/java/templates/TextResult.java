@@ -1,4 +1,4 @@
-package Strutures.ResponseFormat.Plain;
+package templates;
 
 import Strutures.Command.CommandInfo;
 import Strutures.ResponseFormat.IResultFormat;
@@ -12,11 +12,11 @@ import java.util.Map;
 /**
  * Created by Red on 24/04/2016.
  */
-public class TextResult extends ResultFormat {
+public class TextResult implements IResultFormat {
 
     private String response;
 
-    public String generate(CommandInfo commandInfo, ResultInfo resultInfo){
+    public String generate(ResultInfo resultInfo, CommandInfo commandInfo){
         if(resultInfo.getValues().isEmpty()){
             //System.out.println("No results found.");
             response="No results found.";

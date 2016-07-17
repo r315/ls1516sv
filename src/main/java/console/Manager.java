@@ -1,9 +1,8 @@
 package console;
 
 import Strutures.Command.*;
-import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.IResultFormat;
-import Strutures.ResponseFormat.Plain.TextResult;
+import templates.*;
 import Strutures.ResponseFormat.ResultInfo;
 import commands.*;
 import exceptions.InvalidCommandException;
@@ -11,16 +10,11 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import templates.GetMoviesHtml;
-import templates.ResultFormat;
-import utils.Pair;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,7 +83,7 @@ public class Manager {
         server.setHandler(handler);
     }
 
-    private static CommandBase commandWithTemplate(CommandBase cb, ResultFormat rf ){
+    private static CommandBase commandWithTemplate(CommandBase cb, IResultFormat rf ){
         cb.addResultFormat("text/plain",new TextResult());
         cb.addResultFormat("text/html", rf);
         return cb;
@@ -104,14 +98,15 @@ public class Manager {
         map.add("POST /collections",new PostCollections());
         map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
 
+        map.add("GET /",commandWithTemplate(new Home(), new HomeHtml()));
         map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
-
         map.add("GET /movies/{mid}",new GetMoviesMid());
         map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());
         map.add("GET /movies/{mid}/reviews",new GetMoviesMidReviews());
         map.add("GET /movies/{mid}/reviews/{rid}",new GetMoviesMidReviewsRid());
-        map.add("GET /collections",new GetCollections());
-        map.add("GET /collections/{cid}",new GetCollectionsCid());
+        
+        map.add("GET /collections",commandWithTemplate(new GetCollections(), new CollectionsHtml()));
+        map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new CollectionsCidHtml()));
 
         map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
         map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());

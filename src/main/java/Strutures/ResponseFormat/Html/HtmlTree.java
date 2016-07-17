@@ -35,7 +35,8 @@ public class HtmlTree {
                         .addChild(style("table, th, td { border: 1px solid black; border-collapse: collapse;}")))
                 .addChild(new HtmlElement("body")
                         .addChild(div("header"))
-                        .addChild(div("data")));
+                        .addChild(div("data"))
+                        .addChild(div("footer")));
     }
 
     private static HtmlElement findElement(HtmlElement root, String key, BiPredicate<String,HtmlElement> pred){
@@ -206,8 +207,6 @@ public class HtmlTree {
             table.addChild(addDataToRow(tr(), "td", line));
         }
 
-//        addElementTo("body", heading("h2",resultInfo.getDisplayTitle()));
-//        addElementTo("body", table);
         addElementToDiv("data", heading("h2",resultInfo.getDisplayTitle()));
         addElementToDiv("data", table);
     }
@@ -237,6 +236,10 @@ public class HtmlTree {
     public void addPaging(HashMap<String, String> paging) {
         addElementTo("body", p());
         addElementTo("body",createPaging(paging));
+    }
+
+    public void addFooter(HtmlElement data){
+        addElementToDiv("footer", data);
     }
 }
 
