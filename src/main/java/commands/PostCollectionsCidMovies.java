@@ -22,27 +22,26 @@ public class PostCollectionsCidMovies extends CommandBase {
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
         int cid, mid;
-
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             cid = Utils.getInt(data.get("cid"));
             mid = Utils.getInt(data.get("mid"));
-
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
-
             pstmt.executeUpdate();
-
             return createRI();
-
         }catch (SQLException e){
-            int err = e.getErrorCode();
-            if(err == PostException.ENTRY_EXISTS)
-                throw new PostException(err,"Movie Already Exist in collection!");
-            else
-                throw new PostException(err,"Movie not found!");
+            int errorCode= e.getErrorCode();
+            switch(errorCode){
+                case PostException.ENTRY_EXISTS:
+                    throw new PostException(errorCode,"Movie already exists in collection!");
+                case PostException.ENTRY_NOT_FOUND:
+                    throw new PostException(errorCode,"Movie not found!");
+                default:
+                    throw e;
+            }
         }catch (NullPointerException | NumberFormatException e){
             throw new InvalidCommandParametersException();
         }
@@ -62,11 +61,9 @@ public class PostCollectionsCidMovies extends CommandBase {
         columns.add("Movie inserted");
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
-
         ArrayList<String> line = new ArrayList<>();
 
         line.add("Success");
-
         data.add(line);
 
         return new ResultInfo(TITLE, columns, data);

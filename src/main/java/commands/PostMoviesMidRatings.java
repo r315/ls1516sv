@@ -3,6 +3,7 @@ package commands;
 import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
+import exceptions.PostException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 
@@ -26,16 +27,13 @@ public class PostMoviesMidRatings extends CommandBase {
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException, InvalidCommandParametersException {
-		ResultInfo ri = null;
-		if(data == null)
-			throw new InvalidCommandParametersException("Data is null");
-
+		ResultInfo ri;
 		String rID;
 		int mID;
 		try{
 			rID= getRating(data.get("rating"));
 			mID = Utils.getInt(data.get("mid"));
-		}catch(NumberFormatException| NullPointerException e){
+		}catch(NumberFormatException | NullPointerException e){
 			throw new InvalidCommandParametersException();
 		}
 
@@ -43,10 +41,17 @@ public class PostMoviesMidRatings extends CommandBase {
 				Connection conn = ConnectionFactory.getConn();
 				PreparedStatement pstmt = conn.prepareStatement(getQuery(rID),PreparedStatement.RETURN_GENERATED_KEYS)
 		){
-
 			pstmt.setInt(1,mID);
 			int res = pstmt.executeUpdate();
 			ri = createResultInfo(pstmt.getGeneratedKeys());
+		}catch(SQLException e){
+			int errorCode= e.getErrorCode();
+			switch(errorCode){
+				case PostException.ENTRY_NOT_FOUND:
+					throw new PostException(errorCode,"Movie not found!");
+				default:
+					throw e;
+			}
 		}
 
 		return ri;

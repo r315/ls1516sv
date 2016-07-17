@@ -4,6 +4,7 @@ import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
+import exceptions.PostException;
 import sqlserver.ConnectionFactory;
 import utils.Utils;
 
@@ -12,8 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /*
 POST /movies/{mid}/reviews - creates a new review for the movie identified by mid, given the following parameters
@@ -29,21 +30,14 @@ public class PostMoviesMidReviews extends CommandBase {
 	private static final String INSERT = "insert into Review(movie_id,name,review,summary,rating) values(?,?,?,?,?)";
 	private static final int NPARAM = 4;
 
-	// TODO: Rollback
-
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException{
-		ResultInfo ri = null;
-		
-		if(data == null)
-			throw new InvalidCommandParametersException("Data is null");
-		
+		ResultInfo ri;
 		try(
 				Connection conn = ConnectionFactory.getConn();
 				PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS)
-		)
-		{
-			Collection<String> values = new ArrayList<String>(); 
+		){
+			List<String> values = new ArrayList<String>();
 			values.add(data.get("reviewerName"));
 			values.add(data.get("review"));
 			values.add(data.get("reviewSummary"));
@@ -54,15 +48,17 @@ public class PostMoviesMidReviews extends CommandBase {
 				throw new InvalidCommandParametersException();
 
 			pstmt.setInt(1, Utils.getInt(data.get("mid")));
-			pstmt.setString(2,(String) values.toArray()[0]);
-			pstmt.setString(3,(String) values.toArray()[1]);
-			pstmt.setString(4,(String) values.toArray()[2]);			
-			pstmt.setInt(5,Integer.parseInt((String) values.toArray()[3]));
-			
+			pstmt.setString(2, values.get(0));
+			pstmt.setString(3,values.get(1));
+			pstmt.setString(4,values.get(2));
+			pstmt.setInt(5,Integer.parseInt(values.get(3)));
 			int res = pstmt.executeUpdate();
-
-			if(res != 0)
-				ri = createResultInfo( pstmt.getGeneratedKeys());
+			ri = createResultInfo( pstmt.getGeneratedKeys());
+		}catch (SQLException e){
+			int errorCode= e.getErrorCode();
+			if(errorCode == PostException.STRING_IS_TOO_LONG)
+				throw new PostException(errorCode,"At least one field has too many characters!");
+			else throw e;
 		}
 		return ri;
 	}

@@ -37,7 +37,6 @@ public class PostMovies extends CommandBase {
 			 PreparedStatement movieInsert = conn.prepareStatement(INSERT_MOVIE, PreparedStatement.RETURN_GENERATED_KEYS);
 			 PreparedStatement ratingInsert = conn.prepareStatement(INSERT_RATING)
 		){
-
 			conn.setAutoCommit(false);
 			movieInsert.setString(1, title);
 			movieInsert.setString(2, date + "0101");
@@ -47,14 +46,18 @@ public class PostMovies extends CommandBase {
 			ratingInsert.setInt(1, mid);
 			ratingInsert.executeUpdate();
 			conn.commit();
-
 		}catch(SQLException e){
 			int errorCode= e.getErrorCode();
-			if(errorCode == PostException.ENTRY_EXISTS)
-				throw new PostException(errorCode,"Movie already exists!");
-			if(e.getErrorCode() == PostException.DATE_OR_TIME_CONVERTION_FAILED)
-				throw new PostException(errorCode,"Invalid Date!");
-			else throw e;
+			switch(errorCode){
+				case PostException.ENTRY_EXISTS:
+					throw new PostException(errorCode,"Movie already exists!");
+				case PostException.DATE_OR_TIME_CONVERTION_FAILED:
+					throw new PostException(errorCode,"Invalid Date!");
+				case PostException.STRING_IS_TOO_LONG:
+					throw new PostException(errorCode,"Title is too long!");
+				default:
+					throw e;
+			}
 		}
 
 		return ri;
