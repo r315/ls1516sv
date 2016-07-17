@@ -4,6 +4,7 @@ import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import sqlserver.ConnectionFactory;
+import utils.Pair;
 import utils.Utils;
 
 import java.sql.Connection;
@@ -13,40 +14,31 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 29/04/2016.
- */
 public class GetCollections extends CommandBase {
     private static final String INFO = "GET /collections - returns the list of collections, using the insertion order.";
     private final String TITLE = "Collections list";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        Boolean topB = false;
-        int skip = 0, top = 1;
+        String topS = data.get("top");
 
-        if (data != null) {
-            topB = (data.get("top") != null);
-            HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
+        Boolean topB = (topS != null);
+        int skip, top;
 
-            skip = skiptop.get("skip");
-            top = skiptop.get("top");
-        }
+        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
 
-
+        skip = skiptop.value1;
+        top = skiptop.value2;
 
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
         ){
-
             pstmt.setInt(1, skip);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
-
-            return result;
+            return createRI(rs);
         }
 
     }

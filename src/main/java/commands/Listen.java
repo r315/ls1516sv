@@ -5,10 +5,10 @@ import Strutures.ResponseFormat.ResultInfo;
 import Strutures.Server.*;
 import console.Manager;
 import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.Utils;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -24,15 +24,17 @@ public class Listen extends CommandBase {
     public ResultInfo execute(HashMap<String, String> prmts) throws InvalidCommandException, SQLException {
         int port;
         try{
-            port = Utils.getInt(prmts.get("port"));
-        }catch(NullPointerException e){
-            _logger.error("Missing port parameter. Server won't start.");
-            return new ResultInfo(false);
+            String aux_port= prmts.get("port");
+            if(aux_port==null){
+                _logger.error("Invalid port parameter. Server won't start.");
+                throw new InvalidCommandParametersException();
+            }
+
+            port = Integer.parseInt(aux_port);
         }catch (NumberFormatException n){
             _logger.error("Invalid port parameter. Server won't start.");
-            return new ResultInfo(false);
+            throw new InvalidCommandParametersException();
         }
-
         Manager.ServerCreate(port);
 
         //Create a handler for each functionality

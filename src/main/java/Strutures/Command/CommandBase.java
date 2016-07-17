@@ -1,24 +1,21 @@
 package Strutures.Command;
 
 import Strutures.ResponseFormat.IResultFormat;
-import Strutures.ResponseFormat.Plain.TextResult;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
-import templates.ResultFormat;
 
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.function.Function;
 
 public abstract class CommandBase {
 
-    private HashMap<String, ResultFormat> headermap;
+    private HashMap<String, IResultFormat> headermap;
 
     public String getResult(CommandInfo commandInfo, HeaderInfo headerinfo, ResultInfo resultInfo) {
-        return headermap.get(headerinfo.getHeadersMap().get("accept")).generate(commandInfo, resultInfo);
+        return headermap.get(headerinfo.getHeadersMap().get("accept")).generate(resultInfo,commandInfo);
     }
 
-    public CommandBase addResultFormat(String hdr, ResultFormat rf){
+    public CommandBase addResultFormat(String hdr, IResultFormat rf){
         headermap.put(hdr,rf);
         return this;
     }
@@ -27,7 +24,7 @@ public abstract class CommandBase {
         headermap = new HashMap<>();
     }
 
-    public CommandBase(HashMap<String, ResultFormat> hm){
+    public CommandBase(HashMap<String, IResultFormat> hm){
         headermap = hm;
     }
 

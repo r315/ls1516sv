@@ -4,7 +4,7 @@ import Strutures.Command.HeaderInfo;
 import Strutures.Command.HeaderMap;
 import Strutures.ResponseFormat.Html.HtmlResult;
 import Strutures.ResponseFormat.IResultFormat;
-import Strutures.ResponseFormat.Plain.TextResult;
+import templates.TextResult;
 import Strutures.ResponseFormat.ResultInfo;
 import console.Manager;
 import junit.framework.Assert;
