@@ -105,15 +105,15 @@ public class Manager {
         map.add("POST /collections",new PostCollections());
         map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
 
-        map.add("GET /",commandTemplateHtml(new Home(), new HomeHtml()));
+        map.add("GET /",commandTemplateHtml(new Home(), new GetHomeHtml()));
         map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
-        map.add("GET /movies/{mid}",commandWithTemplate(new GetMoviesMid(),new MoviesxMidHtml()));
-        map.add("GET /movies/{mid}/ratings",commandWithTemplate(new GetMoviesMidRatings(),new MoviesMidRatingsHtml()));
-        map.add("GET /movies/{mid}/reviews",commandWithTemplate(new GetMoviesMidReviews(),new MoviesMidReviewsHtml()));
-        map.add("GET /movies/{mid}/reviews/{rid}",commandWithTemplate(new GetMoviesMidReviewsRid(),new MoviesMidReviewsRidHtml()));
+        map.add("GET /movies/{mid}",commandWithTemplate(new GetMoviesMid(),new GetMoviesMidHtml()));
+        map.add("GET /movies/{mid}/ratings",commandWithTemplate(new GetMoviesMidRatings(),new GetMoviesMidRatingsHtml()));
+        map.add("GET /movies/{mid}/reviews",commandWithTemplate(new GetMoviesMidReviews(),new GetMoviesMidReviewsHtml()));
+        map.add("GET /movies/{mid}/reviews/{rid}",commandWithTemplate(new GetMoviesMidReviewsRid(),new GetMoviesMidReviewsRidHtml()));
         
-        map.add("GET /collections",commandWithTemplate(new GetCollections(), new CollectionsHtml()));
-        map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new CollectionsCidHtml()));
+        map.add("GET /collections",commandWithTemplate(new GetCollections(), new GetCollectionsHtml()));
+        map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new GetCollectionsCidHtml()));
 
         map.add("GET /tops/ratings",commandTemplateHtml(new TopsRatings(),new GetTopsRatingsHtml()));
         map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
@@ -127,8 +127,8 @@ public class Manager {
         map.add("DELETE /collections/{cid}/movies/{mid}",commandTemplateText(new DeleteCollectionsCidMoviesMid()));
 
         map.add("OPTION /", commandWithTemplate(new Options(),new GenericHtml()));
-        map.add("LISTEN /", commandTemplateText(new Listen()));
-        map.add("EXIT /",commandTemplateText(new Exit()));
+        map.add("LISTEN /", commandWithTemplate(new Listen(),new GenericHtml()));
+        map.add("EXIT /",commandWithTemplate(new Exit(),new GenericHtml()));
         return map;
     }
 
