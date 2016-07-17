@@ -63,7 +63,7 @@ public class GetMoviesMidHtml implements IResultFormat {
 
         pairs = new ArrayList<>();
 
-        for (ArrayList<String> line : ri.getValues()){
+        for (ArrayList<String> line : resultInfo.getValues()){
             pairs.add(new Pair<>(line.get(1),"/collections/"+line.get(0)));
         }
 
