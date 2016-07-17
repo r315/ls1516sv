@@ -23,7 +23,6 @@ public class CommandInfo {
 		else{
 			parameters = DecodeParameters.decodeParameters(params);
 		}
-
 		method = DecodeMethod.decode(m);
 		resources = DecodePath.decodePath(path);
 		if(resources.size()!=0)
@@ -48,6 +47,6 @@ public class CommandInfo {
 
 	public void addToMapData(String key, String value){	parameters.put(key,value); }
 	
-	public int getResourcesSize() { return resources.size();}	
+	public int getResourcesSize() { return resources.size();}
 }
 

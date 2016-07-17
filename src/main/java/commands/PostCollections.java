@@ -23,28 +23,23 @@ public class PostCollections extends CommandBase {
         String name = data.get("name");
         String desc = data.get("description");
 
-        if(name == null || desc == null)
+        if (name == null || desc == null)
             throw new InvalidCommandParametersException("Bad parameters");
 
-        try(
+        try (
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             pstmt.setString(1, name);
             pstmt.setString(2, desc);
-
             pstmt.executeUpdate();
-
             ResultSet rs = pstmt.getGeneratedKeys();
-
             return createRI(rs);
-
-        }catch (SQLException e){
+        } catch (SQLException e) {
             int err = e.getErrorCode();
-            if(err == PostException.ENTRY_EXISTS)
-                throw new PostException(err,"Collection Already Exists!");
-            else
-                throw new PostException(err,e.getMessage());
+            if (err == PostException.ENTRY_EXISTS)
+                throw new PostException(err, "Collection Already Exists!");
+            else throw e;
         }
     }
 
@@ -60,17 +55,11 @@ public class PostCollections extends CommandBase {
     private ResultInfo createRI(ResultSet rs) throws SQLException {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Collection created with ID");
-
         ArrayList<ArrayList<String>> data = new ArrayList<>();
-
         ArrayList<String> line = new ArrayList<>();
-
         rs.next();
-
         line.add(Long.toString(rs.getLong(1)));
-
         data.add(line);
-
         return new ResultInfo(TITLE, columns, data);
 
     }

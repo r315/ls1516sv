@@ -8,7 +8,7 @@ import console.Manager;
 import exceptions.InvalidCommandParametersException;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,14 +23,23 @@ public class Utils {
         return Integer.parseInt(value);
     }
 
-    public static String reconQuery (HashMap<String,String> param) {
-        String query = "";
+    public static String reconQuery (Map<String,String> map){
+        String result="";
+        if(map.isEmpty())return "";
+        for (Map.Entry s:map.entrySet())
+            result += String.format("%s=%s&",s.getKey(),s.getValue());
+        return result.substring(0,result.length()-1);
+    }
 
-        for (String key : param.keySet()) {
-            query += String.format("%s=%s&",key,param.get(key));
-        }
-
-        return query.substring(0,query.length()-2);
+    public static String decodeParametersMap (Map<String,String[]> map){
+        String result="";
+        map.forEach((k,v)->{
+            result.concat(k);
+            result.concat("=");
+            result.concat(v[0]);//todo generic algorithm for multiple parameters with same key/HTMLname
+            result.concat("&");
+        });
+        return result.substring(0,result.length()-1);
     }
 
     //Commands Utils

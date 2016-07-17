@@ -6,6 +6,7 @@ import console.Manager;
 import exceptions.PostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import utils.Utils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,8 @@ public class Servlet extends HttpServlet {
             String method= req.getMethod();
             String path= req.getRequestURI();
             String query= req.getQueryString();
+            if (query == null) query = "top=5";
+            else if (!query.contains("top=")) query += "&top=5";
             CommandInfo command = new CommandInfo(method, path, query);
             respBody = Manager.executeCommand(command,new HeaderInfo());
             InfoStatusCode(resp, 200, "New GET was received:" + path + (query == null ? "" : query));
@@ -45,7 +48,7 @@ public class Servlet extends HttpServlet {
         try {
             String method= req.getMethod();
             String path= req.getRequestURI();
-            String query= req.getQueryString();
+            String query= Utils.decodeParametersMap(req.getParameterMap());
             CommandInfo command = new CommandInfo(method,path,query);
             String redirect_path= Manager.executeCommand(command, new HeaderInfo());
             InfoStatusCode(resp, 303, "New POST fulfilled:" + path + (query == null ? "" : query));
@@ -67,7 +70,7 @@ public class Servlet extends HttpServlet {
     private String ErrorStatusCode(HttpServletResponse resp, int status, String error){
         resp.setStatus(status);
         _logger.error(error);
-        return String.format("Error %i - ",status)+error;
+        return String.format("Error %d - ",status)+error;
     }
 
     private void InfoStatusCode(HttpServletResponse resp, int status, String info){
