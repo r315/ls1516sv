@@ -14,9 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Luigi Sekuiya on 28/05/2016.
- */
 public class GetCollectionMoviesMid extends CommandBase {
 
     private static final String INFO = "POST /collections/having/movie/{mid2}";
@@ -24,25 +21,20 @@ public class GetCollectionMoviesMid extends CommandBase {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        int mid;
-
-        try {
-            mid = Utils.getInt(data.get("mid"));
-        } catch (NumberFormatException e) {
-            throw new InvalidCommandVariableException();
-        }
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery())
         ){
+            int mid = Utils.getInt(data.get("mid"));
 
             pstmt.setInt(1, mid);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
+            return createRI(rs);
 
-            return result;
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandVariableException();
         }
     }
 

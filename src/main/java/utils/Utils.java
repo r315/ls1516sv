@@ -17,8 +17,10 @@ import java.util.regex.Pattern;
  */
 public class Utils {
 
-    public static int getInt (Object value) throws NumberFormatException, NullPointerException{
-        return Integer.parseInt(getString(value));
+    //General Utils
+
+    public static int getInt (String value) throws NumberFormatException, NullPointerException{
+        return Integer.parseInt(value);
     }
 
     public static String reconQuery (HashMap<String,String> param) {
@@ -31,32 +33,22 @@ public class Utils {
         return query.substring(0,query.length()-2);
     }
 
-    public static String getString (Object value) throws NullPointerException{
-        return value.toString();
-    }
+    //Commands Utils
 
-    public static HashMap<String, Integer> getSkipTop (String skip, String top) throws InvalidCommandParametersException {
-        HashMap<String, Integer> map = new HashMap<>();
+    public static Pair<Integer, Integer> getSkipTop (String skip, String top) throws InvalidCommandParametersException {
         int skipI = 0,topI = 1;
 
         try {
-            skipI = Utils.getInt(skip);
-        } catch (NumberFormatException | NullPointerException e) { //If not number OR null
-            if (skip != null) throw new InvalidCommandParametersException();
-        }
+            if (skip != null) skipI = getInt(skip);
 
-        try {
-            topI = Utils.getInt(top);
-        } catch (NumberFormatException | NullPointerException e) { //If not number OR null
-            if (top != null) throw new InvalidCommandParametersException();
+            if (top != null) topI = getInt(top);
+        } catch (NumberFormatException e) { //If not number
+            throw new InvalidCommandParametersException();
         }
 
         if (skipI < 0 || topI <= 0) throw new InvalidCommandParametersException();
 
-        map.put("skip",skipI);
-        map.put("top",topI);
-
-        return map;
+        return new Pair<>(skipI,topI);
     }
 
     //TODO: Check this method

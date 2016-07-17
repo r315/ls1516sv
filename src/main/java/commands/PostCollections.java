@@ -24,11 +24,11 @@ public class PostCollections extends CommandBase {
         String desc = data.get("description");
 
         if(name == null || desc == null)
-            throw new InvalidCommandParametersException();
+            throw new InvalidCommandParametersException("Bad parameters");
 
         try(
                 Connection conn = ConnectionFactory.getConn();
-                PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS);
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             pstmt.setString(1, name);
             pstmt.setString(2, desc);
@@ -37,17 +37,14 @@ public class PostCollections extends CommandBase {
 
             ResultSet rs = pstmt.getGeneratedKeys();
 
-            ResultInfo result = createRI(rs);
+            return createRI(rs);
 
-            return result;
         }catch (SQLException e){
             int err = e.getErrorCode();
             if(err == PostException.ENTRY_EXISTS)
                 throw new PostException(err,"Collection Already Exists!");
             else
                 throw new PostException(err,e.getMessage());
-        }catch (NullPointerException | NumberFormatException e){
-            throw new InvalidCommandParametersException("Bad parameters");
         }
     }
 

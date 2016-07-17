@@ -5,6 +5,7 @@ import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandVariableException;
 import sqlserver.ConnectionFactory;
+import utils.Pair;
 import utils.Utils;
 
 import java.sql.Connection;
@@ -20,38 +21,32 @@ public class GetMoviesMidReviews extends CommandBase {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        Boolean topB = false;
-        int skip = 0, top = 1;
+        String topS = data.get("top");
 
-        if (data != null) {
-            topB = (data.get("top") != null);
-            HashMap<String, Integer> skiptop = Utils.getSkipTop(data.get("skip"), data.get("top"));
+        Boolean topB = (topS != null);
+        int skip, top;
 
-            skip = skiptop.get("skip");
-            top = skiptop.get("top");
-        }
+        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
+
+        skip = skiptop.value1;
+        top = skiptop.value2;
 
         try(
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
 
         ) {
-            int mID;
+            int mid = Utils.getInt(data.get("mid"));
 
-            try {
-                mID = Utils.getInt(data.get("mid"));
-            } catch (NumberFormatException e) {
-                throw new InvalidCommandVariableException();
-            }
-
-            pstmt.setInt(1, mID);
+            pstmt.setInt(1, mid);
             pstmt.setInt(2, skip);
 
             ResultSet rs = pstmt.executeQuery();
 
-            ResultInfo result = createRI(rs);
+            return createRI(rs);
 
-            return result;
+        } catch (NumberFormatException e) {
+            throw new InvalidCommandVariableException();
         }
 
     }
