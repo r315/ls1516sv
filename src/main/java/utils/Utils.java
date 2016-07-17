@@ -8,6 +8,7 @@ import console.Manager;
 import exceptions.InvalidCommandParametersException;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,6 +21,16 @@ public class Utils {
 
     public static int getInt (String value) throws NumberFormatException, NullPointerException{
         return Integer.parseInt(value);
+    }
+
+    public static String reconQuery (HashMap<String,String> param) {
+        String query = "";
+
+        for (String key : param.keySet()) {
+            query += String.format("%s=%s&",key,param.get(key));
+        }
+
+        return query.substring(0,query.length()-2);
     }
 
     //Commands Utils
@@ -69,6 +80,7 @@ public class Utils {
 
         try {
             //Prev
+
             HeaderInfo headerInfo = new HeaderInfo();
             CommandInfo command;
             CommandBase commandBase;
@@ -84,8 +96,8 @@ public class Utils {
                 //else paging.put("prev", String.format("%s?top=%s&skip=%s", link, top, prevSkip));
                 else paging.put("prev",String.format("%s?%s", link, pagingFormat(query, prevSkip, top)));
             } else paging.put("prev", null);
-
             //Next
+
             command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
             commandBase = Manager.commandMap.get(command);
             ri=commandBase.execute(command.getData());
@@ -121,6 +133,23 @@ public class Utils {
         else query += "&skip=" + skip;
 
         return query;
+    }
+
+    public static HashMap<String, String> specialPaging (String query, String link) {
+        HashMap<String, String> special = paging (query, link);
+        removeTop(special, "prev");
+        removeTop(special, "next");
+
+        return special;
+    }
+
+    private static void removeTop(HashMap<String, String> special, String key) {
+        if (special.get(key) != null) {
+            Pattern p = Pattern.compile("(top=)(\\d+)(&)");
+            Matcher m = p.matcher(special.get(key));
+
+            special.replace(key,m.replaceFirst(""));
+        }
     }
 
 }
