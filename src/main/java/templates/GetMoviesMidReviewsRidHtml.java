@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class MoviesMidReviewsRidHtml implements IResultFormat {
+public class GetMoviesMidReviewsRidHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
         ArrayList<String> values = ri.getValues().iterator().next();

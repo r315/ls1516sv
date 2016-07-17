@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class HomeHtml implements IResultFormat {
+public class GetHomeHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
             HtmlTree page = new HtmlTree();
@@ -24,7 +24,7 @@ public class HomeHtml implements IResultFormat {
                             new Pair<>("Top Ratings", "/tops/ratings")
                     )
             );
-            page.addFooter(new HtmlElement("div","João Duarte | Luís Almeida | Hugo Reis").
+            page.addFooter(new HtmlElement("div","Joï¿½o Duarte | Luï¿½s Almeida | Hugo Reis").
                             addAttributes("style","position:absolute;bottom:0;width:99%;text-align:center"));
             return page.getHtml();
     }

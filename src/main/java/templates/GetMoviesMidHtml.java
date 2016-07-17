@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class MoviesxMidHtml implements IResultFormat {
+public class GetMoviesMidHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
         String mid = ri.getValues().iterator().next().get(0);
@@ -46,6 +46,7 @@ public class MoviesxMidHtml implements IResultFormat {
 
         //Generate and Add Reviews
         HtmlTree page = new HtmlTree();
+        page.addData(ri);
 
         if (!pairs.isEmpty()) page.addList(pairs,"Reviews by");
 

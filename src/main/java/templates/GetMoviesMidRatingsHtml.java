@@ -13,7 +13,7 @@ import java.util.Arrays;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class MoviesMidRatingsHtml implements IResultFormat {
+public class GetMoviesMidRatingsHtml implements IResultFormat {
 
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {

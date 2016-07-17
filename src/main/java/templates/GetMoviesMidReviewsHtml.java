@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class MoviesMidReviewsHtml implements IResultFormat {
+public class GetMoviesMidReviewsHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
         ArrayList<String> values;

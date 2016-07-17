@@ -24,7 +24,6 @@ public class Manager {
     private static final Logger log = LoggerFactory.getLogger(Manager.class);
     public static CommandMap commandMap;
     private static Server server;
-    private static boolean isActive;
 
     public static void Init(){
         try {
@@ -45,11 +44,13 @@ public class Manager {
         Map<String,String> headers= headerinfo.getHeadersMap();
         String filename= headers.get("file-name");
         if(filename==null){//write to console
+            //// TODO: 14/07/2016 logger
             System.out.println(response);
         }else {//write response into a file
             try{
                 writeToFile(filename,response);
             }catch(IOException e){
+                //// TODO: 14/07/2016 logger
                 System.out.println("Error writing into file");
             }
         }
@@ -64,18 +65,14 @@ public class Manager {
             server.start();
         }catch(Exception e){
             log.error("Fail to start server!");
-        }finally {
-            isActive=true;
         }
     }
 
     public static void ServerStop(){
         try{
-            server.stop();
+            if (server != null) server.stop();
         }catch(Exception e){
             log.error("Fail to stop server!");
-        }finally {
-            isActive=false;
         }
     }
 
@@ -98,15 +95,15 @@ public class Manager {
         map.add("POST /collections",new PostCollections());
         map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
 
-        map.add("GET /",commandWithTemplate(new Home(), new HomeHtml()));
+        map.add("GET /",commandWithTemplate(new Home(), new GetHomeHtml()));
         map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
-        map.add("GET /movies/{mid}",commandWithTemplate(new GetMoviesMid(),new MoviesxMidHtml()));
-        map.add("GET /movies/{mid}/ratings",commandWithTemplate(new GetMoviesMidRatings(),new MoviesMidRatingsHtml()));
-        map.add("GET /movies/{mid}/reviews",commandWithTemplate(new GetMoviesMidReviews(),new MoviesMidReviewsHtml()));
-        map.add("GET /movies/{mid}/reviews/{rid}",commandWithTemplate(new GetMoviesMidReviewsRid(),new MoviesMidReviewsRidHtml()));
+        map.add("GET /movies/{mid}",commandWithTemplate(new GetMoviesMid(),new GetMoviesMidHtml()));
+        map.add("GET /movies/{mid}/ratings",commandWithTemplate(new GetMoviesMidRatings(),new GetMoviesMidRatingsHtml()));
+        map.add("GET /movies/{mid}/reviews",commandWithTemplate(new GetMoviesMidReviews(),new GetMoviesMidReviewsHtml()));
+        map.add("GET /movies/{mid}/reviews/{rid}",commandWithTemplate(new GetMoviesMidReviewsRid(),new GetMoviesMidReviewsRidHtml()));
         
-        map.add("GET /collections",commandWithTemplate(new GetCollections(), new CollectionsHtml()));
-        map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new CollectionsCidHtml()));
+        map.add("GET /collections",commandWithTemplate(new GetCollections(), new GetCollectionsHtml()));
+        map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new GetCollectionsCidHtml()));
 
         map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
         map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());

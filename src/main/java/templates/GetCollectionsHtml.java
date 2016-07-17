@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by hmr on 17/07/2016.
  */
-public class CollectionsHtml implements IResultFormat {
+public class GetCollectionsHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
 //        if (query == null) query = "top=5";
