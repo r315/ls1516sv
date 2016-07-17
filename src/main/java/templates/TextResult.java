@@ -3,11 +3,9 @@ package templates;
 import Strutures.Command.CommandInfo;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
-import templates.ResultFormat;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Created by Red on 24/04/2016.
@@ -27,7 +25,7 @@ public class TextResult implements IResultFormat {
         //System.out.println(resultInfo.getDisplayTitle()+":");
         for (ArrayList<String> dataList : resultInfo.getValues()) {
             Iterator<String> dataList_it= dataList.iterator();
-            if(resultInfo.getTitles()==null) {
+            if(resultInfo.getTitles().isEmpty()) {
                 while(dataList_it.hasNext())
                     result+=dataList_it.next()+"\n";
                 //System.out.println(dataList_it.next());

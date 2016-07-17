@@ -17,7 +17,7 @@ import java.util.HashMap;
  * Created by Red on 18/05/2016.
  */
 public class Listen extends CommandBase {
-    private static final String INFO= "Listen - Application starts listening to http requests";
+    private static final String INFO= "LISTEN / - Application starts listening to http requests";
     private static final Logger _logger = LoggerFactory.getLogger(Listen.class);
 
     @Override

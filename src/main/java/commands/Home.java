@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public class Home extends CommandBase {
 
-    private static final String INFO= "Home - Display Home page";
+    private static final String INFO= "GET / - Display Home page";
 
     @Override
     public ResultInfo execute(HashMap<String, String> prmts) throws InvalidCommandException {
