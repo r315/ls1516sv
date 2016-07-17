@@ -117,12 +117,12 @@ public class Manager {
 
         map.add("GET /tops/ratings",commandTemplateHtml(new TopsRatings(),new GetTopsRatingsHtml()));
         map.add("GET /tops/ratings/higher/average",commandWithTemplate(new GetTopsRatingsHigherAverage(), new GetGenericHtml()));
-        map.add("GET /tops/{n}/ratings/higher/average",commandWithTemplate(new GetTopsNRatingsHigherAverage(), new GetTopsNRatingsHigherAverageHtml()));
+        map.add("GET /tops/{n}/ratings/higher/average",commandWithTemplate(new GetTopsNRatingsHigherAverage(), new GetTopsNHtml()));
         map.add("GET /tops/ratings/lower/average",commandWithTemplate(new GetTopsRatingsLowerAverage(), new GetGenericHtml()));
-        map.add("GET /tops/{n}/ratings/lower/average",commandWithTemplate(new GetTopsNRatingsLowerAverage(), new GetTopsNRatingsLowerAverageHtml()));
+        map.add("GET /tops/{n}/ratings/lower/average",commandWithTemplate(new GetTopsNRatingsLowerAverage(), new GetTopsNHtml()));
         map.add("GET /tops/reviews/higher/count",commandWithTemplate(new GetTopsReviewsHigherCount(), new GetGenericHtml()));
-        map.add("GET /tops/{n}/reviews/higher/count",commandWithTemplate(new GetTopsNReviewsHigherCount(), new GetTopsNReviewsHigherCountHtml()));
-        map.add("GET /tops/{n}/reviews/lower/count", commandWithTemplate(new GetTopsNReviewsLowerCount(), new GetTopsNReviewsLowerCountHtml()));
+        map.add("GET /tops/{n}/reviews/higher/count",commandWithTemplate(new GetTopsNReviewsHigherCount(), new GetTopsNHtml()));
+        map.add("GET /tops/{n}/reviews/lower/count", commandWithTemplate(new GetTopsNReviewsLowerCount(), new GetTopsNHtml()));
 
         map.add("DELETE /collections/{cid}/movies/{mid}",commandWithTemplate(new DeleteCollectionsCidMoviesMid(), new GetGenericHtml()));
 

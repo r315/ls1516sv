@@ -7,7 +7,7 @@ import Strutures.ResponseFormat.ResultInfo;
 /**
  * Created by Red on 17/07/2016.
  */
-public class GetTopsNRatingsLowerAverageHtml implements IResultFormat {
+public class GetTopsNHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
         return null;
