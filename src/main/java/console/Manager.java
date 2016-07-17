@@ -99,11 +99,11 @@ public class Manager {
     public static CommandMap createMap() throws Exception{
         CommandMap map=new CommandMap();
 
-        map.add("POST /movies",new PostMovies());
-        map.add("POST /movies/{mid}/ratings",new PostMoviesMidRatings());
-        map.add("POST /movies/{mid}/reviews",new PostMoviesMidReviews());
-        map.add("POST /collections",new PostCollections());
-        map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
+        map.add("POST /movies",commandWithTemplate(new PostMovies(),new PostMoviesHtml()));
+        map.add("POST /movies/{mid}/ratings",commandTemplateText(new PostMoviesMidRatings()));
+        map.add("POST /movies/{mid}/reviews",commandTemplateText(new PostMoviesMidReviews()));
+        map.add("POST /collections",commandTemplateText(new PostCollections()));
+        map.add("POST /collections/{cid}/movies/",commandTemplateText(new PostCollectionsCidMovies()));
 
         map.add("GET /",commandTemplateHtml(new Home(), new GetHomeHtml()));
         map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
@@ -116,7 +116,7 @@ public class Manager {
         map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new GetCollectionsCidHtml()));
 
         map.add("GET /tops/ratings",commandTemplateHtml(new TopsRatings(),new GetTopsRatingsHtml()));
-        map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
+        map.add("GET /tops/ratings/higher/average",commandTemplateText(new GetTopsRatingsHigherAverage()));
         map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());
         map.add("GET /tops/ratings/lower/average",new GetTopsRatingsLowerAverage());
         map.add("GET /tops/{n}/ratings/lower/average",new GetTopsNRatingsLowerAverage());
@@ -126,9 +126,9 @@ public class Manager {
 
         map.add("DELETE /collections/{cid}/movies/{mid}",commandTemplateText(new DeleteCollectionsCidMoviesMid()));
 
-        map.add("OPTION /", commandWithTemplate(new Options(),new GenericHtml()));
-        map.add("LISTEN /", commandWithTemplate(new Listen(),new GenericHtml()));
-        map.add("EXIT /",commandWithTemplate(new Exit(),new GenericHtml()));
+        map.add("OPTION /", commandWithTemplate(new Options(),new GetGenericHtml()));
+        map.add("LISTEN /", commandWithTemplate(new Listen(),new GetGenericHtml()));
+        map.add("EXIT /",commandWithTemplate(new Exit(),new GetGenericHtml()));
         return map;
     }
 

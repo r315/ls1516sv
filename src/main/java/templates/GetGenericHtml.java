@@ -8,7 +8,7 @@ import Strutures.ResponseFormat.ResultInfo;
 /**
  * Created by Luigi Sekuiya on 17/07/2016.
  */
-public class GenericHtml implements IResultFormat {
+public class GetGenericHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) {
         if(!ri.generateresult) return "";

@@ -12,7 +12,11 @@ public abstract class CommandBase {
     private HashMap<String, IResultFormat> headermap;
 
     public String getResult(CommandInfo commandInfo, HeaderInfo headerinfo, ResultInfo resultInfo) {
-        return headermap.get(headerinfo.getHeadersMap().get("accept")).generate(resultInfo,commandInfo);
+        String h= headerinfo.getHeadersMap().get("accept");
+        IResultFormat rf= headermap.get(h);
+        String result= rf.generate(resultInfo,commandInfo);
+        return result;
+        //return headermap.get(headerinfo.getHeadersMap().get("accept")).generate(resultInfo,commandInfo);
     }
 
     public CommandBase addResultFormat(String hdr, IResultFormat rf){
