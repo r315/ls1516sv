@@ -91,10 +91,12 @@ public class GetMoviesTest {
 
         ResultInfo result = new ResultInfo(null,title,data);
 
+        HashMap<String, String> param = new HashMap<>();
+
         /* --- */
 
         GetMovies stuff = new GetMovies();
-        ResultInfo rs = stuff.execute(null);
+        ResultInfo rs = stuff.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
