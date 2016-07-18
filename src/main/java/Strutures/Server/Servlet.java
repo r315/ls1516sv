@@ -30,8 +30,8 @@ public class Servlet extends HttpServlet {
             String method= req.getMethod();
             String path= req.getRequestURI();
             String query= req.getQueryString();
-            if (query == null) query = "top=5";
-            else if (!query.contains("top=")) query += "&top=5";
+            if (query == null) query = String.format("top=%d",Utils.PAG_DEFAULT);
+            else if (!query.contains("top=")) query += String.format("&top=%d",Utils.PAG_DEFAULT);
             CommandInfo command = new CommandInfo(method, path, query);
             respBody = Manager.executeCommand(command,new HeaderInfo());
             InfoStatusCode(resp, 200, String.format("New GET was received: %s?%s",path,query));

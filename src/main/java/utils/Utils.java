@@ -51,27 +51,29 @@ public class Utils {
         return ts;
     }
 
-    public static HashMap<String, String> paging(HashMap<String,String> param, String link) throws SQLException, InvalidCommandException{
-        HashMap<String, String> paging = new HashMap<>();
+    public static final int PAG_DEFAULT = 5;
+
+    public static Pair<String, String> paging(HashMap<String,String> param, String link) throws SQLException, InvalidCommandException{
+        Pair<String,String> page = new Pair<>();
 
         String nextSkip, prevSkip = "";
-        String top = "5";
+        String top = Integer.toString(PAG_DEFAULT);
         String skip = param.get("skip");
 
         int skipI;
         try {
             if (skip == null || (skipI = Integer.parseInt(skip)) == 0) {
-                nextSkip = "5";
-                paging.put("prev", prevSkip);
+                nextSkip = top;
+                page.value1 = prevSkip;
             } else {
-                if (skipI < 5) {
+                if (skipI < PAG_DEFAULT) {
                     prevSkip = "0";
                 } else {
-                    prevSkip = Integer.toString(skipI - 5);
+                    prevSkip = Integer.toString(skipI - PAG_DEFAULT);
                 }
 
-                nextSkip = Integer.toString(skipI + 5);
-                paging.put("prev", String.format("%s?%s", link, pagingFormat(param, prevSkip, top)));
+                nextSkip = Integer.toString(skipI + PAG_DEFAULT);
+                page.value1 = String.format("%s?%s", link, pagingFormat(param, prevSkip, top));
             }
         } catch (NumberFormatException e) { //If not number
             throw new InvalidCommandParametersException("Invalid value for 'Skip'");
@@ -81,11 +83,11 @@ public class Utils {
         CommandInfo command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
         ResultInfo ri = Manager.commandMap.get(command).execute(command.getData());
 
-        if (ri.getValues().isEmpty()) paging.put("next", "");
+        if (ri.getValues().isEmpty()) page.value2 = "";
             //else paging.put("next", String.format("%s?top=%s&skip=%s", link, top, nextSkip));
-        else paging.put("next",String.format("%s?%s", link, pagingFormat(param, nextSkip, top)));
+        else page.value2 = String.format("%s?%s", link, pagingFormat(param, nextSkip, top));
 
-        return paging;
+        return page;
     }
 
     private static String pagingFormat(HashMap<String, String> param, String skip, String top) {
