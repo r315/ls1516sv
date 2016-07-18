@@ -23,8 +23,6 @@ public class PostMoviesMidRatings extends CommandBase {
 		rating - integer between 1 and 5.
 	*/
 
-	// TODO: Rollback
-
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException, InvalidCommandParametersException {
 		ResultInfo ri;

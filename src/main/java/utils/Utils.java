@@ -64,7 +64,6 @@ public class Utils {
         return new Pair<>(skipI,topI);
     }
 
-    //TODO: Check this method
     public static HashMap<String, String> paging(String query, String link) throws SQLException, InvalidCommandException{
         HashMap<String, String> paging = new HashMap<>();
 

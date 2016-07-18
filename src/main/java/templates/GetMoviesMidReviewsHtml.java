@@ -69,8 +69,6 @@ public class GetMoviesMidReviewsHtml implements IResultFormat {
                                 addChild(new HtmlElement("option", "4").addAttributes("value", "4")).
                                 addChild(new HtmlElement("option", "5").addAttributes("value", "5")),
 
-                        // TODO: 13/06/2016 Due to a small bug in the creating of the HTML, textarea appears with several tabs by default.
-
                         new HtmlElement("br", "Summary:"),
                         new HtmlElement("textarea").addAttributes("name", "reviewSummary").addAttributes("rows", "3").addAttributes("cols", "50").addAttributes("required", null),
 

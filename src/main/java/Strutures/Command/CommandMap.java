@@ -22,10 +22,10 @@ public class CommandMap {
         this.commandsMap=new HashMap<String, HashMap<String,DataNode>>();
     }
 
-    public boolean add(String sCommand, CommandBase iCommand)
+    public boolean add(String sCommand, CommandBase commandBase)
             throws InvalidCommandPathException, InvalidCommandMethodException{
-        //TODO make optional iCommand
-        if(sCommand==null || iCommand==null) return false;
+
+        if(sCommand==null || commandBase==null) return false;
 
         String table=null;
         String method= DecodeMethod.decode(sCommand);
@@ -49,7 +49,7 @@ public class CommandMap {
         }
         //path.iterator().forEachRemaining(s->dataNode.);
         path=DecodePath.decode(sCommand);
-        CNode curr= new CNode(path, iCommand);
+        CNode curr= new CNode(path, commandBase);
         curr.setNext(dataNode.getNext());
         dataNode.setNext(curr);
         return true;
