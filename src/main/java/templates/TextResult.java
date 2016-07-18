@@ -14,11 +14,19 @@ import java.util.Iterator;
  */
 public class TextResult implements IResultFormat {
 
-    private String response;
+    private static TextResult instance=null;
+
+    private TextResult(){}
+
+    public static TextResult getInstance(){
+        if(instance == null)
+            instance = new TextResult();
+        return instance;
+    }
 
     public String generate(ResultInfo resultInfo, CommandInfo commandInfo) throws SQLException, InvalidCommandException {
+        String response;
         if(resultInfo.getValues().isEmpty()){
-            //System.out.println("No results found.");
             response="No results found.";
             return response;
         }

@@ -21,25 +21,32 @@ import java.nio.charset.Charset;
  */
 public class Servlet extends HttpServlet {
     private static final Logger _logger = LoggerFactory.getLogger(Servlet.class);
+    private static final int HTTP_OK = 200;
+    private static final int HTTP_REDIRECT = 303;
+    private static final int HTTP_BAD_REQUEST = 400;
+    private static final int HTTP_NOT_FOUND = 404;
+    private static final int HTTP_INTERNAL_ERROR = 500;
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         String respBody;
+        String method= req.getMethod();
+        String path= req.getRequestURI();
+        String query= req.getQueryString();
+
+        if (query == null) query = String.format("top=%d",Utils.PAG_DEFAULT);
+        else if (!query.contains("top=")) query += String.format("&top=%d",Utils.PAG_DEFAULT);
+
         try{
-            String method= req.getMethod();
-            String path= req.getRequestURI();
-            String query= req.getQueryString();
-            if (query == null) query = String.format("top=%d",Utils.PAG_DEFAULT);
-            else if (!query.contains("top=")) query += String.format("&top=%d",Utils.PAG_DEFAULT);
             CommandInfo command = new CommandInfo(method, path, query);
             respBody = Manager.executeCommand(command,new HeaderInfo());
-            InfoStatusCode(resp, 200, String.format("New GET was received: %s?%s",path,query));
+            InfoStatusCode(resp, HTTP_OK, String.format("New GET was received: %s?%s",path,query));
         }catch(Exception e){
             if(e instanceof InvalidCommandException){
-                respBody=ErrorStatusCode(resp, 404, e.getMessage());
+                respBody=ErrorStatusCode(resp, HTTP_NOT_FOUND, e.getMessage());
             }else{
-                respBody=ErrorStatusCode(resp, 500, e.getMessage());
+                respBody=ErrorStatusCode(resp, HTTP_INTERNAL_ERROR, e.getMessage());
             }
         }
         doResponse(resp,respBody);
@@ -55,13 +62,13 @@ public class Servlet extends HttpServlet {
             String query= Utils.decodeParametersMap(req.getParameterMap());
             CommandInfo command = new CommandInfo(method,path,query);
             String redirect_path= Manager.executeCommand(command, new HeaderInfo());
-            InfoStatusCode(resp, 303, String.format("New POST fulfilled: %s?%s",path,query));
+            InfoStatusCode(resp, HTTP_REDIRECT, String.format("New POST fulfilled: %s?%s",path,query));
             resp.sendRedirect(redirect_path);
         }catch(Exception e) {
             if(e instanceof PostException || e instanceof InvalidCommandException){
-                respBody=ErrorStatusCode(resp, 400, e.getMessage());
+                respBody=ErrorStatusCode(resp, HTTP_BAD_REQUEST, e.getMessage());
             }else{
-                respBody=ErrorStatusCode(resp, 500, e.getMessage());
+                respBody=ErrorStatusCode(resp, HTTP_INTERNAL_ERROR, e.getMessage());
             }
             doResponse(resp,respBody);
         }

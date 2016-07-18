@@ -23,17 +23,15 @@ public class PostMovies extends CommandBase {
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-		ResultInfo ri = null;
-		if (data == null)
-			throw new InvalidCommandParametersException();
-
+		ResultInfo ri;
 		String title = data.get("title");
 		String date = data.get("releaseYear");
 
 		if (title == null || date == null)
 			throw new InvalidCommandParametersException();
 
-		try (Connection conn = ConnectionFactory.getConn();
+		try (
+				Connection conn = ConnectionFactory.getConn();
 			 PreparedStatement movieInsert = conn.prepareStatement(INSERT_MOVIE, PreparedStatement.RETURN_GENERATED_KEYS);
 			 PreparedStatement ratingInsert = conn.prepareStatement(INSERT_RATING)
 		){

@@ -1,8 +1,10 @@
 package console;
 
-import Strutures.Command.*;
+import Strutures.Command.CommandBase;
+import Strutures.Command.CommandInfo;
+import Strutures.Command.CommandMap;
+import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.IResultFormat;
-import templates.*;
 import Strutures.ResponseFormat.ResultInfo;
 import commands.*;
 import exceptions.InvalidCommandException;
@@ -10,10 +12,10 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import templates.*;
+import utils.Utils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -25,12 +27,8 @@ public class Manager {
     public static CommandMap commandMap;
     private static Server server;
 
-    public static void Init(){
-        try {
-            commandMap = createMap();
-        }catch(Exception e){
-           log.error("Fail to initialize Manager");
-        }
+    public static void Init() throws InvalidCommandException{
+        commandMap = createMap();
     }
 
     public static String executeCommand(CommandInfo commandInfo, HeaderInfo headerInfo)
@@ -47,7 +45,7 @@ public class Manager {
             System.out.println(response);
         }else {//write response into a file
             try{
-                writeToFile(filename,response);
+                Utils.writeToFile(filename,response);
             }catch(IOException e){
                 System.out.println("Error writing into file: " + e.getMessage());
                 log.error(e.getMessage());
@@ -63,7 +61,7 @@ public class Manager {
         try{
             server.start();
         }catch(Exception e){
-            log.error("Fail to start server!");
+            log.error(String.format("Failed to start server - %s",e.getMessage()));
         }
     }
 
@@ -71,7 +69,7 @@ public class Manager {
         try{
             if (server != null) server.stop();
         }catch(Exception e){
-            log.error("Fail to stop server!");
+            log.error(String.format("Failed to stop server - %s",e.getMessage()));
         }
     }
 
@@ -79,23 +77,7 @@ public class Manager {
         server.setHandler(handler);
     }
 
-    private static CommandBase commandWithTemplate(CommandBase cb, IResultFormat rf){
-        cb.addResultFormat("text/plain",new TextResult());
-        cb.addResultFormat("text/html", rf);
-        return cb;
-    }
-
-    private static CommandBase commandTemplateText(CommandBase cb){
-        cb.addResultFormat("text/plain",new TextResult());
-        return cb;
-    }
-
-    private static CommandBase commandTemplateHtml(CommandBase cb, IResultFormat rf){
-        cb.addResultFormat("text/html",rf);
-        return cb;
-    }
-
-    public static CommandMap createMap() throws Exception{
+    public static CommandMap createMap() throws InvalidCommandException{
         CommandMap map=new CommandMap();
 
         map.add("POST /movies",commandWithTemplate(new PostMovies(),new PostMoviesHtml()));
@@ -104,7 +86,7 @@ public class Manager {
         map.add("POST /collections",commandWithTemplate(new PostCollections(), new PostCollectionsHtml()));
         map.add("POST /collections/{cid}/movies/",commandWithTemplate(new PostCollectionsCidMovies(), new PostCollectionsCidMoviesHtml()));
 
-        map.add("GET /",commandTemplateHtml(new Home(), new GetHomeHtml()));
+        map.add("GET /",commandWithOnlyHtmlTemplate(new Home(), new GetHomeHtml()));
         map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
         map.add("GET /movies/{mid}",commandWithTemplate(new GetMoviesMid(),new GetMoviesMidHtml()));
         map.add("GET /movies/{mid}/ratings",commandWithTemplate(new GetMoviesMidRatings(),new GetMoviesMidRatingsHtml()));
@@ -114,30 +96,42 @@ public class Manager {
         map.add("GET /collections",commandWithTemplate(new GetCollections(), new GetCollectionsHtml()));
         map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new GetCollectionsCidHtml()));
 
-        map.add("GET /tops/ratings",commandTemplateHtml(new TopsRatings(),new GetTopsRatingsHtml()));
-        map.add("GET /tops/ratings/higher/average",commandWithTemplate(new GetTopsRatingsHigherAverage(), new GetGenericHtml()));
+        map.add("GET /tops/ratings",commandWithOnlyHtmlTemplate(new TopsRatings(),new GetTopsRatingsHtml()));
+        map.add("GET /tops/ratings/higher/average",commandWithGenericTemplates(new GetTopsRatingsHigherAverage()));
         map.add("GET /tops/{n}/ratings/higher/average",commandWithTemplate(new GetTopsNRatingsHigherAverage(), new GetTopsNHtml()));
-        map.add("GET /tops/ratings/lower/average",commandWithTemplate(new GetTopsRatingsLowerAverage(), new GetGenericHtml()));
+        map.add("GET /tops/ratings/lower/average",commandWithGenericTemplates(new GetTopsRatingsLowerAverage()));
         map.add("GET /tops/{n}/ratings/lower/average",commandWithTemplate(new GetTopsNRatingsLowerAverage(), new GetTopsNHtml()));
-        map.add("GET /tops/reviews/higher/count",commandWithTemplate(new GetTopsReviewsHigherCount(), new GetGenericHtml()));
+        map.add("GET /tops/reviews/higher/count",commandWithGenericTemplates(new GetTopsReviewsHigherCount()));
         map.add("GET /tops/{n}/reviews/higher/count",commandWithTemplate(new GetTopsNReviewsHigherCount(), new GetTopsNHtml()));
         map.add("GET /tops/{n}/reviews/lower/count", commandWithTemplate(new GetTopsNReviewsLowerCount(), new GetTopsNHtml()));
 
-        map.add("DELETE /collections/{cid}/movies/{mid}",commandWithTemplate(new DeleteCollectionsCidMoviesMid(), new GetGenericHtml()));
+        map.add("DELETE /collections/{cid}/movies/{mid}",commandWithGenericTemplates(new DeleteCollectionsCidMoviesMid()));
 
-        map.add("OPTION /", commandWithTemplate(new Options(),new GetGenericHtml()));
-        map.add("LISTEN /", commandWithTemplate(new Listen(),new GetGenericHtml()));
-        map.add("EXIT /",commandWithTemplate(new Exit(),new GetGenericHtml()));
+        map.add("OPTION /", commandWithGenericTemplates(new Options()));
+        map.add("LISTEN /", commandWithOnlyTextTemplate(new Listen()));
+        map.add("EXIT /",new Exit());
         return map;
     }
 
-    private static void writeToFile(String filename, String s) throws FileNotFoundException {
-        if(filename == null){
-            System.out.println(s);
-        }else{
-            try(  PrintWriter file = new PrintWriter(filename)) {
-                file.println(s);
-            }
-        }
+    private static CommandBase commandWithTemplate(CommandBase cb, IResultFormat rf){
+        cb.addResultFormat("text/plain",TextResult.getInstance());
+        cb.addResultFormat("text/html", rf);
+        return cb;
+    }
+
+    private static CommandBase commandWithGenericTemplates(CommandBase cb){
+        cb.addResultFormat("text/plain",TextResult.getInstance());
+        cb.addResultFormat("text/html", GetGenericHtml.getInstance());
+        return cb;
+    }
+
+    private static CommandBase commandWithOnlyTextTemplate(CommandBase cb){
+        cb.addResultFormat("text/plain",TextResult.getInstance());
+        return cb;
+    }
+
+    private static CommandBase commandWithOnlyHtmlTemplate(CommandBase cb, IResultFormat rf){
+        cb.addResultFormat("text/html",rf);
+        return cb;
     }
 }
