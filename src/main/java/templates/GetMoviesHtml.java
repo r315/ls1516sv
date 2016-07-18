@@ -19,12 +19,6 @@ import java.util.List;
  */
 public class GetMoviesHtml implements IResultFormat {
 
-    private static GetMoviesHtml staticObj=new GetMoviesHtml();
-
-    public static GetMoviesHtml getTemplate(){
-        return staticObj;
-    }
-
     public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
         List<Pair<String,String>> pairs = new ArrayList<>();
 

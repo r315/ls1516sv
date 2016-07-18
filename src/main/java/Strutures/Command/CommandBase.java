@@ -11,6 +11,13 @@ public abstract class CommandBase {
 
     private HashMap<String, IResultFormat> headermap;
 
+    public CommandBase(){
+        headermap = new HashMap<>();
+    }
+
+    public CommandBase(HashMap<String, IResultFormat> hm){
+        headermap = hm;
+    }
     public String getResult(CommandInfo commandInfo, HeaderInfo headerinfo, ResultInfo resultInfo) throws SQLException, InvalidCommandException  {
         String h= headerinfo.getHeadersMap().get("accept");
         IResultFormat rf= headermap.get(h);
@@ -24,14 +31,9 @@ public abstract class CommandBase {
         return this;
     }
 
-    public CommandBase(){
-        headermap = new HashMap<>();
-    }
 
-    public CommandBase(HashMap<String, IResultFormat> hm){
-        headermap = hm;
-    }
 
     abstract public ResultInfo execute(HashMap<String,String> prmts) throws SQLException, InvalidCommandException;
+
     abstract public String getInfo();
 }

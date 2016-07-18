@@ -2,13 +2,12 @@ package commands;
 
 import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
-import Strutures.Server.*;
+import Strutures.Server.Servlet;
+import Strutures.Server.favIconServlet;
 import console.Manager;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 import org.eclipse.jetty.servlet.ServletHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,22 +17,19 @@ import java.util.HashMap;
  */
 public class Listen extends CommandBase {
     private static final String INFO= "LISTEN / - Application starts listening to http requests";
-    private static final Logger _logger = LoggerFactory.getLogger(Listen.class);
 
     @Override
     public ResultInfo execute(HashMap<String, String> prmts) throws InvalidCommandException, SQLException {
+        String aux_port= prmts.get("port");
+        if(aux_port==null){
+            throw new InvalidCommandParametersException("Invalid port parameter. Server won't start.");
+        }
+
         int port;
         try{
-            String aux_port= prmts.get("port");
-            if(aux_port==null){
-                _logger.error("Invalid port parameter. Server won't start.");
-                throw new InvalidCommandParametersException();
-            }
-
             port = Integer.parseInt(aux_port);
         }catch (NumberFormatException n){
-            _logger.error("Invalid port parameter. Server won't start.");
-            throw new InvalidCommandParametersException();
+            throw new InvalidCommandParametersException("Invalid port parameter. Server won't start.");
         }
         Manager.ServerCreate(port);
 
