@@ -12,6 +12,7 @@ import utils.Utils;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,7 +37,7 @@ public class GetCollectionsHtml implements IResultFormat {
 
         //Set Navigation links
         page.addNavigationLinks(
-                Arrays.asList(
+                Collections.singletonList(
                         new Pair<>("Home", "/")
                 )
         );
@@ -47,8 +48,8 @@ public class GetCollectionsHtml implements IResultFormat {
 
         page.addFormGeneric("Add Collection",
                 Arrays.asList(
-                        new Pair<String, String>("method", "POST"),
-                        new Pair<String, String>("action", String.format("/collections?%s", "top=5"))),
+                        new Pair<>("method", "POST"),
+                        new Pair<>("action", String.format("/collections?%s", "top=5"))),
                 Arrays.asList(
                         new HtmlElement("br", "Collection title"),
                         new HtmlElement("input")

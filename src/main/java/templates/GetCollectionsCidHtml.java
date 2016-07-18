@@ -48,8 +48,8 @@ public class GetCollectionsCidHtml implements IResultFormat {
 
         page.addFormGeneric("Add Movie to Collection",
                 Arrays.asList(
-                        new Pair<String, String>("method", "POST"),
-                        new Pair<String, String>("action", String.format("/collections/%s/movies", cid))),
+                        new Pair<>("method", "POST"),
+                        new Pair<>("action", String.format("/collections/%s/movies", cid))),
                 Arrays.asList(
                         new HtmlElement("br","Movie ID"),
                         new HtmlElement("input")

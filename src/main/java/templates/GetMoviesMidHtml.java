@@ -22,13 +22,12 @@ public class GetMoviesMidHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
         String mid = ri.getValues().iterator().next().get(0);
-        ResultInfo resultInfo = null;
         GetMoviesMidReviews reviews = new GetMoviesMidReviews();
         GetCollectionMoviesMid collections = new GetCollectionMoviesMid();
         HashMap<String, String> param = new HashMap<>();
 
         param.put("mid",mid);
-        resultInfo = reviews.execute(param);
+        ResultInfo resultInfo = reviews.execute(param);
         List<Pair<String,String>> pairs = new ArrayList<>();
         for (ArrayList<String> line : resultInfo.getValues()){
             pairs.add(new Pair<>(line.get(3),"/movies/"+mid+"/reviews/"+line.get(2)));        }
