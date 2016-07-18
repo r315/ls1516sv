@@ -4,9 +4,14 @@ import Strutures.Command.CommandBase;
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.ResultInfo;
+import Strutures.Server.Servlet;
 import console.Manager;
+import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -16,6 +21,8 @@ import java.util.regex.Pattern;
  * Created by Luigi Sekuiya on 22/04/2016.
  */
 public class Utils {
+
+    private static final Logger _logger = LoggerFactory.getLogger(Utils.class);
 
     //General Utils
 
@@ -58,10 +65,7 @@ public class Utils {
     }
 
     //TODO: Check this method
-    public static HashMap<String, String> paging(String query, String link){
-
-        //"(skip=)(\\d+)" StringBuffer result = new StringBuffer();
-
+    public static HashMap<String, String> paging(String query, String link) throws SQLException, InvalidCommandException{
         HashMap<String, String> paging = new HashMap<>();
 
         String nextSkip, prevSkip = null;
@@ -79,41 +83,31 @@ public class Utils {
 
         if (skip == null || (skipI = getInt(skip)) == 0) {
             nextSkip = "5";
+            paging.put("prev", null);
         } else {
             if (skipI < 5) { prevSkip = "0"; nextSkip = "5"; }
-            else { prevSkip = Integer.toString(skipI-5); nextSkip = Integer.toString(skipI+5); }
+            else { prevSkip = Integer.toString(skipI-5); }
+
+            nextSkip = Integer.toString(skipI+5);
+            paging.put("prev",String.format("%s?%s", link, pagingFormat(query, prevSkip, top)));
         }
-
-        try {
-            //Prev
-
-            HeaderInfo headerInfo = new HeaderInfo();
-            CommandInfo command;
-            CommandBase commandBase;
-            ResultInfo ri;
-
-            if ( prevSkip != null) {
+            /*if ( prevSkip != null) {
                 command = new CommandInfo("GET", link, String.format("top=%s&skip=%s", top, prevSkip));
-                //resultFormat = (HtmlResult) Manager.executeCommand(command, headerInfo);
                 commandBase = Manager.commandMap.get(command);
                 ri=commandBase.execute(command.getData());
 
                 if (ri.getValues().isEmpty()) paging.put("prev", null);
                 //else paging.put("prev", String.format("%s?top=%s&skip=%s", link, top, prevSkip));
                 else paging.put("prev",String.format("%s?%s", link, pagingFormat(query, prevSkip, top)));
-            } else paging.put("prev", null);
-            //Next
+            } else paging.put("prev", null);*/
 
-            command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
-            commandBase = Manager.commandMap.get(command);
-            ri=commandBase.execute(command.getData());
+            //Next
+            CommandInfo command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
+            ResultInfo ri = Manager.commandMap.get(command).execute(command.getData());
 
             if (ri.getValues().isEmpty()) paging.put("next", null);
             //else paging.put("next", String.format("%s?top=%s&skip=%s", link, top, nextSkip));
             else paging.put("next",String.format("%s?%s", link, pagingFormat(query, nextSkip, top)));
-        }catch (Exception e){
-
-        }
 
         return paging;
     }
@@ -139,23 +133,6 @@ public class Utils {
         else query += "&skip=" + skip;
 
         return query;
-    }
-
-    public static HashMap<String, String> specialPaging (String query, String link) {
-        HashMap<String, String> special = paging (query, link);
-        removeTop(special, "prev");
-        removeTop(special, "next");
-
-        return special;
-    }
-
-    private static void removeTop(HashMap<String, String> special, String key) {
-        if (special.get(key) != null) {
-            Pattern p = Pattern.compile("(top=)(\\d+)(&)");
-            Matcher m = p.matcher(special.get(key));
-
-            special.replace(key,m.replaceFirst(""));
-        }
     }
 
 }

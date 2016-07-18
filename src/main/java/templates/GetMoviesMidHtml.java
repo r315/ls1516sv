@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class GetMoviesMidHtml implements IResultFormat {
     @Override
-    public String generate(ResultInfo ri, CommandInfo ci) {
+    public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
         String mid = ri.getValues().iterator().next().get(0);
 
         //Get Reviews

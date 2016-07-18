@@ -5,9 +5,11 @@ import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 import utils.Pair;
 import utils.Utils;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,7 @@ public class GetMoviesHtml implements IResultFormat {
         return staticObj;
     }
 
-    public String generate(ResultInfo ri, CommandInfo ci) {
+    public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
         List<Pair<String,String>> pairs = new ArrayList<>();
 
         for (ArrayList<String> line : ri.getValues()){

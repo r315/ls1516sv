@@ -5,9 +5,11 @@ import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 import utils.Pair;
 import utils.Utils;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,7 +22,7 @@ import java.util.regex.Pattern;
  */
 public class GetMoviesMidReviewsHtml implements IResultFormat {
     @Override
-    public String generate(ResultInfo ri, CommandInfo ci) {
+    public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
         ArrayList<String> values;
 
         if (ri.getValues().iterator().hasNext()) values = ri.getValues().iterator().next();

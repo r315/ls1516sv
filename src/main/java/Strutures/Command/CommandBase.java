@@ -11,7 +11,7 @@ public abstract class CommandBase {
 
     private HashMap<String, IResultFormat> headermap;
 
-    public String getResult(CommandInfo commandInfo, HeaderInfo headerinfo, ResultInfo resultInfo) {
+    public String getResult(CommandInfo commandInfo, HeaderInfo headerinfo, ResultInfo resultInfo) throws SQLException, InvalidCommandException  {
         String h= headerinfo.getHeadersMap().get("accept");
         IResultFormat rf= headermap.get(h);
         String result= rf.generate(resultInfo,commandInfo);

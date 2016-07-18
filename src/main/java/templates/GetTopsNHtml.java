@@ -4,8 +4,10 @@ import Strutures.Command.CommandInfo;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 import utils.Pair;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.List;
  */
 public class GetTopsNHtml implements IResultFormat {
     @Override
-    public String generate(ResultInfo ri, CommandInfo ci) {
+    public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
 
         //Add collections links to each column
         List<Pair<String,String>> pairs=new ArrayList<>();

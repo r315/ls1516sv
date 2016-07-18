@@ -3,7 +3,9 @@ package templates;
 import Strutures.Command.CommandInfo;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -14,7 +16,7 @@ public class TextResult implements IResultFormat {
 
     private String response;
 
-    public String generate(ResultInfo resultInfo, CommandInfo commandInfo){
+    public String generate(ResultInfo resultInfo, CommandInfo commandInfo) throws SQLException, InvalidCommandException {
         if(resultInfo.getValues().isEmpty()){
             //System.out.println("No results found.");
             response="No results found.";

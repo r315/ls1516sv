@@ -5,8 +5,10 @@ import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandException;
 import utils.Pair;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 
 /**
@@ -14,7 +16,7 @@ import java.util.Arrays;
  */
 public class GetHomeHtml implements IResultFormat {
     @Override
-    public String generate(ResultInfo ri, CommandInfo ci) {
+    public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
             HtmlTree page = new HtmlTree();
             page.addNavigationLinks(
                     Arrays.asList(
