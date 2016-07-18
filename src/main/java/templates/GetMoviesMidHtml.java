@@ -22,44 +22,21 @@ public class GetMoviesMidHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
         String mid = ri.getValues().iterator().next().get(0);
-
-        //Get Reviews
-        GetMoviesMidReviews reviews = new GetMoviesMidReviews();
-
-        HashMap<String, String> param = new HashMap<>();
-        param.put("mid",mid);
-
         ResultInfo resultInfo = null;
-        try {
-            resultInfo = reviews.execute(param);
-        } catch (InvalidCommandException e) {
-           //TODO: handle this exceptions
-        } catch (SQLException e) {
+        GetMoviesMidReviews reviews = new GetMoviesMidReviews();
+        GetCollectionMoviesMid collections = new GetCollectionMoviesMid();
+        HashMap<String, String> param = new HashMap<>();
 
-        }
-
+        param.put("mid",mid);
+        resultInfo = reviews.execute(param);
         List<Pair<String,String>> pairs = new ArrayList<>();
-
         for (ArrayList<String> line : resultInfo.getValues()){
-            pairs.add(new Pair<>(line.get(3),"/movies/"+mid+"/reviews/"+line.get(2)));
-        }
+            pairs.add(new Pair<>(line.get(3),"/movies/"+mid+"/reviews/"+line.get(2)));        }
 
-        //Generate and Add Reviews
         HtmlTree page = new HtmlTree();
         page.addData(ri);
-
         if (!pairs.isEmpty()) page.addList(pairs,"Reviews by");
-
-        //Get Collections
-        GetCollectionMoviesMid collections = new GetCollectionMoviesMid();
-
-        try {
-            resultInfo = collections.execute(param);
-        } catch (InvalidCommandException e) {
-            //TODO: handle this exceptions
-        } catch (SQLException e) {
-            //TODO: handle this exceptions
-        }
+        resultInfo = collections.execute(param);
 
         pairs = new ArrayList<>();
 

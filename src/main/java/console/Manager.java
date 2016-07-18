@@ -44,14 +44,13 @@ public class Manager {
         Map<String,String> headers= headerinfo.getHeadersMap();
         String filename= headers.get("file-name");
         if(filename==null){//write to console
-            //// TODO: 14/07/2016 logger
             System.out.println(response);
         }else {//write response into a file
             try{
                 writeToFile(filename,response);
             }catch(IOException e){
-                //// TODO: 14/07/2016 logger
-                System.out.println("Error writing into file");
+                System.out.println("Error writing into file: " + e.getMessage());
+                log.error(e.getMessage());
             }
         }
     }
