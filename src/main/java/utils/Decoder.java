@@ -1,14 +1,12 @@
 package utils;
 
 import exceptions.*;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+
 
 /**
  * Created by hmr on 18/07/2016.
@@ -28,14 +26,16 @@ public class Decoder {
         return decode(args,"=","&", InvalidCommandParametersException::new);
     }
 
-    public static Collection<String> decodePath(String [] args) throws InvalidCommandException {
+    public static Collection<String> decodeFullPath(String line) throws InvalidCommandPathException {
+        return decodePath(line.split(" "));
+    }
+
+    public static Collection<String> decodePath(String [] args) throws InvalidCommandPathException {
         if (args.length >= 2 && args[1] != null && args[1].length() != 0) return decodePath(args[1]);
         else throw new InvalidCommandPathException();
     }
 
-    public static Collection<String> decodePath(String path)throws InvalidCommandException {
-        if(!path.startsWith("/"))
-            throw new InvalidCommandPathException();
+    public static Collection<String> decodePath(String path) {
         String [] pathS = path.split("/");
         Collection<String> resources = new ArrayList<>();
         if( pathS.length > 0) resources.addAll(Arrays.asList(pathS).subList(1,pathS.length));

@@ -32,7 +32,7 @@ public class CommandMap {
         HashMap<String, DataNode> methodMap= this.commandsMap.putIfAbsent(method,new HashMap<String, DataNode>());
         if(methodMap==null)//in case it didn't exist before
             methodMap=this.commandsMap.get(method);
-        Collection<String> path= Decoder.decodePath(sCommand);
+        Collection<String> path= Decoder.decodeFullPath(sCommand);
         if(path.size()!=0){
             path.removeIf(s -> s.startsWith("{")&& s.endsWith("}"));
             table= path.iterator().next();
@@ -47,7 +47,7 @@ public class CommandMap {
                 if(!col.contains(s))dataNode.addToResources(s);
         }
         //path.iterator().forEachRemaining(s->dataNode.);
-        path=Decoder.decodePath(sCommand);
+        path=Decoder.decodeFullPath(sCommand);
         CNode curr= new CNode(path, commandBase);
         curr.setNext(dataNode.getNext());
         dataNode.setNext(curr);
