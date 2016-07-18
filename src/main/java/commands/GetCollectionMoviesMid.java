@@ -25,7 +25,7 @@ public class GetCollectionMoviesMid extends CommandBase {
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery())
         ){
-            int mid = Utils.getInt(data.get("mid"));
+            int mid = Integer.parseInt(data.get("mid"));
 
             pstmt.setInt(1, mid);
 

@@ -47,7 +47,7 @@ public class PostMoviesMidReviews extends CommandBase {
 			if(values.size() != NPARAM)
 				throw new InvalidCommandParametersException();
 
-			pstmt.setInt(1, Utils.getInt(data.get("mid")));
+			pstmt.setInt(1, Integer.parseInt(data.get("mid")));
 			pstmt.setString(2, values.get(0));
 			pstmt.setString(3,values.get(1));
 			pstmt.setString(4,values.get(2));

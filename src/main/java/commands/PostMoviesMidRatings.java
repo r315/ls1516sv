@@ -32,7 +32,7 @@ public class PostMoviesMidRatings extends CommandBase {
 		int mID;
 		try{
 			rID= getRating(data.get("rating"));
-			mID = Utils.getInt(data.get("mid"));
+			mID = Integer.parseInt(data.get("mid"));
 		}catch(NumberFormatException | NullPointerException e){
 			throw new InvalidCommandParametersException();
 		}

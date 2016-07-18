@@ -21,22 +21,15 @@ public class GetMoviesMidReviews extends CommandBase {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        String topS = data.get("top");
-
-        Boolean topB = (topS != null);
-        int skip, top;
-
-        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
-
-        skip = skiptop.value1;
-        top = skiptop.value2;
+        int skip = Utils.getSkip(data.get("skip"));
+        int top = Utils.getTop(data.get("top"));
 
         try(
                 Connection conn = ConnectionFactory.getConn();
-                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(top))
 
         ) {
-            int mid = Utils.getInt(data.get("mid"));
+            int mid = Integer.parseInt(data.get("mid"));
 
             pstmt.setInt(1, mid);
             pstmt.setInt(2, skip);
@@ -56,14 +49,14 @@ public class GetMoviesMidReviews extends CommandBase {
         return INFO;
     }
 
-    private String getQuery(Boolean topB, int top) {
+    private String getQuery(int top) {
         String query = "SELECT Movie.movie_id, Movie.title, Review.review_id, Review.name, Review.summary, Review.rating " +
                         "FROM Review " +
                         "RIGHT JOIN Movie ON Review.movie_id=Movie.movie_id " +
                         "WHERE Movie.movie_id = ? " +
                         "ORDER BY Movie.movie_id " +
                         "OFFSET ? ROWS";
-        if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
+        if (top > 0) query += " FETCH NEXT " + top + " ROWS ONLY";
         return query;
     }
 

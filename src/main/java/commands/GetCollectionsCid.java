@@ -22,21 +22,14 @@ public class GetCollectionsCid extends CommandBase {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        String topS = data.get("top");
-
-        Boolean topB = (topS != null);
-        int skip, top;
-
-        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
-
-        skip = skiptop.value1;
-        top = skiptop.value2;
+        int skip = Utils.getSkip(data.get("skip"));
+        int top = Utils.getTop(data.get("top"));
 
         try(
                 Connection conn = ConnectionFactory.getConn();
-                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(top))
         ){
-            int cid = Utils.getInt(data.get("cid"));
+            int cid = Integer.parseInt(data.get("cid"));
 
             pstmt.setInt(1, cid);
             pstmt.setInt(2, skip);
@@ -59,14 +52,14 @@ public class GetCollectionsCid extends CommandBase {
         return INFO;
     }
 
-    private String getQuery(Boolean topB, int top) {
+    private String getQuery(int top) {
         String query = "SELECT Collection.*, Movie.* FROM Movie " +
                 "INNER JOIN Has ON Has.movie_id = Movie.movie_id " +
                 "RIGHT JOIN Collection ON Collection.collection_id = Has.collection_id " +
                 "WHERE Collection.collection_id = ? " +
                 "ORDER BY Movie.title " +
                 "OFFSET ? ROWS";
-        if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
+        if (top > 0) query += " FETCH NEXT " + top + " ROWS ONLY";
         return query;
     }
 

@@ -24,7 +24,7 @@ public class GetMoviesMidReviewsRid extends CommandBase {
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery())
         ) {
-            int mid = Utils.getInt(data.get("mid")), rid = Utils.getInt(data.get("rid"));
+            int mid = Integer.parseInt(data.get("mid")), rid = Integer.parseInt(data.get("rid"));
 
             pstmt.setInt(1, mid);
             pstmt.setInt(2, rid);

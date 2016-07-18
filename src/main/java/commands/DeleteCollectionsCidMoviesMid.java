@@ -24,8 +24,8 @@ public class DeleteCollectionsCidMoviesMid extends CommandBase {
                 PreparedStatement select = conn.prepareStatement(getQuerySelect());
                 PreparedStatement delete = conn.prepareStatement(getQueryDelete())
         ){
-            int mid = Utils.getInt(data.get("mid"));
-            int cid = Utils.getInt(data.get("cid"));
+            int mid = Integer.parseInt(data.get("mid"));
+            int cid = Integer.parseInt(data.get("cid"));
 
             select.setInt(1,cid);
             select.setInt(2,mid);

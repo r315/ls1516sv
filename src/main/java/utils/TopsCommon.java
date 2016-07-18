@@ -31,7 +31,7 @@ public class TopsCommon {
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement((isRating) ? getQueryNRating(top, descOrder) : getQueryNReview(top, descOrder))
         ){
-            int n = Utils.getInt(data.get("n"));
+            int n = Integer.parseInt(data.get("n"));
             if (n < 0) throw new InvalidCommandVariableException();
 
             pstmt.setInt(1, n);

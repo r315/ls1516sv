@@ -25,15 +25,8 @@ public class GetMovies extends CommandBase {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        String topS = data.get("top");
-
-        Boolean topB = (topS != null);
-        int skip, top;
-
-        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
-
-        skip = skiptop.value1;
-        top = skiptop.value2;
+        int skip = Utils.getSkip(data.get("skip"));
+        int top = Utils.getTop(data.get("top"));
 
         String orderBy = data.get("sortBy");
         if (orderBy == null) orderBy = "title";
@@ -41,7 +34,7 @@ public class GetMovies extends CommandBase {
 
         try(
                 Connection conn = ConnectionFactory.getConn();
-                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top, orderBy))
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(top, orderBy))
         ){
             pstmt.setInt(1, skip);
 
@@ -57,7 +50,7 @@ public class GetMovies extends CommandBase {
         return INFO;
     }
 
-    private String getQuery(Boolean topB, int top, String orderBy) {
+    private String getQuery(int top, String orderBy) {
         String query = "SELECT Movie.*, ((one * 1. + two * 2 + three * 3 + four * 4 + five * 5) / nullif((one + two + three + four + five),0) ) as rating FROM Movie\n" +
                 "LEFT JOIN (\n" +
                 "SELECT movie_id, COALESCE((one + [1]), one, [1]) as one, COALESCE((two + [2]), two, [2]) as two, COALESCE((three + [3]), three, [3]) as three, COALESCE((four + [4]), four, [4]) as four, COALESCE((five + [5]), five, [5]) as five\n" +
@@ -79,7 +72,7 @@ public class GetMovies extends CommandBase {
                 "ORDER BY " + orderBy + " OFFSET ? ROWS";
 
         /*String query = "SELECT * FROM Movie ORDER BY " + orderBy + " OFFSET ? ROWS";*/
-        if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
+        if (top > 0) query += " FETCH NEXT " + top + " ROWS ONLY";
         return query;
     }
 

@@ -26,8 +26,8 @@ public class PostCollectionsCidMovies extends CommandBase {
                 Connection conn = ConnectionFactory.getConn();
                 PreparedStatement pstmt = conn.prepareStatement(getQuery(), PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
-            cid = Utils.getInt(data.get("cid"));
-            mid = Utils.getInt(data.get("mid"));
+            cid = Integer.parseInt(data.get("cid"));
+            mid = Integer.parseInt(data.get("mid"));
             pstmt.setInt(1, cid);
             pstmt.setInt(2, mid);
             pstmt.executeUpdate();

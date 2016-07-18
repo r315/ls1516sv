@@ -20,19 +20,12 @@ public class GetCollections extends CommandBase {
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
-        String topS = data.get("top");
-
-        Boolean topB = (topS != null);
-        int skip, top;
-
-        Pair<Integer, Integer> skiptop = Utils.getSkipTop(data.get("skip"), topS);
-
-        skip = skiptop.value1;
-        top = skiptop.value2;
+        int skip = Utils.getSkip(data.get("skip"));
+        int top = Utils.getTop(data.get("top"));
 
         try(
                 Connection conn = ConnectionFactory.getConn();
-                PreparedStatement pstmt = conn.prepareStatement(getQuery(topB, top))
+                PreparedStatement pstmt = conn.prepareStatement(getQuery(top))
         ){
             pstmt.setInt(1, skip);
 
@@ -48,9 +41,9 @@ public class GetCollections extends CommandBase {
         return INFO;
     }
 
-    private String getQuery(Boolean topB, int top) {
+    private String getQuery(int top) {
         String query = "SELECT * FROM Collection ORDER BY collection_id OFFSET ? ROWS";
-        if (topB) query += " FETCH NEXT " + top + " ROWS ONLY";
+        if (top > 0) query += " FETCH NEXT " + top + " ROWS ONLY";
         return query;
     }
 
