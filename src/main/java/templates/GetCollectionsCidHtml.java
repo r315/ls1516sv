@@ -44,7 +44,7 @@ public class GetCollectionsCidHtml implements IResultFormat {
 
         page.addLinksToTable(pairs);
 
-        page.addPaging(Utils.paging(Utils.reconQuery(ci.getData()), String.format("/collections/%s", cid)));
+        page.addPaging(Utils.paging(ci.getData(), String.format("/collections/%s", cid)));
 
         page.addFormGeneric("Add Movie to Collection",
                 Arrays.asList(

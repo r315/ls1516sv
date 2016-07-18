@@ -52,7 +52,7 @@ public class GetMoviesMidReviewsHtml implements IResultFormat {
                 )
         );
 
-        page.addPaging(Utils.paging(Utils.reconQuery(ci.getData()), String.format("/movies/%s/reviews", mid)));
+        page.addPaging(Utils.paging(ci.getData(), String.format("/movies/%s/reviews", mid)));
 
         page.addFormGeneric(
                 String.format("Submit a review for movie %s", movie_name)

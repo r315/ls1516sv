@@ -9,20 +9,9 @@ import exceptions.InvalidCommandParametersException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Utils {
-
     //General Utils
-
-    public static String reconQuery (Map<String,String> map){
-        String result="";
-        if(map.isEmpty())return result;
-        for (Map.Entry s:map.entrySet())
-            result += String.format("%s=%s&",s.getKey(),s.getValue());
-        return result.substring(0,result.length()-1);
-    }
 
     public static String decodeParametersMap (Map<String,String[]> map){
         String result="";
@@ -62,25 +51,18 @@ public class Utils {
         return ts;
     }
 
-    public static HashMap<String, String> paging(String query, String link) throws SQLException, InvalidCommandException{
+    public static HashMap<String, String> paging(HashMap<String,String> param, String link) throws SQLException, InvalidCommandException{
         HashMap<String, String> paging = new HashMap<>();
 
-        String nextSkip, prevSkip = null;
+        String nextSkip, prevSkip = "";
         String top = "5";
-        String skip = null;
-
-        if (query != null) {
-            Pattern p = Pattern.compile("(skip=)(\\d+)");
-            Matcher m = p.matcher(query);
-
-            if (m.find()) skip = m.group(2);
-        }
+        String skip = param.get("skip");
 
         int skipI;
         try {
             if (skip == null || (skipI = Integer.parseInt(skip)) == 0) {
                 nextSkip = "5";
-                paging.put("prev", null);
+                paging.put("prev", prevSkip);
             } else {
                 if (skipI < 5) {
                     prevSkip = "0";
@@ -89,44 +71,32 @@ public class Utils {
                 }
 
                 nextSkip = Integer.toString(skipI + 5);
-                paging.put("prev", String.format("%s?%s", link, pagingFormat(query, prevSkip, top)));
+                paging.put("prev", String.format("%s?%s", link, pagingFormat(param, prevSkip, top)));
             }
         } catch (NumberFormatException e) { //If not number
             throw new InvalidCommandParametersException("Invalid value for 'Skip'");
         }
 
-            //Next
-            CommandInfo command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
-            ResultInfo ri = Manager.commandMap.get(command).execute(command.getData());
+        //Next
+        CommandInfo command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
+        ResultInfo ri = Manager.commandMap.get(command).execute(command.getData());
 
-            if (ri.getValues().isEmpty()) paging.put("next", null);
+        if (ri.getValues().isEmpty()) paging.put("next", "");
             //else paging.put("next", String.format("%s?top=%s&skip=%s", link, top, nextSkip));
-            else paging.put("next",String.format("%s?%s", link, pagingFormat(query, nextSkip, top)));
+        else paging.put("next",String.format("%s?%s", link, pagingFormat(param, nextSkip, top)));
 
         return paging;
     }
 
-    private static String pagingFormat(String query, String skip, String top) {
+    private static String pagingFormat(HashMap<String, String> param, String skip, String top) {
+        param.put("top",top);
+        param.put("skip",skip);
 
-        Pattern p;
-        Matcher m;
+        String result="";
+        for (Map.Entry s:param.entrySet())
+            result += String.format("%s=%s&",s.getKey(),s.getValue());
 
-        if (query == null) query = "top=" + top;
-        else {
-            p = Pattern.compile("(top=)(\\d+)");
-            m = p.matcher(query);
-
-            if (m.find()) query = m.replaceFirst(m.group(1) + top);
-            else query += "&top=" + top;
-        }
-
-        p = Pattern.compile("(skip=)(\\d+)");
-        m = p.matcher(query);
-
-        if (m.find()) query = m.replaceFirst(m.group(1) + skip);
-        else query += "&skip=" + skip;
-
-        return query;
+        return result.substring(0,result.length()-1);
     }
 
 }

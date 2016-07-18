@@ -60,7 +60,7 @@ public class GetMoviesHtml implements IResultFormat {
                 )
         );
 
-        page.addPaging(Utils.paging(Utils.reconQuery(ci.getData()), "/movies"));
+        page.addPaging(Utils.paging(ci.getData(), "/movies"));
 
         page.addFormGeneric("Insert a new Movie"
                 ,Arrays.asList(new Pair<>("method","POST"),new Pair<>("action","/movies"))

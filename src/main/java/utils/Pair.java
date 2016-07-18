@@ -1,8 +1,5 @@
 package utils;
 
-/**
- * Created by Luigi Sekuiya on 24/05/2016.
- */
 public class Pair<T,U> {
     public T value1;
     public U value2;
