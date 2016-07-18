@@ -6,7 +6,6 @@ import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 import exceptions.PostException;
 import sqlserver.ConnectionFactory;
-import utils.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -56,7 +55,7 @@ public class PostCollectionsCidMovies extends CommandBase {
         return "INSERT INTO Has (collection_id, movie_id) VALUES (?,?)";
     }
 
-    private ResultInfo createRI() throws SQLException {
+    private ResultInfo createRI() {
         ArrayList<String> columns = new ArrayList<>();
         columns.add("Movie inserted");
 

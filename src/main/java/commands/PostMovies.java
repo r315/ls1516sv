@@ -19,7 +19,7 @@ public class PostMovies extends CommandBase {
 	private static final String INSERT_MOVIE = "insert into Movie(title,release_year) values(?,?)";
 	private static final String INSERT_RATING = "insert into Rating(movie_id,one,two,three,four,five) values(?,0,0,0,0,0)";
 	private static final String TITLE = "Movie Insertion";
-	int mid;
+	private int mid;
 	
 	@Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {
@@ -73,7 +73,7 @@ public class PostMovies extends CommandBase {
     	columns.add("Movie ID");
     	ArrayList<ArrayList<String>> rdata=new ArrayList<>();
     	rs.next();
-		ArrayList<String> line = new ArrayList<String>();
+		ArrayList<String> line = new ArrayList<>();
 		mid = rs.getInt(1);
 		line.add(Integer.toString(mid));
 		rdata.add(line);

@@ -6,7 +6,6 @@ import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 import exceptions.PostException;
 import sqlserver.ConnectionFactory;
-import utils.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +36,7 @@ public class PostMoviesMidReviews extends CommandBase {
 				Connection conn = ConnectionFactory.getConn();
 				PreparedStatement pstmt = conn.prepareStatement(INSERT,PreparedStatement.RETURN_GENERATED_KEYS)
 		){
-			List<String> values = new ArrayList<String>();
+			List<String> values = new ArrayList<>();
 			values.add(data.get("reviewerName"));
 			values.add(data.get("review"));
 			values.add(data.get("reviewSummary"));
@@ -73,7 +72,7 @@ public class PostMoviesMidReviews extends CommandBase {
     	columns.add("Review ID");
     	ArrayList<ArrayList<String>> rdata = new ArrayList<>();		
     	while(rs.next()) {
-    		ArrayList<String> line = new ArrayList<String>();
+    		ArrayList<String> line = new ArrayList<>();
     		line.add(Integer.toString(rs.getInt(1)));
     		rdata.add(line);		        	
     	}

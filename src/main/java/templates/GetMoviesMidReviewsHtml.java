@@ -56,7 +56,7 @@ public class GetMoviesMidReviewsHtml implements IResultFormat {
 
         page.addFormGeneric(
                 String.format("Submit a review for movie %s", movie_name)
-                , Arrays.asList(new Pair("method", "POST"), new Pair("action", String.format("/movies/%s/reviews", mid)))
+                , Arrays.asList(new Pair<>("method", "POST"), new Pair<>("action", String.format("/movies/%s/reviews", mid)))
                 , Arrays.asList(
                         new HtmlElement("br", "Name:"),
                         new HtmlElement("input").addAttributes("type", "text").addAttributes("name", "reviewerName").addAttributes("required", null),

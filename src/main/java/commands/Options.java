@@ -12,7 +12,7 @@ public class Options extends CommandBase {
     private final String title="List of available commands and their characteristics";
     @Override
     public ResultInfo execute(HashMap<String, String> data) {
-        ArrayList<String> rtitle=new ArrayList<String>();rtitle.add("Commands Info:");
+        ArrayList<String> rtitle=new ArrayList<>();rtitle.add("Commands Info:");
         ArrayList<ArrayList<String>> rdata=new ArrayList<>();
         for (CommandBase cmd: Manager.commandMap.getCommands()){
             ArrayList<String> aux=new ArrayList<>(1);

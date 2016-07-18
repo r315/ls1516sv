@@ -5,7 +5,6 @@ import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandParametersException;
 import exceptions.PostException;
 import sqlserver.ConnectionFactory;
-import utils.Utils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -68,7 +67,7 @@ public class PostMoviesMidRatings extends CommandBase {
 
 	private static String getRating(String r){
 		//r="1" -> "one"
-		HashMap<String, String> m=new HashMap<String,String>();
+		HashMap<String, String> m=new HashMap<>();
 		m.put("1","one");
 		m.put("2","two");
 		m.put("3","three");

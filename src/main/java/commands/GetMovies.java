@@ -5,7 +5,6 @@ import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 import sqlserver.ConnectionFactory;
-import utils.Pair;
 import utils.Utils;
 
 import java.sql.Connection;
