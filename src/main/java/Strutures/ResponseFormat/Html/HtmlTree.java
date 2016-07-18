@@ -143,9 +143,9 @@ public class HtmlTree {
     private static HtmlElement createPaging ( HashMap<String, String> paging ) {
         String next,prev;
         prev = paging.get("prev");
-        prev = prev != null ? "<a href = \"" + paging.get("prev") + "\" >PREV</a>" : "PREV";
+        prev = !prev.isEmpty() ? "<a href = \"" + paging.get("prev") + "\" >PREV</a>" : "PREV";
         next = paging.get("next");
-        next = next != null ? "<a href = \"" + paging.get("next") + "\" >NEXT</a>" :  "NEXT";
+        next = !next.isEmpty() ? "<a href = \"" + paging.get("next") + "\" >NEXT</a>" :  "NEXT";
         HtmlElement p = new HtmlElement("p",prev + "&nbsp;&nbsp;&nbsp;" + next).addAttributes("align","right");
         return p;
     }

@@ -8,9 +8,9 @@ import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 public class ConnectionFactory {
 
-    static SQLServerDataSource ds = null;
+    private static SQLServerDataSource ds = null;
 
-    static private void createDataSource() throws SQLException {
+    static private void createDataSource() {
         ds = new SQLServerDataSource();
         Map<String,String> env=System.getenv();
         ds.setServerName(env.get("LS_SERVER"));
@@ -29,10 +29,6 @@ public class ConnectionFactory {
         if (ds == null) createDataSource();
 
         return ds.getConnection();
-    }
-
-    static public void closeConn (Connection conn) throws SQLException {
-        conn.close();
     }
 
 }

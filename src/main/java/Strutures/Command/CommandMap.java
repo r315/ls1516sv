@@ -1,11 +1,10 @@
 package Strutures.Command;
 
-import decoders.DecodeMethod;
-import decoders.DecodePath;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandMethodException;
 import exceptions.InvalidCommandPathException;
 import exceptions.InvalidCommandTableException;
+import utils.Decoder;
 
 import java.util.*;
 
@@ -23,17 +22,17 @@ public class CommandMap {
     }
 
     public boolean add(String sCommand, CommandBase commandBase)
-            throws InvalidCommandPathException, InvalidCommandMethodException{
+            throws InvalidCommandException{
 
         if(sCommand==null || commandBase==null) return false;
 
         String table=null;
-        String method= DecodeMethod.decode(sCommand);
+        String method= Decoder.decodeMethod(sCommand);
         //HashMap<String,DataNode> methodMap= this.commandsMap.get(method);
         HashMap<String, DataNode> methodMap= this.commandsMap.putIfAbsent(method,new HashMap<String, DataNode>());
         if(methodMap==null)//in case it didn't exist before
             methodMap=this.commandsMap.get(method);
-        Collection<String> path= DecodePath.decode(sCommand);
+        Collection<String> path= Decoder.decodePath(sCommand);
         if(path.size()!=0){
             path.removeIf(s -> s.startsWith("{")&& s.endsWith("}"));
             table= path.iterator().next();
@@ -48,7 +47,7 @@ public class CommandMap {
                 if(!col.contains(s))dataNode.addToResources(s);
         }
         //path.iterator().forEachRemaining(s->dataNode.);
-        path=DecodePath.decode(sCommand);
+        path=Decoder.decodePath(sCommand);
         CNode curr= new CNode(path, commandBase);
         curr.setNext(dataNode.getNext());
         dataNode.setNext(curr);

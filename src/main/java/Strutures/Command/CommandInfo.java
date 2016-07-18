@@ -1,11 +1,9 @@
 package Strutures.Command;
 
-import decoders.DecodeMethod;
-import decoders.DecodeParameters;
-import decoders.DecodePath;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandMethodException;
 import exceptions.InvalidCommandPathException;
+import utils.Decoder;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,18 +19,18 @@ public class CommandInfo {
 		if(path==null)throw  new InvalidCommandPathException();
 		if(params==null)parameters=new HashMap<>();
 		else{
-			parameters = DecodeParameters.decodeParameters(params);
+			parameters = Decoder.decodeParameters(params);
 		}
-		method = DecodeMethod.decode(m);
-		resources = DecodePath.decodePath(path);
+		method = Decoder.decodeMethod(m);
+		resources = Decoder.decodePath(path);
 		if(resources.size()!=0)
 			table = resources.iterator().next();
 	}
 
 	public CommandInfo(String[] command) throws InvalidCommandException{
-		method = DecodeMethod.decode(command);
-		resources = DecodePath.decode(command);
-		parameters = DecodeParameters.decode(command);
+		method = Decoder.decodeMethod(command);
+		resources = Decoder.decodePath(command);
+		parameters = Decoder.decodeParameters(command);
 		if(resources.size()!=0)
 			table = resources.iterator().next();
 	}
