@@ -50,7 +50,7 @@ public class DecodePathTest {
 
     @Test(expected=InvalidCommandPathException.class)
     public void PathExecute_isNull() throws Exception {
-        String [] aux = new String[]{null,null};
+        String [] aux = new String[]{"GET",null};
         Collection<String> path = Decoder.decodePath(aux);
     }
 }
