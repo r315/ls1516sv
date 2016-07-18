@@ -2,12 +2,9 @@ package commands;
 
 import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
-import sqlserver.ConnectionFactory;
+import utils.TopsCommon;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 
 public class GetTopsRatingsLowerAverage extends CommandBase {
@@ -16,14 +13,8 @@ public class GetTopsRatingsLowerAverage extends CommandBase {
 
 	@Override
 	public ResultInfo execute(HashMap<String, String> data) throws SQLException {
-		try(
-				Connection conn = ConnectionFactory.getConn();
-				Statement stmt = conn.createStatement()
-		) {
-			ResultSet rs = stmt.executeQuery(GetTopsRatingsHigherAverage.getQuery(false));
-
-			return GetTopsRatingsHigherAverage.createRI(rs, TITLE);
-		}
+		final boolean DESC_ORDER = false;
+		return TopsCommon.getRatings(TITLE, DESC_ORDER);
 	}
 
 	@Override
