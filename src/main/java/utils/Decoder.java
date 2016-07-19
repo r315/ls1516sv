@@ -26,7 +26,7 @@ public class Decoder {
         return decode(args,"=","&", InvalidCommandParametersException::new);
     }
 
-    public static Collection<String> decodeFullPath(String line) throws InvalidCommandPathException {
+    public static Collection<String> decodePathFromCommand(String line) throws InvalidCommandPathException {
         return decodePath(line.split(" "));
     }
 
