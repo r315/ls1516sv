@@ -1,12 +1,10 @@
 package Strutures.ResponseFormat.Html;
 
-import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.ResultInfo;
 import utils.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -140,12 +138,12 @@ public class HtmlTree {
         return table;
     }
 
-    private static HtmlElement createPaging ( HashMap<String, String> paging ) {
+    private static HtmlElement createPaging (Pair<String, String> paging ) {
         String next,prev;
-        prev = paging.get("prev");
-        prev = !prev.isEmpty() ? "<a href = \"" + paging.get("prev") + "\" >PREV</a>" : "PREV";
-        next = paging.get("next");
-        next = !next.isEmpty() ? "<a href = \"" + paging.get("next") + "\" >NEXT</a>" :  "NEXT";
+        prev = paging.value1;
+        prev = !prev.isEmpty() ? "<a href = \"" + prev + "\" >PREV</a>" : "PREV";
+        next = paging.value2;
+        next = !next.isEmpty() ? "<a href = \"" + next + "\" >NEXT</a>" :  "NEXT";
         HtmlElement p = new HtmlElement("p",prev + "&nbsp;&nbsp;&nbsp;" + next).addAttributes("align","right");
         return p;
     }
@@ -233,7 +231,7 @@ public class HtmlTree {
         addElementTo("body", createFormGeneric(legend, formAtributes, inputs));
     }
 
-    public void addPaging(HashMap<String, String> paging) {
+    public void addPaging(Pair<String, String> paging) {
         addElementTo("body", p());
         addElementTo("body",createPaging(paging));
     }

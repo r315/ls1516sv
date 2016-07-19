@@ -35,8 +35,8 @@ public class Servlet extends HttpServlet {
         String path= req.getRequestURI();
         String query= req.getQueryString();
 
-        if (query == null) query = "top=5";
-        else if (!query.contains("top=")) query += "&top=5";
+        if (query == null) query = String.format("top=%d",Utils.PAG_DEFAULT);
+        else if (!query.contains("top=")) query += String.format("&top=%d",Utils.PAG_DEFAULT);
 
         try{
             CommandInfo command = new CommandInfo(method, path, query);
