@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class PostCollections extends CommandBase {
     private static final String INFO = "POST /collections - creates a new collection and returns its identifier, given the parameters \"name\" and \"description\".";
-    private final String TITLE = "Collection Created";
+    private static final String TITLE = "Collection Created";
 
     @Override
     public ResultInfo execute(HashMap<String, String> data) throws InvalidCommandException, SQLException {

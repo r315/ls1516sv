@@ -1,13 +1,14 @@
 package Strutures.Command;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import exceptions.InvalidCommandException;
 import utils.Decoder;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HeaderInfo {
 
+	public static final String FILENAME_TOKEN="file-name";
 	private Map<String,String> headers;
 
 	public HeaderInfo(){
@@ -23,5 +24,13 @@ public class HeaderInfo {
 	
 	public Map<String,String> getHeadersMap(){
 		return headers;
+	}
+
+	public String getHeaderValue(String key){
+		return headers.get(key);
+	}
+
+	public boolean hasKey(String key){
+		return headers.containsKey(key);
 	}
 }

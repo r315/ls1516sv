@@ -6,6 +6,8 @@ import Strutures.Command.CommandMap;
 import Strutures.Command.HeaderInfo;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import Strutures.Server.Servlet;
+import Strutures.Server.favIconServlet;
 import commands.*;
 import exceptions.InvalidCommandException;
 import org.eclipse.jetty.server.Server;
@@ -17,13 +19,12 @@ import utils.Utils;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * Created by Red on 18/05/2016.
  */
 public class Manager {
-    private static final Logger log = LoggerFactory.getLogger(Manager.class);
+    private static final Logger _logger = LoggerFactory.getLogger(Manager.class);
     public static CommandMap commandMap;
     private static Server server;
 
@@ -38,30 +39,37 @@ public class Manager {
         return cmdbase.getResult(commandInfo,headerInfo,result);
     }
 
+
+    //// TODO: 19/07/2016 Fazer isto de novo or test
     public static void displayResponse(String response, HeaderInfo headerinfo){
-        Map<String,String> headers= headerinfo.getHeadersMap();
-        String filename= headers.get("file-name");
-        if(filename==null){//write to console
-            System.out.println(response);
-        }else {//write response into a file
+        if(headerinfo.hasKey(HeaderInfo.FILENAME_TOKEN)){
             try{
-                Utils.writeToFile(filename,response);
+                Utils.writeToFile(headerinfo.getHeaderValue(HeaderInfo.FILENAME_TOKEN),response);
             }catch(IOException e){
-                System.out.println("Error writing into file: " + e.getMessage());
-                log.error(e.getMessage());
+                _logger.error(String.format("Error writing into file: %s",e.getMessage()));
             }
+        }else{
+            System.out.println(response);
         }
     }
 
-    public static void ServerCreate(int port){
-        server=new Server(port);
+    public static void ServerCreate(String port) throws NumberFormatException{
+        server=new Server(Integer.parseInt(port));
+    }
+
+    public static void ServerJoin(){
+        try{
+            server.join();
+        }catch (InterruptedException e){
+            _logger.error(String.format("Failed to block Thread - %s",e.getMessage()));
+        }
     }
 
     public static void ServerStart() {
         try{
             server.start();
         }catch(Exception e){
-            log.error(String.format("Failed to start server - %s",e.getMessage()));
+            _logger.error(String.format("Failed to start server - %s",e.getMessage()));
         }
     }
 
@@ -69,12 +77,18 @@ public class Manager {
         try{
             if (server != null) server.stop();
         }catch(Exception e){
-            log.error(String.format("Failed to stop server - %s",e.getMessage()));
+            _logger.error(String.format("Failed to stop server - %s",e.getMessage()));
         }
     }
 
     public static void ServerSetHandler(ServletHandler handler){
         server.setHandler(handler);
+        AssociateHandlers(handler);
+    }
+
+    private static void AssociateHandlers(ServletHandler handler){
+        handler.addServletWithMapping(favIconServlet.class, "/favicon.ico");
+        handler.addServletWithMapping(Servlet.class, "/*");
     }
 
     public static CommandMap createMap() throws InvalidCommandException{

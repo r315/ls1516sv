@@ -1,7 +1,6 @@
 package console;
 
-import Strutures.Command.CommandInfo;
-import Strutures.Command.HeaderInfo;
+import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,28 +12,21 @@ public class HerokuMainApp {
     private static final Logger _logger = LoggerFactory.getLogger(HerokuMainApp.class);
 
     public static void main(String [] args){
-
         System.setProperty("org.slf4j.simpleLogger.levelInBrackets","true");
-
         String port = System.getenv().get("PORT");
-
-        String[] userArgs = {"LISTEN", "/", String.format("port=%s",port)};
-
-        Manager.Init();
-        try {
-            HeaderInfo headerInfo = new HeaderInfo(userArgs);
-            CommandInfo command = new CommandInfo(userArgs);
-            String result= Manager.executeCommand(command,headerInfo);
-            if(result!=null)Manager.displayResponse(result,headerInfo);
-
-        }catch(Exception e){
-
-            System.out.println(e.getMessage());
+        try{
+            Manager.ServerCreate(port);
+        }catch(NumberFormatException e){
+            _logger.error(String.format("Ending Application. - %s",e.getMessage()));
             return;
         }
 
-        _logger.info("Application Started!!");
+        //Create a handler for each functionality
+        Manager.ServerSetHandler(new ServletHandler());
 
-        while (true);
+        //Starts listening to requests
+        Manager.ServerStart();
+        Manager.ServerJoin();
+        _logger.info("Application Started!");
     }
 }

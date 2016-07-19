@@ -13,15 +13,14 @@ import java.util.function.Supplier;
  */
 public class Decoder {
 
-
     public static HashMap<String, String> decodeHeaders(String[] args) throws InvalidCommandException{
         return decode(args,":","\\|", InvalidCommandHeadersException::new);
     }
 
     public static HashMap<String, String> decodeParameters(String args) throws InvalidCommandException{
         return decodeParameters(args.split(" "));
-
     }
+
     public static HashMap<String, String> decodeParameters(String[] args) throws InvalidCommandException{
         return decode(args,"=","&", InvalidCommandParametersException::new);
     }
@@ -50,15 +49,13 @@ public class Decoder {
     public static String decodeMethod(String [] args) throws InvalidCommandException {
         if (args != null && args.length > 0 && args[0] != null && args[0].length() != 0) return args[0];
         else throw new InvalidCommandMethodException();
-
     }
 
     private static HashMap<String, String> decode(String[] args, String kvSeparator, String paramSeparator,
                                                  Supplier<InvalidCommandException> ex) throws InvalidCommandException
     {
         HashMap<String, String> map = new HashMap<String, String>();
-        try {
-
+        try{
             Arrays.stream(args)
                     .filter(s -> s.contains(kvSeparator))
                     .map(sm -> sm.split(paramSeparator))    //return Stream<String[]>

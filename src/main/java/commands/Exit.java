@@ -2,6 +2,7 @@ package commands;
 
 import Strutures.Command.CommandBase;
 import Strutures.ResponseFormat.ResultInfo;
+import console.MainApp;
 import console.Manager;
 
 import java.util.HashMap;
@@ -15,9 +16,8 @@ public class Exit extends CommandBase {
     @Override
     public ResultInfo execute(HashMap<String, String> data)  {
         Manager.ServerStop();
-        //Manager.ServerJoin();
-        System.exit(0);
-        return null;
+        MainApp.Exit();
+        return new ResultInfo(false);
     }
 
     @Override

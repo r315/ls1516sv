@@ -1,21 +1,30 @@
 package console;
 
-import java.util.Scanner;
-
 import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
+import exceptions.InvalidCommandException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.sql.SQLException;
+import java.util.Scanner;
 
 public class MainApp {
 
-	public static void main(String [] args){
-		String[] userArgs=args;
-		boolean interactive_mode=false;
-		Scanner scanner = new Scanner(System.in);
+	private static final Logger _logger = LoggerFactory.getLogger(MainApp.class);
+	private static boolean interactive_mode=false;
 
+	public static void main(String [] args){
+		String[] userArgs = args.clone();
+		Scanner scanner = new Scanner(System.in);
 		if(args.length==0)
 			interactive_mode=true;
 
-		Manager.Init();
+		try{
+			Manager.Init();
+		}catch(InvalidCommandException e){
+			_logger.error("Failed to create CommandMap. Stoping execution.");
+		}
+
 		do {
 			try {
 				if(interactive_mode){
@@ -25,59 +34,22 @@ public class MainApp {
 				HeaderInfo headerInfo = new HeaderInfo(userArgs);
 				CommandInfo command = new CommandInfo(userArgs);
 				String result= Manager.executeCommand(command,headerInfo);
-                if (result!=null)Manager.displayResponse(result,headerInfo);
+                Manager.displayResponse(result,headerInfo);
 
-				}catch(Exception e){
+				}catch(SQLException | InvalidCommandException e){
 					if(interactive_mode){
-						System.out.println(e.getMessage());
+						_logger.error(e.getMessage());
 						System.out.println("Please insert a valid command. (For more informations type:OPTION / )");
 					}else{
-						System.out.println(e.getMessage());
-						scanner.close();
-						return;
+						_logger.error(e.getMessage());
+						interactive_mode=false;
 					}
 				}
 		}while(interactive_mode);
 		scanner.close();
 	}
 
-	/*
-	public static CommandMap createMap() throws Exception{
-		CommandMap map=new CommandMap();
-		map.add("POST /movies",new PostMovies());
-		map.add("POST /movies/{mid}/ratings",new PostMoviesMidRatings());
-		map.add("POST /movies/{mid}/reviews",new PostMoviesMidReviews());
-		map.add("POST /collections",new PostCollections());
-		map.add("POST /collections/{cid}/movies/",new PostCollectionsCidMovies());
-
-		map.add("GET /movies",new GetMovies());
-		map.add("GET /movies/{mid}",new GetMoviesMid());
-		map.add("GET /movies/{mid}/ratings",new GetMoviesMidRatings());
-		map.add("GET /movies/{mid}/reviews",new GetMoviesMidReviews());
-		map.add("GET /movies/{mid}/reviews/{rid}",new GetMoviesMidReviewsRid());
-		map.add("GET /collections",new GetCollections());
-		map.add("GET /collections/{cid}",new GetCollectionsCid());
-
-		map.add("GET /tops/ratings/higher/average",new GetTopsRatingsHigherAverage());
-		map.add("GET /tops/{n}/ratings/higher/average",new GetTopsNRatingsHigherAverage());
-		map.add("GET /tops/ratings/lower/average",new GetTopsRatingsLowerAverage());
-		map.add("GET /tops/{n}/ratings/lower/average",new GetTopsNRatingsLowerAverage());
-		map.add("GET /tops/reviews/higher/count",new GetTopsReviewsHigherCount());
-		map.add("GET /tops/{n}/reviews/higher/count",new GetTopsNReviewsHigherCount());
-
-		map.add("DELETE /collections/{cid}/movies/{mid}",new DeleteCollectionsCidMoviesMid());
-
-		map.add("LISTEN /", new Listen());
-		map.add("EXIT /",new Exit());
-		map.add("OPTION /",new Options());
-		return map;
+	public static void Exit(){
+		interactive_mode=false;
 	}
-
-	public static HeaderMap createHeadersMap(){
-		HeaderMap map=new HeaderMap();
-		map.addResponseMethod("text/html",new HtmlResult());
-		map.addResponseMethod("text/plain",new TextResult());
-		return map;
-	}
-	*/
 }
