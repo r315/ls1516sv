@@ -24,55 +24,52 @@ public class DecoderTest {
 
     @Test
     public void shouldBeAblleToGetHeaders() throws Exception{
-        HashMap<String, String> headers = Decoder.decodeHeaders(("POST /movies/1/reviews accept:text/plain|accept-language:en-gb").split(" "));
+        HashMap<String, String> headers = decodeHeaders("POST /movies/1/reviews accept:text/plain|accept-language:en-gb");
         assertEquals(expectedHeader,headers);
     }
 
     @Test(expected= InvalidCommandHeadersException.class)
     public void shouldGetExceptionOnIncompleteFilenameHeader() throws InvalidCommandException {
-        shouldGetExceptionOnIncompleteHeader("POST /movies/1/reviews file-name:");
+        decodeHeaders("POST /movies/1/reviews file-name:");
     }
 
     @Test(expected= InvalidCommandHeadersException.class)
     public void shouldGetExceptionOnIncompleteAcceptHeader() throws InvalidCommandException {
-        shouldGetExceptionOnIncompleteHeader("POST /movies/1/reviews accept:");
+        decodeHeaders("POST /movies/1/reviews accept:");
     }
 
     @Test
     public void HeadersExecute_HeaderParam() throws Exception {
-        HashMap<String, String> headers = Decoder.decodeHeaders("POST /movies/1/reviews accept:text/plain|accept-language:en-gb reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5".split(" "));
+        HashMap<String, String> headers = decodeHeaders("POST /movies/1/reviews accept:text/plain|accept-language:en-gb reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
         assertEquals(expectedHeader,headers);
     }
 
     @Test
     public void HeadersExecute_Array() throws Exception {
-        String [] aux = new String[]{"POST","/movies/1/reviews","accept:text/plain|accept-language:en-gb"};
-        HashMap<String, String> headers = Decoder.decodeHeaders(aux);
+        HashMap<String, String> headers = decodeHeaders("POST /movies/1/reviews accept:text/plain|accept-language:en-gb");
         assertEquals(expectedHeader,headers);
     }
 
     @Test
     public void HeaderExecute_OnlyParam() throws Exception {
-        HashMap<String, String> headers = Decoder.decodeHeaders("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5".split(" "));
+        HashMap<String, String> headers = decodeHeaders("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
         assertEquals(new HashMap<String, String>(),headers);
     }
 
     @Test
     public void HeadersExecute_isEmpty() throws Exception {
-        String [] aux = new String[]{"GET","","",""};
-        HashMap<String, String> headers = Decoder.decodeHeaders(aux);
+        HashMap<String, String> headers = decodeHeaders("GET");
         assertEquals(new HashMap<String, String>(),headers);
     }
 
     @Test
 	public void shouldGetHeaderFromCommandLine() throws Exception{
-		String cmdline = "GET /movies accept:text/plain|file-name:teste.txt";
-		Map <String,String> map = Decoder.decodeHeaders(cmdline.split(" "));
+		Map <String,String> map = decodeHeaders("GET /movies accept:text/plain|file-name:teste.txt");
 		assertEquals(map.get("accept"),"text/plain");
 		assertEquals(map.get("file-name"),"teste.txt");		
 	}
 
-    private void shouldGetExceptionOnIncompleteHeader(String path) throws InvalidCommandException {
-        Decoder.decodeHeaders(path.split(" "));
+    private HashMap<String, String> decodeHeaders(String path) throws InvalidCommandException {
+        return Decoder.decodeHeaders(path.split(" "));
     }
 }

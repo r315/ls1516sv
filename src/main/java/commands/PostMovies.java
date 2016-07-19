@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PostMovies extends CommandBase {
-	private final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
+    private static final String MONTHDAY = "0101";
+    private static final String INFO = "POST /movies - creates a new movie, given the parameters \"title\" and \"releaseYear\"";
 	private static final String INSERT_MOVIE = "insert into Movie(title,release_year) values(?,?)";
 	private static final String INSERT_RATING = "insert into Rating(movie_id,one,two,three,four,five) values(?,0,0,0,0,0)";
 	private static final String TITLE = "Movie Insertion";
@@ -28,36 +29,37 @@ public class PostMovies extends CommandBase {
 		String date = data.get("releaseYear");
 
 		if (title == null || date == null)
-			throw new InvalidCommandParametersException();
+            throw new InvalidCommandParametersException();
 
-		try (
-				Connection conn = ConnectionFactory.getConn();
-			 PreparedStatement movieInsert = conn.prepareStatement(INSERT_MOVIE, PreparedStatement.RETURN_GENERATED_KEYS);
-			 PreparedStatement ratingInsert = conn.prepareStatement(INSERT_RATING)
-		){
+		try(
+            Connection conn = ConnectionFactory.getConn();
+            PreparedStatement movieInsert = conn.prepareStatement(INSERT_MOVIE, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement ratingInsert = conn.prepareStatement(INSERT_RATING)
+        ){
 			conn.setAutoCommit(false);
-			movieInsert.setString(1, title);
-			movieInsert.setString(2, date + "0101");
-			mid = movieInsert.executeUpdate();
-
-			ri = createResultInfo(movieInsert.getGeneratedKeys());
-			ratingInsert.setInt(1, mid);
-			ratingInsert.executeUpdate();
-			conn.commit();
-		}catch(SQLException e){
-			int errorCode= e.getErrorCode();
-			switch(errorCode){
-				case PostException.ENTRY_EXISTS:
-					throw new PostException(errorCode,"Movie already exists!");
-				case PostException.DATE_OR_TIME_CONVERTION_FAILED:
-					throw new PostException(errorCode,"Invalid Date!");
-				case PostException.STRING_IS_TOO_LONG:
-					throw new PostException(errorCode,"Title is too long!");
-				default:
-					throw e;
-			}
+            movieInsert.setString(1, title);
+            movieInsert.setString(2, date + MONTHDAY);
+            try {
+                mid = movieInsert.executeUpdate();
+                ri = createResultInfo(movieInsert.getGeneratedKeys());
+                ratingInsert.setInt(1, mid);
+                ratingInsert.executeUpdate();
+                conn.commit();
+            }catch(SQLException e){
+                conn.rollback();
+                int errorCode= e.getErrorCode();
+                switch(errorCode){
+                    case PostException.ENTRY_EXISTS:
+                        throw new PostException(errorCode,"Movie already exists!");
+                    case PostException.DATE_OR_TIME_CONVERTION_FAILED:
+                        throw new PostException(errorCode,"Invalid Date!");
+                    case PostException.STRING_IS_TOO_LONG:
+                        throw new PostException(errorCode,"Title is too long!");
+                    default:
+                        throw e;
+                }
+            }
 		}
-
 		return ri;
 	}
 
