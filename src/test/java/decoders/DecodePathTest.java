@@ -32,7 +32,7 @@ public class DecodePathTest {
 
     @Test(expected=InvalidCommandPathException.class)
     public void PathExecute_Method() throws InvalidCommandException {
-        Collection<String> path = Decoder.decodePath("EXIT");
+        Collection<String> path = Decoder.decodePathFromCommand("EXIT");
     }
 
     @Test

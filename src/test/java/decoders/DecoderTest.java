@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandHeadersException;
 import org.junit.Before;
 import org.junit.Test;
 import utils.Decoder;
@@ -27,10 +28,14 @@ public class DecoderTest {
         assertEquals(expectedHeader,headers);
     }
 
-    @Test(expected= InvalidCommandException.class)
-    public void HeadersExecute_SingleHeader() throws InvalidCommandException {
-        HashMap<String, String> aux = new HashMap<>(); aux.put("accept","text/plain");
-        HashMap<String, String> headers = Decoder.decodeHeaders("POST /movies/1/reviews accept:".split(" "));
+    @Test(expected= InvalidCommandHeadersException.class)
+    public void shouldGetExceptionOnIncompleteFilenameHeader() throws InvalidCommandException {
+        shouldGetExceptionOnIncompleteHeader("POST /movies/1/reviews file-name:");
+    }
+
+    @Test(expected= InvalidCommandHeadersException.class)
+    public void shouldGetExceptionOnIncompleteAcceptHeader() throws InvalidCommandException {
+        shouldGetExceptionOnIncompleteHeader("POST /movies/1/reviews accept:");
     }
 
     @Test
@@ -65,5 +70,9 @@ public class DecoderTest {
 		Map <String,String> map = Decoder.decodeHeaders(cmdline.split(" "));
 		assertEquals(map.get("accept"),"text/plain");
 		assertEquals(map.get("file-name"),"teste.txt");		
-	}	
+	}
+
+    private void shouldGetExceptionOnIncompleteHeader(String path) throws InvalidCommandException {
+        Decoder.decodeHeaders(path.split(" "));
+    }
 }

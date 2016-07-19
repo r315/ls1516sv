@@ -34,7 +34,7 @@ public class DecodeParametersTest {
 
     @Test
     public void ParametersExecute_Parameters() throws Exception {
-        HashMap<String, String> param = Decoder.decodeParameters("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5".split(" "));
+        HashMap<String, String> param = decodeParams("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
         assertEquals(parameters,param);
     }
 
@@ -42,33 +42,31 @@ public class DecodeParametersTest {
     @Test
     public void ParametersExecute_SingleParam() throws Exception {
         HashMap<String, String> aux = new HashMap<>(); aux.put("reviewerName","LS");
-        HashMap<String, String> param = Decoder.decodeParameters("POST /movies/1/reviews reviewerName=LS".split(" "));
+        HashMap<String, String> param = decodeParams("POST /movies/1/reviews reviewerName=LS");
         assertEquals(aux,param);
     }
 
     @Test
     public void ParametersExecute_HeaderParam() throws Exception {
-        HashMap<String, String> param = Decoder.decodeParameters("POST /movies/1/reviews accept:text/plain|accept-language:en-gb reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5".split(" "));
+        HashMap<String, String> param = decodeParams("POST /movies/1/reviews accept:text/plain|accept-language:en-gb reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
         assertEquals(parameters,param);
     }
 
     @Test
     public void ParametersExecute_Array() throws Exception {
-        String [] aux = new String[]{"POST","/movies/1/reviews","reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5"};
-        HashMap<String, String> param = Decoder.decodeParameters(aux);
+        HashMap<String, String> param = decodeParams("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
         assertEquals(parameters,param);
     }
 
     @Test
     public void ParametersExecute_OnlyHeader() throws Exception {
-        HashMap<String, String> param = Decoder.decodeParameters("POST /movies/1/reviews accept:text/plain|accept-language:en-gb".split(" "));
+        HashMap<String, String> param = decodeParams("POST /movies/1/reviews accept:text/plain|accept-language:en-gb");
         assertEquals(new HashMap<String, String>(),param);
     }
 
     @Test
     public void ParametersExecute_isEmpty() throws Exception {
-        String [] aux = new String[]{"GET","","",""};
-        HashMap<String, String> param = Decoder.decodeParameters(aux);
+        HashMap<String, String> param = decodeParams("GET");
         assertEquals(new HashMap<String, String>(),param);
     }
 
@@ -78,9 +76,7 @@ public class DecodeParametersTest {
         HashMap<String, String> param = Decoder.decodeParameters(aux);
     }
 
-    @Test(expected=InvalidCommandException.class)
-    public void ParametersExecute_NullParam()throws InvalidCommandException{
-        String [] aux = new String[]{"POST","/movies/1/reviews","accept:text/plain|accept-language:en-gb",null};
-        HashMap<String, String> param = Decoder.decodeParameters(aux);
+    private HashMap<String, String> decodeParams(String path) throws InvalidCommandException{
+        return Decoder.decodeParameters(path.split(" "));
     }
 }
