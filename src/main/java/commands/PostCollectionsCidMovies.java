@@ -41,7 +41,7 @@ public class PostCollectionsCidMovies extends CommandBase {
                 default:
                     throw e;
             }
-        }catch (NullPointerException | NumberFormatException e){
+        }catch (NumberFormatException e){
             throw new InvalidCommandParametersException();
         }
     }
