@@ -88,8 +88,8 @@ public class GetTopsNReviewsLowerCountTest {
 
         /* --- */
 
-        GetTopsNReviewsLowerCount stuff = new GetTopsNReviewsLowerCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsLowerCount command = new GetTopsNReviewsLowerCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -111,8 +111,8 @@ public class GetTopsNReviewsLowerCountTest {
 
         /* --- */
 
-        GetTopsNReviewsLowerCount stuff = new GetTopsNReviewsLowerCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsLowerCount command = new GetTopsNReviewsLowerCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -134,8 +134,8 @@ public class GetTopsNReviewsLowerCountTest {
 
         /* --- */
 
-        GetTopsNReviewsLowerCount stuff = new GetTopsNReviewsLowerCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsLowerCount command = new GetTopsNReviewsLowerCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -157,8 +157,8 @@ public class GetTopsNReviewsLowerCountTest {
 
         /* --- */
 
-        GetTopsNReviewsLowerCount stuff = new GetTopsNReviewsLowerCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsLowerCount command = new GetTopsNReviewsLowerCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -169,8 +169,8 @@ public class GetTopsNReviewsLowerCountTest {
 
         /* --- */
 
-        GetTopsNReviewsLowerCount stuff = new GetTopsNReviewsLowerCount();
-        stuff.execute(param);
+        GetTopsNReviewsLowerCount command = new GetTopsNReviewsLowerCount();
+        command.execute(param);
     }
 
     @Test(expected= InvalidCommandVariableException.class)
@@ -180,7 +180,7 @@ public class GetTopsNReviewsLowerCountTest {
 
         /* --- */
 
-        GetTopsNReviewsLowerCount stuff = new GetTopsNReviewsLowerCount();
-        stuff.execute(param);
+        GetTopsNReviewsLowerCount command = new GetTopsNReviewsLowerCount();
+        command.execute(param);
     }
 }

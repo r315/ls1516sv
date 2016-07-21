@@ -89,8 +89,8 @@ public class GetTopsNReviewsHigherCountTest {
 
         /* --- */
 
-        GetTopsNReviewsHigherCount stuff = new GetTopsNReviewsHigherCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsHigherCount command = new GetTopsNReviewsHigherCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -112,8 +112,8 @@ public class GetTopsNReviewsHigherCountTest {
 
         /* --- */
 
-        GetTopsNReviewsHigherCount stuff = new GetTopsNReviewsHigherCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsHigherCount command = new GetTopsNReviewsHigherCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -135,8 +135,8 @@ public class GetTopsNReviewsHigherCountTest {
 
         /* --- */
 
-        GetTopsNReviewsHigherCount stuff = new GetTopsNReviewsHigherCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsHigherCount command = new GetTopsNReviewsHigherCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -158,8 +158,8 @@ public class GetTopsNReviewsHigherCountTest {
 
         /* --- */
 
-        GetTopsNReviewsHigherCount stuff = new GetTopsNReviewsHigherCount();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNReviewsHigherCount command = new GetTopsNReviewsHigherCount();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -170,8 +170,8 @@ public class GetTopsNReviewsHigherCountTest {
 
         /* --- */
 
-        GetTopsNReviewsHigherCount stuff = new GetTopsNReviewsHigherCount();
-        stuff.execute(param);
+        GetTopsNReviewsHigherCount command = new GetTopsNReviewsHigherCount();
+        command.execute(param);
     }
 
     @Test(expected= InvalidCommandVariableException.class)
@@ -181,7 +181,7 @@ public class GetTopsNReviewsHigherCountTest {
 
         /* --- */
 
-        GetTopsNReviewsHigherCount stuff = new GetTopsNReviewsHigherCount();
-        stuff.execute(param);
+        GetTopsNReviewsHigherCount command = new GetTopsNReviewsHigherCount();
+        command.execute(param);
     }
 }

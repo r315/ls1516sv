@@ -95,8 +95,8 @@ public class GetMoviesTest {
 
         /* --- */
 
-        GetMovies stuff = new GetMovies();
-        ResultInfo rs = stuff.execute(param);
+        GetMovies command = new GetMovies();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -117,8 +117,8 @@ public class GetMoviesTest {
 
         /* --- */
 
-        GetMovies stuff = new GetMovies();
-        ResultInfo rs = stuff.execute(param);
+        GetMovies command = new GetMovies();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -139,8 +139,8 @@ public class GetMoviesTest {
 
         /* --- */
 
-        GetMovies stuff = new GetMovies();
-        ResultInfo rs = stuff.execute(param);
+        GetMovies command = new GetMovies();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -161,8 +161,8 @@ public class GetMoviesTest {
 
         /* --- */
 
-        GetMovies stuff = new GetMovies();
-        ResultInfo rs = stuff.execute(param);
+        GetMovies command = new GetMovies();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -178,8 +178,8 @@ public class GetMoviesTest {
 
         /* --- */
 
-        GetMovies stuff = new GetMovies();
-        ResultInfo rs = stuff.execute(param);
+        GetMovies command = new GetMovies();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -201,8 +201,8 @@ public class GetMoviesTest {
 
         /* --- */
 
-        GetMovies stuff = new GetMovies();
-        ResultInfo rs = stuff.execute(param);
+        GetMovies command = new GetMovies();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

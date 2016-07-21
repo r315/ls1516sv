@@ -81,8 +81,8 @@ public class GetMoviesMidReviewsRidTest {
 
         /* --- */
 
-        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviewsRid command = new GetMoviesMidReviewsRid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -94,8 +94,8 @@ public class GetMoviesMidReviewsRidTest {
 
         /* --- */
 
-        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
-        stuff.execute(param);
+        GetMoviesMidReviewsRid command = new GetMoviesMidReviewsRid();
+        command.execute(param);
     }
 
     @Test
@@ -111,8 +111,8 @@ public class GetMoviesMidReviewsRidTest {
 
         /* --- */
 
-        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviewsRid command = new GetMoviesMidReviewsRid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -124,8 +124,8 @@ public class GetMoviesMidReviewsRidTest {
 
         /* --- */
 
-        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
-        stuff.execute(param);
+        GetMoviesMidReviewsRid command = new GetMoviesMidReviewsRid();
+        command.execute(param);
     }
 
     @Test
@@ -141,8 +141,8 @@ public class GetMoviesMidReviewsRidTest {
 
         /* --- */
 
-        GetMoviesMidReviewsRid stuff = new GetMoviesMidReviewsRid();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviewsRid command = new GetMoviesMidReviewsRid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

@@ -75,8 +75,8 @@ public class DeleteCollectionsCidMoviesMidTest {
 
         /* --- */
 
-        DeleteCollectionsCidMoviesMid stuff = new DeleteCollectionsCidMoviesMid();
-        ResultInfo rs = stuff.execute(param);
+        DeleteCollectionsCidMoviesMid command = new DeleteCollectionsCidMoviesMid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

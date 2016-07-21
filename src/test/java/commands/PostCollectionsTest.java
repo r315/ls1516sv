@@ -65,8 +65,8 @@ public class PostCollectionsTest {
 
         /* --- */
 
-        PostCollections stuff = new PostCollections();
-        ResultInfo rs = stuff.execute(param);
+        PostCollections command = new PostCollections();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 }
