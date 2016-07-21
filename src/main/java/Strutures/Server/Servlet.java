@@ -92,8 +92,9 @@ public class Servlet extends HttpServlet {
     }
 
     private static String addPagingToQuery(String query) {
-        if (query == null) query = String.format("top=%d", Utils.PAG_DEFAULT);
-        else if (!query.contains("top=")) query += String.format("&top=%d",Utils.PAG_DEFAULT);
+        final String topPaging = "top";
+        if (query == null) query = String.format("%s=%d", topPaging, Utils.PAG_DEFAULT);
+        else if (!query.contains(String.format("%s=", topPaging))) query += String.format("&%s=%d", topPaging, Utils.PAG_DEFAULT);
         return query;
     }
 }

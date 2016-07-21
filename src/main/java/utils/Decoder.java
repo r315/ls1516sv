@@ -34,11 +34,13 @@ public class Decoder {
         else throw new InvalidCommandPathException();
     }
 
-    public static Collection<String> decodePath(String path) {
-        String [] pathS = path.split("/");
-        Collection<String> resources = new ArrayList<>();
-        if( pathS.length > 0) resources.addAll(Arrays.asList(pathS).subList(1,pathS.length));
-        return resources;
+    public static Collection<String> decodePath(String path) throws InvalidCommandPathException {
+        if (path.charAt(0) == '/') {
+            String[] pathS = path.split("/");
+            Collection<String> resources = new ArrayList<>();
+            if (pathS.length > 0) resources.addAll(Arrays.asList(pathS).subList(1, pathS.length));
+            return resources;
+        } else throw new InvalidCommandPathException();
     }
 
     public static String decodeMethod(String line) throws InvalidCommandException {
