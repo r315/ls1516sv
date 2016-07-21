@@ -113,8 +113,8 @@ public class GetTopsNRatingsLowerAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsLowerAverage stuff = new GetTopsNRatingsLowerAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsLowerAverage command = new GetTopsNRatingsLowerAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -140,8 +140,8 @@ public class GetTopsNRatingsLowerAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsLowerAverage stuff = new GetTopsNRatingsLowerAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsLowerAverage command = new GetTopsNRatingsLowerAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -173,8 +173,8 @@ public class GetTopsNRatingsLowerAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsLowerAverage stuff = new GetTopsNRatingsLowerAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsLowerAverage command = new GetTopsNRatingsLowerAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -201,8 +201,8 @@ public class GetTopsNRatingsLowerAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsLowerAverage stuff = new GetTopsNRatingsLowerAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsLowerAverage command = new GetTopsNRatingsLowerAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -213,8 +213,8 @@ public class GetTopsNRatingsLowerAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsLowerAverage stuff = new GetTopsNRatingsLowerAverage();
-        stuff.execute(param);
+        GetTopsNRatingsLowerAverage command = new GetTopsNRatingsLowerAverage();
+        command.execute(param);
     }
 
     @Test(expected= InvalidCommandVariableException.class)
@@ -224,7 +224,7 @@ public class GetTopsNRatingsLowerAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsLowerAverage stuff = new GetTopsNRatingsLowerAverage();
-        stuff.execute(param);
+        GetTopsNRatingsLowerAverage command = new GetTopsNRatingsLowerAverage();
+        command.execute(param);
     }
 }

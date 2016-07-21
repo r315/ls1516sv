@@ -81,8 +81,8 @@ public class GetTopsReviewsHigherCountTest {
 
         /* --- */
 
-        GetTopsReviewsHigherCount stuff = new GetTopsReviewsHigherCount();
-        ResultInfo rs = stuff.execute(null);
+        GetTopsReviewsHigherCount command = new GetTopsReviewsHigherCount();
+        ResultInfo rs = command.execute(null);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

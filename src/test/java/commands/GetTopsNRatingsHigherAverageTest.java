@@ -114,8 +114,8 @@ public class GetTopsNRatingsHigherAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsHigherAverage stuff = new GetTopsNRatingsHigherAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsHigherAverage command = new GetTopsNRatingsHigherAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -147,8 +147,8 @@ public class GetTopsNRatingsHigherAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsHigherAverage stuff = new GetTopsNRatingsHigherAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsHigherAverage command = new GetTopsNRatingsHigherAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -174,8 +174,8 @@ public class GetTopsNRatingsHigherAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsHigherAverage stuff = new GetTopsNRatingsHigherAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsHigherAverage command = new GetTopsNRatingsHigherAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -202,8 +202,8 @@ public class GetTopsNRatingsHigherAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsHigherAverage stuff = new GetTopsNRatingsHigherAverage();
-        ResultInfo rs = stuff.execute(param);
+        GetTopsNRatingsHigherAverage command = new GetTopsNRatingsHigherAverage();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -214,8 +214,8 @@ public class GetTopsNRatingsHigherAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsHigherAverage stuff = new GetTopsNRatingsHigherAverage();
-        stuff.execute(param);
+        GetTopsNRatingsHigherAverage command = new GetTopsNRatingsHigherAverage();
+        command.execute(param);
     }
 
     @Test(expected= InvalidCommandVariableException.class)
@@ -225,7 +225,7 @@ public class GetTopsNRatingsHigherAverageTest {
 
         /* --- */
 
-        GetTopsNRatingsHigherAverage stuff = new GetTopsNRatingsHigherAverage();
-        stuff.execute(param);
+        GetTopsNRatingsHigherAverage command = new GetTopsNRatingsHigherAverage();
+        command.execute(param);
     }
 }

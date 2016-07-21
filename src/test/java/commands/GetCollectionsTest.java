@@ -72,8 +72,8 @@ public class GetCollectionsTest {
 
         /* --- */
 
-        GetCollections stuff = new GetCollections();
-        ResultInfo rs = stuff.execute(param);
+        GetCollections command = new GetCollections();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -94,8 +94,8 @@ public class GetCollectionsTest {
 
         /* --- */
 
-        GetCollections stuff = new GetCollections();
-        ResultInfo rs = stuff.execute(param);
+        GetCollections command = new GetCollections();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -116,8 +116,8 @@ public class GetCollectionsTest {
 
         /* --- */
 
-        GetCollections stuff = new GetCollections();
-        ResultInfo rs = stuff.execute(param);
+        GetCollections command = new GetCollections();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -139,8 +139,8 @@ public class GetCollectionsTest {
 
         /* --- */
 
-        GetCollections stuff = new GetCollections();
-        ResultInfo rs = stuff.execute(param);
+        GetCollections command = new GetCollections();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -156,8 +156,8 @@ public class GetCollectionsTest {
 
         /* --- */
 
-        GetCollections stuff = new GetCollections();
-        ResultInfo rs = stuff.execute(param);
+        GetCollections command = new GetCollections();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

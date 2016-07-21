@@ -93,8 +93,8 @@ public class GetTopsRatingsHigherAverageTest {
 
         /* --- */
 
-        GetTopsRatingsHigherAverage stuff = new GetTopsRatingsHigherAverage();
-        ResultInfo rs = stuff.execute(null);
+        GetTopsRatingsHigherAverage command = new GetTopsRatingsHigherAverage();
+        ResultInfo rs = command.execute(null);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

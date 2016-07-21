@@ -91,8 +91,8 @@ public class GetMoviesMidRatingsTest {
 
         /* --- */
 
-        GetMoviesMidRatings stuff = new GetMoviesMidRatings();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidRatings command = new GetMoviesMidRatings();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
         }
 
@@ -108,8 +108,8 @@ public class GetMoviesMidRatingsTest {
 
         /* --- */
 
-        GetMoviesMidRatings stuff = new GetMoviesMidRatings();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidRatings command = new GetMoviesMidRatings();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -120,7 +120,7 @@ public class GetMoviesMidRatingsTest {
 
         /* --- */
 
-        GetMoviesMidRatings stuff = new GetMoviesMidRatings();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidRatings command = new GetMoviesMidRatings();
+        ResultInfo rs = command.execute(param);
     }
 }
