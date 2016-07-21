@@ -9,6 +9,7 @@ import java.util.Map;
 public class HeaderInfo {
 
 	public static final String FILENAME_TOKEN="file-name";
+	public static final String ACCEPT_TOKEN="accept";
 	private Map<String,String> headers;
 
 	public HeaderInfo(){
