@@ -53,14 +53,16 @@ public class Utils {
         return ts;
     }
 
-    public static final int PAG_DEFAULT = 5;
+    private static final int PAG_DEFAULT = 5;
+    private static final String topPaging = "top";
+    private static final String skipPaging = "skip";
 
     public static Pair<String, String> paging(HashMap<String,String> param, String link) throws SQLException, InvalidCommandException{
         Pair<String,String> page = new Pair<>();
 
         String nextSkip, prevSkip = "";
         String top = Integer.toString(PAG_DEFAULT);
-        String skip = param.get("skip");
+        String skip = param.get(skipPaging);
 
         int skipI;
         try {
@@ -78,11 +80,11 @@ public class Utils {
                 page.value1 = String.format("%s?%s", link, pagingFormat(param, prevSkip, top));
             }
         } catch (NumberFormatException e) { //If not number
-            throw new InvalidCommandParametersException("Invalid value for 'Skip'");
+            throw new InvalidCommandParametersException(String.format("Invalid value for '%s'", skipPaging));
         }
 
         //Next
-        CommandInfo command = new CommandInfo("GET", link, String.format("top=%s&skip=%s",top,nextSkip));
+        CommandInfo command = new CommandInfo("GET", link, String.format("%s=%s&%s=%s",topPaging,top,skipPaging,nextSkip));
         ResultInfo ri = Manager.commandMap.get(command).execute(command.getData());
 
         if (ri.getValues().isEmpty()) page.value2 = "";
@@ -93,14 +95,20 @@ public class Utils {
     }
 
     private static String pagingFormat(HashMap<String, String> param, String skip, String top) {
-        param.put("top",top);
-        param.put("skip",skip);
+        param.put(topPaging,top);
+        param.put(skipPaging,skip);
 
         String result="";
         for (Map.Entry s:param.entrySet())
             result += String.format("%s=%s&",s.getKey(),s.getValue());
 
         return result.substring(0,result.length()-1);
+    }
+
+    public static String addPagingToQuery(String query) {
+        if (query == null) query = String.format("%s=%d", topPaging, PAG_DEFAULT);
+        else if (!query.contains(String.format("%s=", topPaging))) query += String.format("&%s=%d", topPaging, PAG_DEFAULT);
+        return query;
     }
 
     public static void writeToFile(String filename, String s) throws FileNotFoundException {
@@ -112,5 +120,4 @@ public class Utils {
             }
         }
     }
-
 }
