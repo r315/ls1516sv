@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import exceptions.InvalidCommandParametersException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,57 +31,38 @@ public class PostMoviesMidRatingsTest {
 	public void init() throws SQLException {
 		try (Connection conn = ConnectionFactory.getConn()) {
 			Statement stmt = conn.createStatement();
-
 			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('x','20000101')");
-
 			stmt.executeUpdate("DELETE FROM Movie WHERE title='x'");
-
 			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
-
 			stmt.executeUpdate("DBCC CHECKIDENT (Rating, RESEED, 0)");
-
 			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('awesomeJack','20000101')");
-
 			stmt.executeUpdate("INSERT INTO Rating (movie_id,one,two,three,four,five) VALUES ('1','0','0','0','0','0')");
-
 			stmt.close();
 		}
 	}
 
 	@After
-	public void removeInserts() throws Exception {
+	public void removeInserts() throws SQLException {
 		try (Connection conn = ConnectionFactory.getConn()) {
 			Statement stmt = conn.createStatement();
-
 			stmt.executeUpdate("DELETE Rating");
-
 			stmt.executeUpdate("DELETE Movie");
-
 			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
-
 			stmt.executeUpdate("DBCC CHECKIDENT (Rating, RESEED, 0)");
-
 		}
 	}
 
 	@Test
-	public void PostMoviesMidRatingsTest0() throws Exception{
+	public void PostMoviesMidRatingsTest0() throws SQLException, InvalidCommandParametersException {
 		HashMap<String,String> data = new HashMap<String,String>();    	
     	data.put("rating", "5");
 		data.put("mid", "1");
-
 		ArrayList<ArrayList<String>> resdata = new ArrayList<>();
-
 		ResultInfo result = new ResultInfo(null,new ArrayList<>(1),resdata);
-
 		ArrayList<String> line1 = new ArrayList<>(); line1.add("Success");
-
 		resdata.add(line1);
-
     	ResultInfo ri = new PostMoviesMidRatings().execute(data);
-
 		assertEquals(ri.getValues(),result.getValues());
-
 	}
 
 }

@@ -9,64 +9,61 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import exceptions.InvalidCommandException;
+import exceptions.PostException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import sqlserver.ConnectionFactory;
 import Strutures.ResponseFormat.ResultInfo;
+import utils.DataBase;
 
 /**
  * Created by Luigi Sekuiya on 30/04/2016.
  */
 public class PostCollectionsTest {
+    private PostCollections post;
 
     @Before
     public void init() throws SQLException {
-        try (Connection conn = ConnectionFactory.getConn()) {
-            Statement stmt = conn.createStatement();
-
-            stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('x','y')");
-
-            stmt.executeUpdate("DELETE FROM Collection WHERE collection_id=1");
-
-            stmt.executeUpdate("DBCC CHECKIDENT (Collection, RESEED, 0)");
-
-            stmt.close();
-        }
+        post = new PostCollections();
+        DataBase.clear();
     }
 
     @After
-    public void removeInserts() throws Exception {
-        try (Connection conn = ConnectionFactory.getConn()) {
-            Statement stmt = conn.createStatement();
-
-            stmt.executeUpdate("DELETE FROM Collection WHERE collection_id=1");
-
-            stmt.executeUpdate("DBCC CHECKIDENT (Collection, RESEED, 0)");
-
-        }
+    public void finish()throws SQLException{
+        DataBase.clear();
     }
 
     @Test
-    public void PostCollectionsExecute() throws Exception {
+    public void shouldPostCollection() throws SQLException, InvalidCommandException {
+        DataBase.clear();
+        ResultInfo rs = post.execute(createParamMap());
+        assertEquals(getResultInfo().getValues(), rs.getValues());
+    }
+
+    @Test(expected = PostException.class)
+    public void shouldGetExceptionOnDuplicatedCollection() throws SQLException, InvalidCommandException {
+        HashMap<String, String> param = createParamMap();
+        DataBase.clear();
+        post.execute(param);
+        post.execute(param);
+    }
+
+    private ResultInfo getResultInfo() {
         Collection<String> title = new ArrayList<>();
         ArrayList<ArrayList<String>> data = new ArrayList<>();
-
-        ArrayList<String> line1 = new ArrayList<>(); line1.add("1");
-
+        ArrayList<String> line1 = new ArrayList<>();
+        line1.add("1");
         data.add(line1);
+        return new ResultInfo(null, title, data);
+    }
 
-        ResultInfo result = new ResultInfo(null,title,data);
-
+    private HashMap<String, String> createParamMap(){
         HashMap<String, String> param = new HashMap<>();
         param.put("name","TheBest");
         param.put("description","The+greatest+movies+of+all+time");
-
-        /* --- */
-
-        PostCollections stuff = new PostCollections();
-        ResultInfo rs = stuff.execute(param);
-        assertEquals(result.getValues(),rs.getValues());
+        return param;
     }
 }

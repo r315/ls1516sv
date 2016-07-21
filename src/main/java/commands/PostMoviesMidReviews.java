@@ -55,9 +55,14 @@ public class PostMoviesMidReviews extends CommandBase {
 			ri = createResultInfo( pstmt.getGeneratedKeys());
 		}catch (SQLException e){
 			int errorCode= e.getErrorCode();
-			if(errorCode == PostException.STRING_IS_TOO_LONG)
-				throw new PostException(errorCode,"At least one field has too many characters!");
-			else throw e;
+            switch(errorCode){
+                case PostException.ENTRY_NOT_FOUND:
+                    throw new PostException(errorCode,"Movie not found!");
+                case PostException.STRING_IS_TOO_LONG:
+                    throw new PostException(errorCode,"At least one field has too many characters!");
+                default:
+                    throw e;
+            }
 		}
 		return ri;
 	}
