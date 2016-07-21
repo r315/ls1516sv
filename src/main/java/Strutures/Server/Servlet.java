@@ -29,18 +29,15 @@ public class Servlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
         String respBody;
         String method= req.getMethod();
         String path= req.getRequestURI();
         String query= req.getQueryString();
 
-        if (query == null) query = String.format("top=%d",Utils.PAG_DEFAULT);
-        else if (!query.contains("top=")) query += String.format("&top=%d",Utils.PAG_DEFAULT);
+        query = addPagingToQuery(query);
 
         try{
-            CommandInfo command = new CommandInfo(method, path, query);
-            respBody = Manager.executeCommand(command,new HeaderInfo());
+            respBody = Manager.executeCommand(new CommandInfo(method, path, query), new HeaderInfo());
             InfoStatusCode(resp, HTTP_OK, String.format("New GET was received: %s?%s",path,query));
         }catch(Exception e){
             if(e instanceof InvalidCommandException){
@@ -54,7 +51,6 @@ public class Servlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
         String respBody;
         try {
             String method= req.getMethod();
@@ -93,5 +89,11 @@ public class Servlet extends HttpServlet {
         OutputStream os = resp.getOutputStream();
         os.write(respBodyBytes);
         os.close();
+    }
+
+    private static String addPagingToQuery(String query) {
+        if (query == null) query = String.format("top=%d", Utils.PAG_DEFAULT);
+        else if (!query.contains("top=")) query += String.format("&top=%d",Utils.PAG_DEFAULT);
+        return query;
     }
 }

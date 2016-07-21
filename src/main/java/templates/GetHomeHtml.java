@@ -26,7 +26,7 @@ public class GetHomeHtml implements IResultFormat {
                             new Pair<>("Top Ratings", "/tops/ratings")
                     )
             );
-            page.addFooter(new HtmlElement("div","João Duarte | Luís Almeida | Hugo Reis").
+            page.addFooter(new HtmlElement("div","Joao Duarte | Luis Almeida | Hugo Reis").
                             addAttributes("style","position:absolute;bottom:0;width:99%;text-align:center"));
             return page.getHtml();
     }

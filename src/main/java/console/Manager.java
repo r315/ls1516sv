@@ -39,7 +39,6 @@ public class Manager {
         return cmdbase.getResult(commandInfo,headerInfo,result);
     }
 
-
     //// TODO: 19/07/2016 Fazer isto de novo or test
     public static void displayResponse(String response, HeaderInfo headerinfo){
         if(headerinfo.hasKey(HeaderInfo.FILENAME_TOKEN)){
@@ -100,7 +99,7 @@ public class Manager {
         map.add("POST /collections",commandWithTemplate(new PostCollections(), new PostCollectionsHtml()));
         map.add("POST /collections/{cid}/movies/",commandWithTemplate(new PostCollectionsCidMovies(), new PostCollectionsCidMoviesHtml()));
 
-        map.add("GET /",commandWithOnlyHtmlTemplate(new Home(), new GetHomeHtml()));
+        map.add("GET /",commandWithTemplate(new Home(), new GetHomeHtml()));
         map.add("GET /movies",commandWithTemplate(new GetMovies(), new GetMoviesHtml()));
         map.add("GET /movies/{mid}",commandWithTemplate(new GetMoviesMid(),new GetMoviesMidHtml()));
         map.add("GET /movies/{mid}/ratings",commandWithTemplate(new GetMoviesMidRatings(),new GetMoviesMidRatingsHtml()));
@@ -110,7 +109,7 @@ public class Manager {
         map.add("GET /collections",commandWithTemplate(new GetCollections(), new GetCollectionsHtml()));
         map.add("GET /collections/{cid}",commandWithTemplate(new GetCollectionsCid(), new GetCollectionsCidHtml()));
 
-        map.add("GET /tops/ratings",commandWithOnlyHtmlTemplate(new TopsRatings(),new GetTopsRatingsHtml()));
+        map.add("GET /tops/ratings",commandWithTemplate(new TopsRatings(),new GetTopsRatingsHtml()));
         map.add("GET /tops/ratings/higher/average",commandWithGenericTemplates(new GetTopsRatingsHigherAverage()));
         map.add("GET /tops/{n}/ratings/higher/average",commandWithTemplate(new GetTopsNRatingsHigherAverage(), new GetTopsNHtml()));
         map.add("GET /tops/ratings/lower/average",commandWithGenericTemplates(new GetTopsRatingsLowerAverage()));
@@ -122,8 +121,8 @@ public class Manager {
         map.add("DELETE /collections/{cid}/movies/{mid}",commandWithGenericTemplates(new DeleteCollectionsCidMoviesMid()));
         //TODO: ADD templates to all commands
         map.add("OPTION /", commandWithGenericTemplates(new Options()));
-        map.add("LISTEN /", commandWithOnlyTextTemplate(new Listen()));
-        map.add("EXIT /",new Exit());
+        map.add("LISTEN /", commandWithGenericTemplates(new Listen()));
+        map.add("EXIT /",commandWithGenericTemplates(new Exit()));
         return map;
     }
 
