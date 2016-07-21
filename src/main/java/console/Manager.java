@@ -137,14 +137,4 @@ public class Manager {
         cb.addResultFormat("text/html", GetGenericHtml.getInstance());
         return cb;
     }
-
-    private static CommandBase commandWithOnlyTextTemplate(CommandBase cb){
-        cb.addResultFormat("text/plain",TextResult.getInstance());
-        return cb;
-    }
-
-    private static CommandBase commandWithOnlyHtmlTemplate(CommandBase cb, IResultFormat rf){
-        cb.addResultFormat("text/html",rf);
-        return cb;
-    }
 }

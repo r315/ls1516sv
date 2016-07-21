@@ -6,8 +6,7 @@ import console.Manager;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -103,13 +102,12 @@ public class Utils {
         return result.substring(0,result.length()-1);
     }
 
-    public static void writeToFile(String filename, String s) throws FileNotFoundException {
-        if(filename == null){
-            System.out.println(s);
-        }else{
-            try(  PrintWriter file = new PrintWriter(filename)) {
-                file.println(s);
-            }
+    public static void writeToFile(String filename, String s) throws IOException{
+        try(
+                Writer writer = new BufferedWriter(new OutputStreamWriter(
+                                new FileOutputStream(filename), "utf-8"))
+        ){
+            writer.write(s);
         }
     }
 

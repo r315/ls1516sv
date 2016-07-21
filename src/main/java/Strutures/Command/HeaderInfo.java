@@ -10,19 +10,21 @@ public class HeaderInfo {
 
 	public static final String FILENAME_TOKEN="file-name";
 	public static final String ACCEPT_TOKEN="accept";
+	public static final String TEXT_HTML_TOKEN="text/html";
+	public static final String TEXT_PLAIN_TOKEN="text/plain";
 	private Map<String,String> headers;
 
 	public HeaderInfo(){
 		headers= new HashMap<>();
-		headers.put("accept","text/html");
+		headers.put(TEXT_PLAIN_TOKEN,TEXT_HTML_TOKEN);
 	}
 
 	public HeaderInfo(String[] h) throws InvalidCommandException {
 		headers= Decoder.decodeHeaders(h);
-		if(headers.size()==0)
-			headers.put("accept","text/html");
+		if(!headers.containsKey(ACCEPT_TOKEN))
+			headers.put(ACCEPT_TOKEN,TEXT_HTML_TOKEN);
 	}
-	
+
 	public Map<String,String> getHeadersMap(){
 		return headers;
 	}

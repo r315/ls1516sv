@@ -3,7 +3,6 @@ package Strutures.Command;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandMethodException;
 import exceptions.InvalidCommandPathException;
-import exceptions.InvalidCommandTableException;
 import utils.Decoder;
 
 import java.util.*;
@@ -28,7 +27,6 @@ public class CommandMap {
 
         String table=null;
         String method= Decoder.decodeMethod(sCommand);
-        //HashMap<String,DataNode> methodMap= this.commandsMap.get(method);
         HashMap<String, DataNode> methodMap= this.commandsMap.putIfAbsent(method,new HashMap<String, DataNode>());
         if(methodMap==null)//in case it didn't exist before
             methodMap=this.commandsMap.get(method);
@@ -46,7 +44,6 @@ public class CommandMap {
             for (String s:path)
                 if(!col.contains(s))dataNode.addToResources(s);
         }
-        //path.iterator().forEachRemaining(s->dataNode.);
         path=Decoder.decodePathFromCommand(sCommand);
         CNode curr= new CNode(path, commandBase);
         curr.setNext(dataNode.getNext());
@@ -63,7 +60,7 @@ public class CommandMap {
         //Iterator<String> commandIterator = cmdInfo.getResources().iterator();
         if(tablesMap==null)throw new InvalidCommandMethodException();
         DataNode dataNode = tablesMap.get(cmdInfo.getTable());
-        if(dataNode==null)throw new InvalidCommandTableException();
+        if(dataNode==null)throw new InvalidCommandPathException();
 
         Collection<String> dataNodeSegmentList= dataNode.resources();
         CNode curr = dataNode.getNext();

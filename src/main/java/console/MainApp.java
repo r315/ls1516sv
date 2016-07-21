@@ -27,6 +27,7 @@ public class MainApp {
 
 		do {
 			try {
+
 				if(interactive_mode){
 					System.out.println("[Interactive mode] Insert a command:");
 					userArgs= scanner.nextLine().split(" ");
@@ -35,15 +36,11 @@ public class MainApp {
 				CommandInfo command = new CommandInfo(userArgs);
 				String result= Manager.executeCommand(command,headerInfo);
                 Manager.displayResponse(result,headerInfo);
-
 				}catch(SQLException | InvalidCommandException e){
-					if(interactive_mode){
-						_logger.error(e.getMessage());
-						System.out.println("Please insert a valid command. (For more informations type:OPTION / )");
-					}else{
-						_logger.error(e.getMessage());
+					_logger.error(e.getMessage());
+				System.out.println("(For more informations type the command:OPTION / )");
+					if(!interactive_mode)
 						interactive_mode=false;
-					}
 				}
 		}while(interactive_mode);
 		scanner.close();
