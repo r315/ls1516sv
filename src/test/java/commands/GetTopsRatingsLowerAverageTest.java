@@ -93,8 +93,8 @@ public class GetTopsRatingsLowerAverageTest {
 
         /* --- */
 
-        GetTopsRatingsLowerAverage stuff = new GetTopsRatingsLowerAverage();
-        ResultInfo rs = stuff.execute(null);
+        GetTopsRatingsLowerAverage command = new GetTopsRatingsLowerAverage();
+        ResultInfo rs = command.execute(null);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

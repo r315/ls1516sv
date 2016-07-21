@@ -82,8 +82,8 @@ public class GetCollectionsCidTest {
 
         /* --- */
 
-        GetCollectionsCid stuff = new GetCollectionsCid();
-        ResultInfo rs = stuff.execute(param);
+        GetCollectionsCid command = new GetCollectionsCid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -99,8 +99,8 @@ public class GetCollectionsCidTest {
 
         /* --- */
 
-        GetCollectionsCid stuff = new GetCollectionsCid();
-        ResultInfo rs = stuff.execute(param);
+        GetCollectionsCid command = new GetCollectionsCid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -111,8 +111,8 @@ public class GetCollectionsCidTest {
 
         /* --- */
 
-        GetCollectionsCid stuff = new GetCollectionsCid();
-        ResultInfo rs = stuff.execute(param);
+        GetCollectionsCid command = new GetCollectionsCid();
+        ResultInfo rs = command.execute(param);
     }
 
     @Test
@@ -127,8 +127,8 @@ public class GetCollectionsCidTest {
 
         /* --- */
 
-        GetCollectionsCid stuff = new GetCollectionsCid();
-        ResultInfo rs = stuff.execute(param);
+        GetCollectionsCid command = new GetCollectionsCid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 }

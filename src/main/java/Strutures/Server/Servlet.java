@@ -34,7 +34,7 @@ public class Servlet extends HttpServlet {
         String path= req.getRequestURI();
         String query= req.getQueryString();
 
-        query = addPagingToQuery(query);
+        query = Utils.addPagingToQuery(query);
 
         try{
             respBody = Manager.executeCommand(new CommandInfo(method, path, query), new HeaderInfo());
@@ -91,10 +91,4 @@ public class Servlet extends HttpServlet {
         os.close();
     }
 
-    private static String addPagingToQuery(String query) {
-        final String topPaging = "top";
-        if (query == null) query = String.format("%s=%d", topPaging, Utils.PAG_DEFAULT);
-        else if (!query.contains(String.format("%s=", topPaging))) query += String.format("&%s=%d", topPaging, Utils.PAG_DEFAULT);
-        return query;
-    }
 }

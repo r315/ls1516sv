@@ -67,8 +67,8 @@ public class GetMoviesMidTest {
 
         /* --- */
 
-        GetMoviesMid stuff = new GetMoviesMid();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMid command = new GetMoviesMid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -84,8 +84,8 @@ public class GetMoviesMidTest {
 
         /* --- */
 
-        GetMoviesMid stuff = new GetMoviesMid();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMid command = new GetMoviesMid();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -96,7 +96,7 @@ public class GetMoviesMidTest {
 
         /* --- */
 
-        GetMoviesMid stuff = new GetMoviesMid();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMid command = new GetMoviesMid();
+        ResultInfo rs = command.execute(param);
     }
 }

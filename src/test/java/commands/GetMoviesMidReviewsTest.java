@@ -99,8 +99,8 @@ public class GetMoviesMidReviewsTest {
 
         /* --- */
 
-        GetMoviesMidReviews stuff = new GetMoviesMidReviews();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviews command = new GetMoviesMidReviews();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -137,8 +137,8 @@ public class GetMoviesMidReviewsTest {
 
         /* --- */
 
-        GetMoviesMidReviews stuff = new GetMoviesMidReviews();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviews command = new GetMoviesMidReviews();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -175,8 +175,8 @@ public class GetMoviesMidReviewsTest {
 
         /* --- */
 
-        GetMoviesMidReviews stuff = new GetMoviesMidReviews();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviews command = new GetMoviesMidReviews();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -205,8 +205,8 @@ public class GetMoviesMidReviewsTest {
 
         /* --- */
 
-        GetMoviesMidReviews stuff = new GetMoviesMidReviews();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviews command = new GetMoviesMidReviews();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -222,8 +222,8 @@ public class GetMoviesMidReviewsTest {
 
         /* --- */
 
-        GetMoviesMidReviews stuff = new GetMoviesMidReviews();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviews command = new GetMoviesMidReviews();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
     }
 
@@ -234,7 +234,7 @@ public class GetMoviesMidReviewsTest {
 
         /* --- */
 
-        GetMoviesMidReviews stuff = new GetMoviesMidReviews();
-        ResultInfo rs = stuff.execute(param);
+        GetMoviesMidReviews command = new GetMoviesMidReviews();
+        ResultInfo rs = command.execute(param);
     }
 }

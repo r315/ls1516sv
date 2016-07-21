@@ -84,8 +84,8 @@ public class PostCollectionsCidMoviesTest {
 
         /* --- */
 
-        PostCollectionsCidMovies stuff = new PostCollectionsCidMovies();
-        ResultInfo rs = stuff.execute(param);
+        PostCollectionsCidMovies command = new PostCollectionsCidMovies();
+        ResultInfo rs = command.execute(param);
         assertEquals(result.getValues(),rs.getValues());
         removeInserts();
     }
