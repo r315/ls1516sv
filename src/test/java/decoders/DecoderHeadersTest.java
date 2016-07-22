@@ -33,7 +33,7 @@ public class DecoderHeadersTest {
     }
 
     @Test
-    public void HeadersExecute_HeaderParam() throws InvalidCommandException {
+    public void HeadersExecute_HeaderAndParam() throws InvalidCommandException {
         HashMap<String, String> headers = decodeHeaders("POST /movies/1/reviews accept:text/plain|accept-language:en-gb reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
         assertEquals(expectedHeader,headers);
     }
@@ -46,7 +46,7 @@ public class DecoderHeadersTest {
     }
 
     @Test
-    public void HeadersExecute_Array() throws InvalidCommandException {
+    public void HeadersExecute_MultipleHeader() throws InvalidCommandException {
         HashMap<String, String> headers = decodeHeaders("POST /movies/1/reviews accept:text/plain|accept-language:en-gb");
         assertEquals(expectedHeader,headers);
     }

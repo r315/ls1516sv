@@ -13,21 +13,21 @@ import exceptions.InvalidCommandPathException;
 import utils.Decoder;
 
 public class DecodePathTest {
-    Collection<String> resources;
+    Collection<String> testResources;
 
     @Before
     public void init(){
-        resources = new ArrayList<>();
-        resources.add("movies");
-        resources.add("1");
-        resources.add("reviews");
-        resources.add("4");
+        testResources = new ArrayList<>();
+        testResources.add("movies");
+        testResources.add("1");
+        testResources.add("reviews");
+        testResources.add("4");
     }
 
     @Test
-    public void PathExecute_MethodPath() throws Exception {
+    public void PathExecute_MethodPath() throws InvalidCommandException {
         Collection<String> path = Decoder.decodePath("GET /movies/1/reviews/4".split(" "));
-        assertEquals(resources,path);
+        assertEquals(testResources,path);
     }
 
     @Test(expected=InvalidCommandPathException.class)
@@ -36,20 +36,20 @@ public class DecodePathTest {
     }
 
     @Test
-    public void PathExecute_Array() throws Exception {
+    public void PathExecute_Array() throws InvalidCommandException {
         String [] aux = new String[]{"GET","/movies/1/reviews/4"};
         Collection<String> path = Decoder.decodePath(aux);
-        assertEquals(resources,path);
+        assertEquals(testResources,path);
     }
 
     @Test(expected=InvalidCommandPathException.class)
-    public void PathExecute_isEmpty() throws Exception {
+    public void PathExecute_isEmpty() throws InvalidCommandException {
         String [] aux = new String[]{"GET",""};
         Collection<String> path = Decoder.decodePath(aux);
     }
 
     @Test(expected=InvalidCommandPathException.class)
-    public void PathExecute_isNull() throws Exception {
+    public void PathExecute_isNull() throws InvalidCommandException {
         String [] aux = new String[]{"GET",null};
         Collection<String> path = Decoder.decodePath(aux);
     }

@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 
 import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
 import org.junit.Before;
 import org.junit.Test;
 import utils.Decoder;
@@ -15,15 +16,15 @@ import utils.Decoder;
  * Created by Luigi Sekuiya on 23/04/2016.
  */
 public class DecodeParametersTest {
-    HashMap<String, String> parameters;
+    HashMap<String, String> testParameters;
 
     @Before
     public void init(){
-        parameters = new HashMap<>();
-        parameters.put("reviewerName","LS");
-        parameters.put("reviewSummary","FewStuff");
-        parameters.put("review","MoreStuff");
-        parameters.put("rating","5");
+        testParameters = new HashMap<>();
+        testParameters.put("reviewerName", "LS");
+        testParameters.put("reviewSummary", "FewStuff");
+        testParameters.put("review", "MoreStuff");
+        testParameters.put("rating", "5");
     }
 
     @Test
@@ -35,34 +36,33 @@ public class DecodeParametersTest {
     @Test
     public void ParametersExecute_Parameters() throws InvalidCommandException {
         HashMap<String, String> param = decodeParams("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
-        assertEquals(parameters,param);
+        assertEquals(testParameters,param);
     }
 
 
     @Test
     public void ParametersExecute_SingleParam() throws InvalidCommandException {
         HashMap<String, String> aux = new HashMap<>(); aux.put("reviewerName","LS");
-        HashMap<String, String> param = decodeParams("POST /movies/1/reviews reviewerName=LS");
-        assertEquals(aux,param);
+        assertEquals(aux,decodeParams("POST /movies/1/reviews reviewerName=LS"));
     }
 
     @Test
-    public void ParametersExecute_HeaderParam() throws InvalidCommandException {
+    public void ParametersExecute_HeaderAndParam() throws InvalidCommandException {
         HashMap<String, String> param = decodeParams("POST /movies/1/reviews accept:text/plain|accept-language:en-gb reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
-        assertEquals(parameters,param);
+        assertEquals(testParameters,param);
     }
 
     @Test
-    public void HeaderExecute_OnlyParam() throws InvalidCommandException {
+    public void ParametersExecute_OnlyParam() throws InvalidCommandException {
         HashMap<String, String> expected = new HashMap<>();
         expected.put("reviewerName","LS");
         assertEquals(expected, decodeParams("POST /movies/1/reviews reviewerName=LS"));
     }
 
     @Test
-    public void ParametersExecute_Array() throws InvalidCommandException {
+    public void ParametersExecute_MultipleParam() throws InvalidCommandException {
         HashMap<String, String> param = decodeParams("POST /movies/1/reviews reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
-        assertEquals(parameters,param);
+        assertEquals(testParameters,param);
     }
 
     @Test
@@ -71,10 +71,14 @@ public class DecodeParametersTest {
         assertEquals(new HashMap<String, String>(),param);
     }
 
-    @Test(expected=InvalidCommandException.class)
-    public void ParametersExecute_isNull() throws InvalidCommandException {
-        String [] aux = new String[]{null,null,null,null};
-        HashMap<String, String> param = Decoder.decodeParameters(aux);
+    @Test(expected = InvalidCommandParametersException.class)
+    public void shouldGetExceptionOnIncompleteRightParameter()throws InvalidCommandException{
+        decodeParams("POST /movies/1/reviews reviewerName=");
+    }
+
+    @Test(expected = InvalidCommandParametersException.class)
+    public void shouldGetExceptionOnIncompleteLeftParameter()throws InvalidCommandException{
+        decodeParams("POST /movies/1/reviews =MovieName");
     }
 
     private HashMap<String, String> decodeParams(String path) throws InvalidCommandException{
