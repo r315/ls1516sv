@@ -104,18 +104,17 @@ public class Utils {
         return result.substring(0,result.length()-1);
     }
 
-    public static String addPagingToQuery(String query) {
-        if (query == null) query = String.format("%s=%d", topPaging, PAG_DEFAULT);
-        else if (!query.contains(String.format("%s=", topPaging))) query += String.format("&%s=%d", topPaging, PAG_DEFAULT);
-        return query;
-    }
-
-    public static void writeToFile(String filename, String s) throws IOException{
-        try(
+    public static void writeToFile(String filename, String s) throws IOException {
+        try (
                 Writer writer = new BufferedWriter(new OutputStreamWriter(
                                 new FileOutputStream(filename), "utf-8"))
         ){
             writer.write(s);
         }
+    }
+    public static String addPagingToQuery(String query) {
+        if (query == null) query = String.format("%s=%d", topPaging, PAG_DEFAULT);
+        else if (!query.contains(String.format("%s=", topPaging))) query += String.format("&%s=%d", topPaging, PAG_DEFAULT);
+        return query;
     }
 }
