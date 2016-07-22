@@ -16,7 +16,7 @@ public class HeaderInfo {
 
 	public HeaderInfo(){
 		headers= new HashMap<>();
-		headers.put(TEXT_PLAIN_TOKEN,TEXT_HTML_TOKEN);
+		headers.put(ACCEPT_TOKEN,TEXT_HTML_TOKEN);
 	}
 
 	public HeaderInfo(String[] h) throws InvalidCommandException {
