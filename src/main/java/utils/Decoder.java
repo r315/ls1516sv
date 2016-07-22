@@ -1,13 +1,12 @@
 package utils;
 
-import exceptions.InvalidCommandException;
-import exceptions.InvalidCommandMethodException;
-import exceptions.InvalidCommandPathException;
+import exceptions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 
 /**
@@ -20,9 +19,12 @@ public class Decoder {
     public static final String PARAMETERS_PAIR_SEPARATOR_TOKEN= "=";
     public static final String PARAMETERS_SEPARATOR_TOKEN= "&";
     public static final String WHITESPACE_TOKEN= " ";
+    public static final String PATH_SEPARATOR_TOKEN = "/";
 
     public static HashMap<String, String> decodeHeaders(String[] args) throws InvalidCommandException{
-        return decode(args,HEADER_PAIR_SEPARATOR_TOKEN,HEADER_SEPARATOR_TOKEN);
+        if(args.length > 4) throw new InvalidCommandException("Invalid number of arguments!");
+        if(args.length < 3) return new HashMap<>();
+        return decode(args[2], HEADER_PAIR_SEPARATOR_TOKEN, HEADER_SEPARATOR_TOKEN, InvalidCommandHeadersException::new);
     }
 
     public static HashMap<String, String> decodeParameters(String args) throws InvalidCommandException{
@@ -30,7 +32,9 @@ public class Decoder {
     }
 
     public static HashMap<String, String> decodeParameters(String[] args) throws InvalidCommandException{
-        return decode(args,PARAMETERS_PAIR_SEPARATOR_TOKEN,PARAMETERS_SEPARATOR_TOKEN);
+        if(args.length > 4) throw new InvalidCommandException("Invalid number of arguments!");
+        if(args.length < 3) return new HashMap<>();
+        return decode(args[args.length-1], PARAMETERS_PAIR_SEPARATOR_TOKEN, PARAMETERS_SEPARATOR_TOKEN, InvalidCommandParametersException::new);
     }
 
     public static Collection<String> decodePathFromCommand(String line) throws InvalidCommandPathException {
@@ -44,7 +48,7 @@ public class Decoder {
 
     public static Collection<String> decodePath(String path) throws InvalidCommandPathException {
         if (path.charAt(0) == '/') {
-            String[] pathS = path.split("/");
+            String[] pathS = path.split(PATH_SEPARATOR_TOKEN);
             Collection<String> resources = new ArrayList<>();
             if (pathS.length > 0) resources.addAll(Arrays.asList(pathS).subList(1, pathS.length));
             return resources;
@@ -61,19 +65,16 @@ public class Decoder {
         else throw new InvalidCommandMethodException();
     }
 
-    private static HashMap<String, String> decode(String[] args, String kvSeparator, String paramSeparator) throws InvalidCommandException
+    private static HashMap<String, String> decode(String args, String pairSeparator, String separator,
+                                                  Supplier<InvalidCommandException> e) throws InvalidCommandException
     {
+        if(!args.contains(pairSeparator)) throw e.get();
         HashMap<String, String> map = new HashMap<>();
-        Arrays.stream(args)
-                .filter(s -> s.contains(kvSeparator))
-                .map(s1 -> s1.split(paramSeparator))
-                .flatMap(Arrays::stream)
-                .forEach(
-                    h -> {
-                        String[] sh = h.split(kvSeparator);
-                        map.put(sh[0], sh[1]);
-                    }
-                );
+        for(String s: args.split(separator)){
+            String[] sh = s.split(pairSeparator);
+            if(sh.length > 2 || sh.length < 2 || sh[0].isEmpty()) throw e.get();
+            map.put(sh[0], sh[1]);
+        }
         return map;
     }
 }

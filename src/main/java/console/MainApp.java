@@ -39,8 +39,6 @@ public class MainApp {
 				}catch(SQLException | InvalidCommandException e){
 					_logger.error(e.getMessage());
 				System.out.println("(For more informations type the command:OPTION / )");
-					if(!interactive_mode)
-						interactive_mode=false;
 				}
 		}while(interactive_mode);
 		scanner.close();

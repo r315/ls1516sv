@@ -39,7 +39,6 @@ public class Manager {
         return cmdbase.getResult(commandInfo,headerInfo,result);
     }
 
-    //// TODO: 19/07/2016 Fazer isto de novo or test
     public static void displayResponse(String response, HeaderInfo headerinfo){
         if(headerinfo.hasKey(HeaderInfo.FILENAME_TOKEN)){
             try{
