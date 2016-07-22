@@ -15,7 +15,7 @@ public class HeaderInfoTest {
     @Test
     public void GetDefaultFormat() throws Exception{
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies"});
-        Assert.assertEquals("text/html",hi.hasKey("accept"));
+        Assert.assertEquals("text/html",hi.getHeaderValue("accept"));
     }
 
     @Test
@@ -27,6 +27,6 @@ public class HeaderInfoTest {
     @Test
     public void GetResultHtmlTest() throws Exception{
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies","accept:text/html"});
-        Assert.assertEquals("text/html",hi.hasKey("accept"));
+        Assert.assertEquals("text/html",hi.getHeaderValue("accept"));
     }
 }

@@ -20,7 +20,7 @@ public abstract class CommandBase {
     }
 
     public String getResult(CommandInfo commandInfo, HeaderInfo headerinfo, ResultInfo resultInfo) throws SQLException, InvalidCommandException  {
-        return headermap.get(headerinfo.getHeadersMap().get(HeaderInfo.ACCEPT_TOKEN)).generate(resultInfo,commandInfo);
+        return headermap.get(headerinfo.getHeaderValue(HeaderInfo.ACCEPT_TOKEN)).generate(resultInfo,commandInfo);
     }
 
     public CommandBase addResultFormat(String hdr, IResultFormat rf){
