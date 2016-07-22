@@ -22,16 +22,6 @@ public class DecoderHeadersTest {
         expectedHeader.put("accept-language", "en-gb");
     }
 
-    @Test(expected= InvalidCommandHeadersException.class)
-    public void shouldGetExceptionOnIncompleteFilenameHeader() throws InvalidCommandException {
-        decodeHeaders("POST /movies/1/reviews file-name:");
-    }
-
-    @Test(expected= InvalidCommandHeadersException.class)
-    public void shouldGetExceptionOnIncompleteAcceptHeader() throws InvalidCommandException {
-        decodeHeaders("POST /movies/1/reviews accept:");
-    }
-
     @Test
     public void HeadersExecute_HeaderAndParam() throws InvalidCommandException {
         HashMap<String, String> headers = decodeHeaders("POST /movies/1/reviews accept:text/plain|accept-language:en-gb reviewerName=LS&reviewSummary=FewStuff&review=MoreStuff&rating=5");
@@ -63,6 +53,26 @@ public class DecoderHeadersTest {
 		assertEquals(map.get("accept"),"text/plain");
 		assertEquals(map.get("file-name"),"teste.txt");		
 	}
+
+    @Test(expected = InvalidCommandHeadersException.class)
+    public void shouldGetExceptionOnIncompleteFilenameHeader() throws InvalidCommandException {
+        decodeHeaders("POST /movies/1/reviews file-name:");
+    }
+
+    @Test(expected = InvalidCommandHeadersException.class)
+    public void shouldGetExceptionOnIncompleteAcceptHeader() throws InvalidCommandException {
+        decodeHeaders("POST /movies/1/reviews accept:");
+    }
+
+    @Test(expected = InvalidCommandException.class)
+    public void shouldGetExceptionOnOnExcessOfArguments() throws InvalidCommandException {
+        decodeHeaders("POST /movies accept:text/plain name=movie invalid");
+    }
+
+    @Test(expected = InvalidCommandException.class)
+    public void shouldGetExceptionOnWrongOrder() throws InvalidCommandException {
+        decodeHeaders("POST /movies name=movie accept:text/plain");
+    }
 
     private HashMap<String, String> decodeHeaders(String path) throws InvalidCommandException {
         return Decoder.decodeHeaders(path.split(" "));
