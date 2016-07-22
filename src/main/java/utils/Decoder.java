@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Decoder {
 
     public static final String HEADER_PAIR_SEPARATOR_TOKEN= ":";
-    public static final String HEADER_SEPARATOR_TOKEN= "|";
+    public static final String HEADER_SEPARATOR_TOKEN= "\\|";
     public static final String PARAMETERS_PAIR_SEPARATOR_TOKEN= "=";
     public static final String PARAMETERS_SEPARATOR_TOKEN= "&";
     public static final String WHITESPACE_TOKEN= " ";
@@ -66,6 +66,8 @@ public class Decoder {
         HashMap<String, String> map = new HashMap<>();
         Arrays.stream(args)
                 .filter(s -> s.contains(kvSeparator))
+                .map(s1 -> s1.split(paramSeparator))
+                .flatMap(Arrays::stream)
                 .forEach(
                     h -> {
                         String[] sh = h.split(kvSeparator);
@@ -73,17 +75,5 @@ public class Decoder {
                     }
                 );
         return map;
-    } /*
-        Arrays.stream(args)
-                .filter(s -> s.contains(kvSeparator))
-                .map(sm -> sm.split(paramSeparator))    //return Stream<String[]>
-                .flatMap(Arrays::stream)    //return Stream<String>
-                .forEach(
-                    h -> {
-                        String[] sh = h.split(kvSeparator);
-                        map.put(sh[0], sh[1]);
-                    }
-                );
-                */
-
+    }
 }
