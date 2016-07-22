@@ -16,18 +16,14 @@ public class HeaderInfo {
 
 	public HeaderInfo(){
 		headers= new HashMap<>();
-		headers.put(TEXT_PLAIN_TOKEN,TEXT_HTML_TOKEN);
+		headers.put(ACCEPT_TOKEN,TEXT_HTML_TOKEN);
 	}
 
 	public HeaderInfo(String[] h) throws InvalidCommandException {
-		headers= Decoder.decodeHeaders(h);
-		if(!headers.containsKey(ACCEPT_TOKEN))
-			headers.put(ACCEPT_TOKEN,TEXT_HTML_TOKEN);
-	}
-
-	public Map<String,String> getHeadersMap(){
-		return headers;
-	}
+        headers = Decoder.decodeHeaders(h);
+        if (!headers.containsKey(ACCEPT_TOKEN))
+            headers.put(ACCEPT_TOKEN, TEXT_HTML_TOKEN);
+    }
 
 	public String getHeaderValue(String key){
 		return headers.get(key);

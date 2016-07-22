@@ -39,7 +39,6 @@ public class DecodeParametersTest {
         assertEquals(testParameters,param);
     }
 
-
     @Test
     public void ParametersExecute_SingleParam() throws InvalidCommandException {
         HashMap<String, String> aux = new HashMap<>(); aux.put("reviewerName","LS");
@@ -79,6 +78,16 @@ public class DecodeParametersTest {
     @Test(expected = InvalidCommandParametersException.class)
     public void shouldGetExceptionOnIncompleteLeftParameter()throws InvalidCommandException{
         decodeParams("POST /movies/1/reviews =MovieName");
+    }
+
+    @Test(expected = InvalidCommandException.class)
+     public void shouldGetExceptionOnExcessOfArguments()throws InvalidCommandException{
+        decodeParams("POST /movies accept:text/plain name=movie invalid");
+    }
+
+    @Test(expected = InvalidCommandException.class)
+    public void shouldGetExceptionOnWrongOrder()throws InvalidCommandException{
+        decodeParams("POST /movies name=movie accept:text/plain");
     }
 
     private HashMap<String, String> decodeParams(String path) throws InvalidCommandException{

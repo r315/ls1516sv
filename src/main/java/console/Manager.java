@@ -118,7 +118,7 @@ public class Manager {
         map.add("GET /tops/{n}/reviews/lower/count", commandWithTemplate(new GetTopsNReviewsLowerCount(), new GetTopsNHtml()));
 
         map.add("DELETE /collections/{cid}/movies/{mid}",commandWithGenericTemplates(new DeleteCollectionsCidMoviesMid()));
-        //TODO: ADD templates to all commands
+
         map.add("OPTION /", commandWithGenericTemplates(new Options()));
         map.add("LISTEN /", commandWithGenericTemplates(new Listen()));
         map.add("EXIT /",commandWithGenericTemplates(new Exit()));
