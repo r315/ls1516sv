@@ -15,21 +15,18 @@ public class HeaderInfoTest {
     @Test
     public void GetDefaultFormat() throws Exception{
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies"});
-        String accept = hi.getHeadersMap().get("accept");
-        Assert.assertEquals("text/html",accept);
+        Assert.assertEquals("text/html",hi.hasKey("accept"));
     }
 
     @Test
     public void GetResultTextTestWithHeaderParams() throws Exception{
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies","accept:text/plain"});
-        String accept = hi.getHeadersMap().get("accept");
-        Assert.assertEquals("text/plain",accept);
+        Assert.assertEquals("text/plain",hi.getHeaderValue("accept"));
     }
 
     @Test
     public void GetResultHtmlTest() throws Exception{
         HeaderInfo hi= new HeaderInfo(new String[]{"GET","/movies","accept:text/html"});
-        String accept = hi.getHeadersMap().get("accept");
-        Assert.assertEquals("text/html",accept);
+        Assert.assertEquals("text/html",hi.hasKey("accept"));
     }
 }

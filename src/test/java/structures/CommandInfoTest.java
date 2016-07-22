@@ -35,16 +35,8 @@ public class CommandInfoTest {
     public void shouldGetResources() throws Exception{
         Collection<String> expected = new ArrayList<String>();
         expected.addAll(Arrays.asList(new String[]{"movies","123","reviews"}));
-
-            CommandInfo cmdInfo = new CommandInfo(new String[]{"GET","/movies/123/reviews"});
-            Iterator<String> it1 = expected.iterator();
-            Iterator<String> it2 = cmdInfo.getResources().iterator();
-
-            while(it1.hasNext() && it2.hasNext()){
-                if(!it1.next().equals(it2.next()))
-                    fail();
-            }
-
+        CommandInfo cmdInfo = new CommandInfo(new String[]{"GET","/movies/123/reviews"});
+        assertEquals(expected,cmdInfo.getResources());
     }
 
     @Test

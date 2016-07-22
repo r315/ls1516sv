@@ -20,14 +20,10 @@ public class HeaderInfo {
 	}
 
 	public HeaderInfo(String[] h) throws InvalidCommandException {
-		headers= Decoder.decodeHeaders(h);
-		if(!headers.containsKey(ACCEPT_TOKEN))
-			headers.put(ACCEPT_TOKEN,TEXT_HTML_TOKEN);
-	}
-
-	public Map<String,String> getHeadersMap(){
-		return headers;
-	}
+        headers = Decoder.decodeHeaders(h);
+        if (!headers.containsKey(ACCEPT_TOKEN))
+            headers.put(ACCEPT_TOKEN, TEXT_HTML_TOKEN);
+    }
 
 	public String getHeaderValue(String key){
 		return headers.get(key);

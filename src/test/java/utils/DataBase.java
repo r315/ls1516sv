@@ -27,4 +27,28 @@ public class DataBase {
             stmt.close();
         }
     }
+
+    public static void createCollection(boolean addMovie) throws SQLException {
+        try (Connection conn = ConnectionFactory.getConn()) {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('TestColection','Collections for testing')");
+            stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars IV','19770525')");
+            if(addMovie)
+                stmt.executeUpdate("INSERT INTO Has VALUES (1,1)");
+            stmt.close();
+        }
+    }
+
+    public static void deleteCollections() throws SQLException {
+        try (Connection conn = ConnectionFactory.getConn()) {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate("DELETE FROM Has WHERE collection_id=1");
+            stmt.executeUpdate("DELETE FROM Movie WHERE movie_id=1");
+            stmt.executeUpdate("DELETE FROM Collection WHERE collection_id=1");
+            stmt.executeUpdate("DBCC CHECKIDENT (Collection, RESEED, 0)");
+            stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
+            stmt.close();
+        }
+    }
+
 }
