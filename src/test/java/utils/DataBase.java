@@ -51,4 +51,14 @@ public class DataBase {
         }
     }
 
+    public static void removeTestMovie(){
+        try (Connection conn = ConnectionFactory.getConn()) {
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate("DELETE FROM Movie WHERE title=TestMovie and release_year=2016");
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Fail to remove test movie: " + e.getMessage());
+        }
+    }
+
 }
