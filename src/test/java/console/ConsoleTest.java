@@ -15,8 +15,6 @@ import java.sql.SQLException;
  */
 public class ConsoleTest {
 
-
-
     @Test
     public void shouldGetMoviesDefaultHtml() throws SQLException, InvalidCommandException {
         System.out.println(executeCommand("GET /movies"));
@@ -33,18 +31,51 @@ public class ConsoleTest {
     }
 
     @Test
+    public void shouldGetTopMoviesHtml() throws SQLException, InvalidCommandException {
+        System.out.println(executeCommand("GET /movies accept:text/hmtl top=5"));
+    }
+
+    @Test
+    public void shouldGetMoviesSortedText() throws SQLException, InvalidCommandException {
+        System.out.println(executeCommand("GET /movies accept:text/plain sortBy=title"));
+    }
+
+    @Test
     public void shouldPostMovie() throws SQLException, InvalidCommandException {
-        System.out.println(executeCommand("Post /movies title=TestMovie&releaseYear=2016"));
+        System.out.println(executeCommand("POST /movies title=TestMovie&releaseYear=2016"));
+    }
+
+    @Test
+    public void shouldPostColection() throws SQLException, InvalidCommandException {
+        executeCommand("POST /collections name=Testcollection1&description=collection_for_testing");
+    }
+
+    @Test
+    public void shouldPostMovieOnColection() throws SQLException, InvalidCommandException {
+        executeCommand("POST /collections/1/movies mid=1");
+    }
+
+    @Test
+    public void shouldPostRating() throws SQLException, InvalidCommandException {
+        executeCommand("POST /movies/1/ratings rating=5");
+    }
+
+    @Test
+    public void shouldPostReview() throws SQLException, InvalidCommandException {
+        executeCommand("POST /movies/1/reviews reviewerName=isel&reviewSummary=thisisasummary&review=thefullreview&rating=4");
     }
 
     @BeforeClass
-    public static void setUp() throws InvalidCommandException {
+    public static void setUp() throws InvalidCommandException, SQLException {
         Manager.Init();
+        DataBase.clear();
+
+        DataBase.createCollection(false);
     }
 
     @AfterClass
-    public static void cleanUp(){
-        DataBase.removeTestMovie();
+    public static void cleanUp() throws SQLException {
+        DataBase.clear();
     }
 
     private String executeCommand(String cmd) throws InvalidCommandException, SQLException {

@@ -14,7 +14,7 @@ import java.util.Map;
 public class DataBase {
     private static SQLServerDataSource ds = null;
 
-    public static void clear() throws SQLException {
+    public static void clear()throws SQLException {
         try (Connection conn = ConnectionFactory.getConn()) {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate("DELETE FROM Has");
@@ -24,6 +24,8 @@ public class DataBase {
             stmt.executeUpdate("DELETE FROM Movie");
             stmt.executeUpdate("DBCC CHECKIDENT (Collection, RESEED, 0)");
             stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
+            stmt.executeUpdate("DBCC CHECKIDENT (Rating, RESEED, 0)");
+            stmt.executeUpdate("DBCC CHECKIDENT (Review, RESEED, 0)");
             stmt.close();
         }
     }
@@ -50,15 +52,4 @@ public class DataBase {
             stmt.close();
         }
     }
-
-    public static void removeTestMovie(){
-        try (Connection conn = ConnectionFactory.getConn()) {
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate("DELETE FROM Movie WHERE title=TestMovie and release_year=2016");
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println("Fail to remove test movie: " + e.getMessage());
-        }
-    }
-
 }
