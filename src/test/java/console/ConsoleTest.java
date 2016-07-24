@@ -28,24 +28,56 @@ public class ConsoleTest {
 
     @Test
     public void shouldGetMoviesHtml() throws SQLException, InvalidCommandException {
-        System.out.println(executeCommand("GET /movies accept:text/plain"));
+        System.out.println(executeCommand("GET /movies accept:text/html"));
     }
 
     @Test
     public void shouldPostMovie() throws SQLException, InvalidCommandException, NumberFormatException {
-        String[] cmd_response= executeCommand("POST /movies title=TestMovie&releaseYear=2016").split("/");
-        Assert.assertEquals("movies",cmd_response[1]);
+        String[] cmd_response = executeCommand("POST /movies title=TestMovie&releaseYear=2016").split("/");
+        Assert.assertEquals("movies", cmd_response[1]);
         Integer.parseInt(cmd_response[2]);
     }
 
+    @Test
+    public void shouldGetTopMoviesHtml() throws SQLException, InvalidCommandException {
+        System.out.println(executeCommand("GET /movies accept:text/html top=5"));
+    }
+
+    @Test
+    public void shouldGetMoviesSortedText() throws SQLException, InvalidCommandException {
+        System.out.println(executeCommand("GET /movies accept:text/plain sortBy=title"));
+    }
+
+    @Test
+    public void shouldPostColection() throws SQLException, InvalidCommandException {
+        executeCommand("POST /collections name=Testcollection1&description=collection_for_testing");
+    }
+
+    @Test
+    public void shouldPostMovieOnColection() throws SQLException, InvalidCommandException {
+        executeCommand("POST /collections/1/movies mid=1");
+    }
+
+    @Test
+    public void shouldPostRating() throws SQLException, InvalidCommandException {
+        executeCommand("POST /movies/1/ratings rating=5");
+    }
+
+    @Test
+    public void shouldPostReview() throws SQLException, InvalidCommandException {
+        executeCommand("POST /movies/1/reviews reviewerName=isel&reviewSummary=thisisasummary&review=thefullreview&rating=4");
+    }
+
     @BeforeClass
-    public static void setUp() throws InvalidCommandException {
+    public static void setUp() throws InvalidCommandException, SQLException {
         Manager.Init();
+        DataBase.clear();
+        DataBase.createCollection(false);
     }
 
     @AfterClass
-    public static void cleanUp(){
-        DataBase.removeTestMovie();
+    public static void cleanUp() throws SQLException {
+        DataBase.clear();
     }
 
     private String executeCommand(String cmd) throws InvalidCommandException, SQLException {
