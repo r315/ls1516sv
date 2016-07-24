@@ -1,6 +1,12 @@
 package commands;
 
-import static org.junit.Assert.assertEquals;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandVariableException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import sqlserver.ConnectionFactory;
+import utils.DataBase;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -8,13 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import sqlserver.ConnectionFactory;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandVariableException;
+import static org.junit.Assert.assertEquals;
 
 public class GetMoviesMidTest {
 
@@ -22,7 +22,7 @@ public class GetMoviesMidTest {
     public void init() throws Exception {
         try (Connection conn = ConnectionFactory.getConn()) {
             Statement stmt = conn.createStatement();
-
+            DataBase.clear();
             stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars IV','19770525')");
 
             stmt.executeUpdate("DELETE FROM Movie");

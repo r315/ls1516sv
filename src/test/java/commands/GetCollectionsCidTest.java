@@ -1,6 +1,12 @@
 package commands;
 
-import static org.junit.Assert.assertEquals;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandVariableException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import sqlserver.ConnectionFactory;
+import utils.DataBase;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,13 +15,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import sqlserver.ConnectionFactory;
-import Strutures.ResponseFormat.ResultInfo;
-import exceptions.InvalidCommandVariableException;
+import static org.junit.Assert.assertEquals;
 
 public class GetCollectionsCidTest {
 
@@ -23,16 +23,7 @@ public class GetCollectionsCidTest {
     public void init() throws SQLException {
         try (Connection conn = ConnectionFactory.getConn()) {
             Statement stmt = conn.createStatement();
-
-            stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('x','y')");
-            stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars IV','19770525')");
-
-            stmt.executeUpdate("DELETE FROM Movie");
-            stmt.executeUpdate("DELETE FROM Collection");
-
-            stmt.executeUpdate("DBCC CHECKIDENT (Collection, RESEED, 0)");
-            stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
-
+            DataBase.clear();
             stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('Best Movies','y')");
             stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('SomethingHappened','x')");
 

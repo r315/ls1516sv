@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import sqlserver.ConnectionFactory;
+import utils.DataBase;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -24,7 +25,7 @@ public class GetTopsNReviewsLowerCountTest {
     public void init() throws Exception {
     try (Connection conn = ConnectionFactory.getConn()) {
         Statement stmt = conn.createStatement();
-
+        DataBase.clear();
         stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars IV','19770525')");
         stmt.executeUpdate("INSERT INTO Review (movie_id,name,review,summary,rating) VALUES ('1','Luis','Muito Bom','Gostei','5')");
 

@@ -16,8 +16,6 @@ import java.sql.SQLException;
  */
 public class ConsoleTest {
 
-
-
     @Test
     public void shouldGetMoviesDefaultHtml() throws SQLException, InvalidCommandException {
         System.out.println(executeCommand("GET /movies"));

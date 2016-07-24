@@ -5,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import sqlserver.ConnectionFactory;
+import utils.DataBase;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,15 +19,7 @@ public class PostMoviesTest {
 
 	@Before
 	public void init() throws SQLException {
-		try (Connection conn = ConnectionFactory.getConn()) {
-			Statement stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('x','20000101')");
-			stmt.executeUpdate("DELETE Rating");
-			stmt.executeUpdate("DELETE Review");
-			stmt.executeUpdate("DELETE Movie");
-			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
-			stmt.close();
-		}
+		DataBase.clear();
 	}
 
 	@After

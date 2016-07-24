@@ -1,6 +1,11 @@
 package commands;
 
-import static org.junit.Assert.assertEquals;
+import Strutures.ResponseFormat.ResultInfo;
+import exceptions.InvalidCommandParametersException;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import sqlserver.ConnectionFactory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,13 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import exceptions.InvalidCommandParametersException;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import sqlserver.ConnectionFactory;
-import Strutures.ResponseFormat.ResultInfo;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Red on 09/04/2016.
@@ -31,10 +30,6 @@ public class PostMoviesMidRatingsTest {
 	public void init() throws SQLException {
 		try (Connection conn = ConnectionFactory.getConn()) {
 			Statement stmt = conn.createStatement();
-			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('x','20000101')");
-			stmt.executeUpdate("DELETE FROM Movie WHERE title='x'");
-			stmt.executeUpdate("DBCC CHECKIDENT (Movie, RESEED, 0)");
-			stmt.executeUpdate("DBCC CHECKIDENT (Rating, RESEED, 0)");
 			stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('awesomeJack','20000101')");
 			stmt.executeUpdate("INSERT INTO Rating (movie_id,one,two,three,four,five) VALUES ('1','0','0','0','0','0')");
 			stmt.close();

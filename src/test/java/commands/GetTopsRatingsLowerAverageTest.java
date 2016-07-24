@@ -1,18 +1,18 @@
 package commands;
 
-import static org.junit.Assert.assertEquals;
+import Strutures.ResponseFormat.ResultInfo;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import sqlserver.ConnectionFactory;
+import utils.DataBase;
 
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import sqlserver.ConnectionFactory;
-import Strutures.ResponseFormat.ResultInfo;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Luigi Sekuiya on 09/04/2016.
@@ -23,7 +23,7 @@ public class GetTopsRatingsLowerAverageTest {
     public void init() throws Exception {
         try (Connection conn = ConnectionFactory.getConn()) {
             Statement stmt = conn.createStatement();
-
+            DataBase.clear();
             stmt.executeUpdate("INSERT INTO Movie (title,release_year) VALUES ('Star Wars IV','19770525')");
             stmt.executeUpdate("INSERT INTO Review (movie_id,name,review,summary,rating) VALUES ('1','Luis','Muito Bom','Gostei','5')");
             stmt.executeUpdate("INSERT INTO Rating (movie_id,one,two,three,four,five) VALUES ('1','1','2','3','4','5')");

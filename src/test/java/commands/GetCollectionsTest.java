@@ -1,6 +1,11 @@
 package commands;
 
-import static org.junit.Assert.assertEquals;
+import Strutures.ResponseFormat.ResultInfo;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import sqlserver.ConnectionFactory;
+import utils.DataBase;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,12 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import sqlserver.ConnectionFactory;
-import Strutures.ResponseFormat.ResultInfo;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Luigi Sekuiya on 30/04/2016.
@@ -25,12 +25,7 @@ public class GetCollectionsTest {
     public void init() throws SQLException {
         try (Connection conn = ConnectionFactory.getConn()) {
             Statement stmt = conn.createStatement();
-
-            stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('x','y')");
-
-            stmt.executeUpdate("DELETE FROM Collection");
-
-            stmt.executeUpdate("DBCC CHECKIDENT (Collection, RESEED, 0)");
+            DataBase.clear();
 
             stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('Best Movies','y')");
             stmt.executeUpdate("INSERT INTO Collection (name,description) VALUES ('x','z')");
