@@ -4,6 +4,7 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import exceptions.InvalidCommandException;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import utils.DataBase;
@@ -27,22 +28,24 @@ public class ConsoleTest {
 
     @Test
     public void shouldGetMoviesHtml() throws SQLException, InvalidCommandException {
-        System.out.println(executeCommand("GET /movies accept:text/hmtl"));
+        System.out.println(executeCommand("GET /movies accept:text/html"));
+    }
+
+    @Test
+    public void shouldPostMovie() throws SQLException, InvalidCommandException, NumberFormatException {
+        String[] cmd_response = executeCommand("POST /movies title=TestMovie&releaseYear=2016").split("/");
+        Assert.assertEquals("movies", cmd_response[1]);
+        Integer.parseInt(cmd_response[2]);
     }
 
     @Test
     public void shouldGetTopMoviesHtml() throws SQLException, InvalidCommandException {
-        System.out.println(executeCommand("GET /movies accept:text/hmtl top=5"));
+        System.out.println(executeCommand("GET /movies accept:text/html top=5"));
     }
 
     @Test
     public void shouldGetMoviesSortedText() throws SQLException, InvalidCommandException {
         System.out.println(executeCommand("GET /movies accept:text/plain sortBy=title"));
-    }
-
-    @Test
-    public void shouldPostMovie() throws SQLException, InvalidCommandException {
-        System.out.println(executeCommand("POST /movies title=TestMovie&releaseYear=2016"));
     }
 
     @Test
@@ -69,7 +72,6 @@ public class ConsoleTest {
     public static void setUp() throws InvalidCommandException, SQLException {
         Manager.Init();
         DataBase.clear();
-
         DataBase.createCollection(false);
     }
 
