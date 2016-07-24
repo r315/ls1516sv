@@ -24,6 +24,7 @@ public class Decoder {
     public static HashMap<String, String> decodeHeaders(String[] args) throws InvalidCommandException{
         if(args.length > 4) throw new InvalidCommandException("Invalid number of arguments!");
         if(args.length < 3) return new HashMap<>();
+        if(args.length==4 && !args[2].contains(HEADER_PAIR_SEPARATOR_TOKEN)) throw new InvalidCommandHeadersException();
         return decode(args[2], HEADER_PAIR_SEPARATOR_TOKEN, HEADER_SEPARATOR_TOKEN, InvalidCommandHeadersException::new);
     }
 
@@ -34,6 +35,7 @@ public class Decoder {
     public static HashMap<String, String> decodeParameters(String[] args) throws InvalidCommandException{
         if(args.length > 4) throw new InvalidCommandException("Invalid number of arguments!");
         if(args.length < 3) return new HashMap<>();
+        if(args.length==4 && !args[3].contains(PARAMETERS_PAIR_SEPARATOR_TOKEN)) throw new InvalidCommandParametersException();
         return decode(args[args.length-1], PARAMETERS_PAIR_SEPARATOR_TOKEN, PARAMETERS_SEPARATOR_TOKEN, InvalidCommandParametersException::new);
     }
 
@@ -68,8 +70,8 @@ public class Decoder {
     private static HashMap<String, String> decode(String args, String pairSeparator, String separator,
                                                   Supplier<InvalidCommandException> e) throws InvalidCommandException
     {
-        if(!args.contains(pairSeparator)) throw e.get();
         HashMap<String, String> map = new HashMap<>();
+        if(!args.contains(pairSeparator)) return map;
         for(String s: args.split(separator)){
             String[] sh = s.split(pairSeparator);
             if(sh.length > 2 || sh.length < 2 || sh[0].isEmpty()) throw e.get();

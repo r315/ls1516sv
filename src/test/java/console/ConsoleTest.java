@@ -4,6 +4,7 @@ import Strutures.Command.CommandInfo;
 import Strutures.Command.HeaderInfo;
 import exceptions.InvalidCommandException;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import utils.DataBase;
@@ -29,12 +30,14 @@ public class ConsoleTest {
 
     @Test
     public void shouldGetMoviesHtml() throws SQLException, InvalidCommandException {
-        System.out.println(executeCommand("GET /movies accept:text/hmtl"));
+        System.out.println(executeCommand("GET /movies accept:text/plain"));
     }
 
     @Test
-    public void shouldPostMovie() throws SQLException, InvalidCommandException {
-        System.out.println(executeCommand("Post /movies title=TestMovie&releaseYear=2016"));
+    public void shouldPostMovie() throws SQLException, InvalidCommandException, NumberFormatException {
+        String[] cmd_response= executeCommand("POST /movies title=TestMovie&releaseYear=2016").split("/");
+        Assert.assertEquals("movies",cmd_response[1]);
+        Integer.parseInt(cmd_response[2]);
     }
 
     @BeforeClass
