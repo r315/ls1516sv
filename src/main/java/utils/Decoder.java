@@ -29,7 +29,8 @@ public class Decoder {
     }
 
     public static HashMap<String, String> decodeParameters(String args) throws InvalidCommandException{
-        return decodeParameters(args.split(WHITESPACE_TOKEN));
+        if(!args.contains(PARAMETERS_PAIR_SEPARATOR_TOKEN))throw new InvalidCommandParametersException();
+        return decode(args, PARAMETERS_PAIR_SEPARATOR_TOKEN, PARAMETERS_SEPARATOR_TOKEN, InvalidCommandParametersException::new);
     }
 
     public static HashMap<String, String> decodeParameters(String[] args) throws InvalidCommandException{
