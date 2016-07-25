@@ -5,15 +5,13 @@ import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import commands.GetMovies;
 import exceptions.InvalidCommandException;
 import utils.Pair;
 import utils.Utils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by hmr on 17/07/2016.
@@ -63,5 +61,30 @@ public class GetCollectionsHtml implements IResultFormat {
                                 .addAttributes("required", null))
         );
         return page.getHtml();
+    }
+
+    private static List<Pair<String, String>> getMoviesList() throws SQLException, InvalidCommandException {
+        final int TITLE_POSITION = 1;
+        final int YEAR_POSITION = 2;
+        final int ID_POSITION = 0;
+
+        List<Pair<String, String>> movies = new ArrayList<>();
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("sortBy","title");
+
+        GetMovies command = new GetMovies();
+        ResultInfo ri = command.execute(param);
+
+        if (ri.getValues().isEmpty()){
+            return movies;
+        }
+
+        for (ArrayList<String> line : ri.getValues()) {
+            Pair<String,String> movie = new Pair<>(String.format("%s (%s)", line.get(TITLE_POSITION), line.get(YEAR_POSITION)),line.get(ID_POSITION));
+            movies.add(movie);
+        }
+
+        return movies;
     }
 }
