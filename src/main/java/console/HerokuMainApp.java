@@ -1,5 +1,6 @@
 package console;
 
+import exceptions.InvalidCommandException;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,9 @@ public class HerokuMainApp {
         System.setProperty("org.slf4j.simpleLogger.levelInBrackets","true");
         String port = System.getenv().get("PORT");
         try{
+            Manager.Init();
             Manager.ServerCreate(port);
-        }catch(NumberFormatException e){
+        }catch(NumberFormatException | InvalidCommandException e){
             _logger.error(String.format("Ending Application. - %s",e.getMessage()));
             return;
         }
@@ -26,7 +28,7 @@ public class HerokuMainApp {
 
         //Starts listening to requests
         Manager.ServerStart();
-        Manager.ServerJoin();
         _logger.info("Application Started!");
+        Manager.ServerJoin();
     }
 }
