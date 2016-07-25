@@ -151,7 +151,7 @@ public class HtmlTree {
     public static HtmlElement createDropDownMenu(String parameterName, List<Pair<String,String>> movies){
          HtmlElement dropdown=new HtmlElement("select").addAttributes("name", parameterName);
          movies.forEach(
-                 pair -> dropdown.addChild(new HtmlElement("option", pair.value2).addAttributes("value", pair.value1))
+                 pair -> dropdown.addChild(new HtmlElement("option", pair.value1).addAttributes("value", pair.value2))
          );
         return dropdown;
     }

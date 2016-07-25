@@ -2,13 +2,16 @@ package utils;
 
 import Strutures.Command.CommandInfo;
 import Strutures.ResponseFormat.ResultInfo;
+import commands.GetMovies;
 import console.Manager;
 import exceptions.InvalidCommandException;
 import exceptions.InvalidCommandParametersException;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Utils {
@@ -116,5 +119,29 @@ public class Utils {
         if (query == null) query = String.format("%s=%d", topPaging, PAG_DEFAULT);
         else if (!query.contains(String.format("%s=", topPaging))) query += String.format("&%s=%d", topPaging, PAG_DEFAULT);
         return query;
+    }
+
+    public static List<Pair<String, String>> getMoviesList() throws SQLException, InvalidCommandException {
+        final int TITLE_POSITION = 1, YEAR_POSITION = 2, ID_POSITION = 0;
+
+        List<Pair<String, String>> movies = new ArrayList<>();
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("sortBy","title");
+
+        GetMovies command = new GetMovies();
+        ResultInfo ri = command.execute(param);
+
+        if (ri.getValues().isEmpty()){
+            return movies;
+        }
+
+        for (ArrayList<String> line : ri.getValues()) {
+            Pair<String,String> movie = new Pair<>(
+                    String.format("%s (%s)", line.get(TITLE_POSITION), line.get(YEAR_POSITION)),line.get(ID_POSITION));
+            movies.add(movie);
+        }
+
+        return movies;
     }
 }
