@@ -6,11 +6,13 @@ import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
 import utils.Pair;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * Created by hmr on 17/07/2016.
@@ -19,7 +21,10 @@ public class GetMoviesMidRatingsHtml implements IResultFormat {
 
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
-        ArrayList<String> values = ri.getValues().iterator().next();
+        Iterator<ArrayList<String>> it=ri.getValues().iterator();
+        if(!it.hasNext()) throw new InvalidCommandParametersException("Movie not found");
+        ArrayList<String> values= it.next();
+        String mid = values.get(0);
         String movie_id=values.get(0);
         String movie_name=values.get(1);
 

@@ -6,14 +6,12 @@ import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
 import utils.Pair;
 import utils.Utils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,10 +21,12 @@ import java.util.regex.Pattern;
 public class GetMoviesMidReviewsHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
+        Iterator<ArrayList<String>> it= ri.getValues().iterator();
         ArrayList<String> values;
+        if(ri.generateresult)values=getInfo(ci,ri);
+        else throw new InvalidCommandParametersException("Movie not found!");
+        //values = it.next();
 
-        if (ri.getValues().iterator().hasNext()) values = ri.getValues().iterator().next();
-        else {values = getInfo(ci, ri);}
         String mid = values.get(0);
         String movie_name = values.get(1);
 
@@ -78,7 +78,6 @@ public class GetMoviesMidReviewsHtml implements IResultFormat {
         );
         return page.getHtml();
     }
-
     private ArrayList<String> getInfo(CommandInfo command, ResultInfo resultInfo) {
         HashMap<String, String> param = command.getData();
         ArrayList<String> info = new ArrayList<>();

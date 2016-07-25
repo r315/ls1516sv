@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -48,7 +47,7 @@ public class ResultInfo {
     } 
 
     public Collection<ArrayList<String>> getValues(){
-    	return this.data == null ? new ArrayList<ArrayList<String>>(): this.data;}
+    	return this.data == null ? new ArrayList<>(): this.data;}
 
     public List<String> removeColumn(String col) throws NoSuchElementException{
         List<String> removedValues = new ArrayList<String>();

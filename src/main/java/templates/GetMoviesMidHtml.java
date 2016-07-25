@@ -7,13 +7,11 @@ import Strutures.ResponseFormat.ResultInfo;
 import commands.GetCollectionMoviesMid;
 import commands.GetMoviesMidReviews;
 import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
 import utils.Pair;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by hmr on 17/07/2016.
@@ -21,7 +19,10 @@ import java.util.List;
 public class GetMoviesMidHtml implements IResultFormat {
     @Override
     public String generate(ResultInfo ri, CommandInfo ci) throws SQLException, InvalidCommandException {
-        String mid = ri.getValues().iterator().next().get(0);
+        Iterator<ArrayList<String>> it=ri.getValues().iterator();
+        if(!it.hasNext()) throw new InvalidCommandParametersException("Movie not found");
+        ArrayList<String> values= it.next();
+        String mid = values.get(0);
         GetMoviesMidReviews reviews = new GetMoviesMidReviews();
         GetCollectionMoviesMid collections = new GetCollectionMoviesMid();
         HashMap<String, String> param = new HashMap<>();
@@ -29,8 +30,8 @@ public class GetMoviesMidHtml implements IResultFormat {
         param.put("mid",mid);
         ResultInfo resultInfo = reviews.execute(param);
         List<Pair<String,String>> pairs = new ArrayList<>();
-        for (ArrayList<String> line : resultInfo.getValues()){
-            pairs.add(new Pair<>(line.get(3),"/movies/"+mid+"/reviews/"+line.get(2)));        }
+        for (ArrayList<String> line : resultInfo.getValues())
+            pairs.add(new Pair<>(line.get(3),"/movies/"+mid+"/reviews/"+line.get(2)));
 
         HtmlTree page = new HtmlTree();
         page.addData(ri);

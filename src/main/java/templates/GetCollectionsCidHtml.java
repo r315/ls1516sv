@@ -6,12 +6,14 @@ import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
 import exceptions.InvalidCommandException;
+import exceptions.InvalidCommandParametersException;
 import utils.Pair;
 import utils.Utils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,7 +26,10 @@ public class GetCollectionsCidHtml implements IResultFormat {
 
         //Add collections links to each column
         List<Pair<String, String>> pairs = new ArrayList<>();
-        for (ArrayList<String> line : ri.getValues())
+        Collection<ArrayList<String>> values= ri.getValues();
+        if(!ri.generateresult)throw new InvalidCommandParametersException("Collection not found!");
+
+        for (ArrayList<String> line : values)
             pairs.add(new Pair<>(line.get(1), "/movies/" + line.get(0)));
 
         //Remove Release Year and Movie ID columns
