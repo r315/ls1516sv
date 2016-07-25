@@ -70,7 +70,12 @@ public class GetMoviesMidReviews extends CommandBase {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        if (!rs.next()) return new ResultInfo(TITLE, columns, data);
+        if (!rs.next()) {
+            ResultInfo result = new ResultInfo(TITLE, columns, data);
+            result.generateresult = false;
+            return result;
+        }
+
         String title = rs.getString("title");
 
         if((rs.getString("review_id") != null)) {

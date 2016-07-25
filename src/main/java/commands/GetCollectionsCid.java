@@ -37,8 +37,6 @@ public class GetCollectionsCid extends CommandBase {
 
             ResultInfo result = createRI(rs);
 
-            pstmt.close();
-
             return result;
 
         } catch (NumberFormatException e) {
@@ -70,7 +68,12 @@ public class GetCollectionsCid extends CommandBase {
 
         ArrayList<ArrayList<String>> data = new ArrayList<>();
 
-        if (!rs.next()) return new ResultInfo(TITLE, columns, data);
+        if (!rs.next()) {
+            ResultInfo result = new ResultInfo(TITLE, columns, data);
+            result.generateresult = false;
+            return result;
+        }
+
         String name = rs.getString("name");
 
         if((rs.getString("movie_id") != null)) {
