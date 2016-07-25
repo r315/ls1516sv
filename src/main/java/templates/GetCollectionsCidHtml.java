@@ -5,6 +5,7 @@ import Strutures.ResponseFormat.Html.HtmlElement;
 import Strutures.ResponseFormat.Html.HtmlTree;
 import Strutures.ResponseFormat.IResultFormat;
 import Strutures.ResponseFormat.ResultInfo;
+import commands.GetMovies;
 import exceptions.InvalidCommandException;
 import utils.Pair;
 import utils.Utils;
@@ -12,6 +13,7 @@ import utils.Utils;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -49,15 +51,38 @@ public class GetCollectionsCidHtml implements IResultFormat {
         page.addFormGeneric("Add Movie to Collection",
                 Arrays.asList(
                         new Pair<>("method", "POST"),
-                        new Pair<>("action", String.format("/collections/%s/movies", cid))),
+                        new Pair<>("action", String.format("/collections/%s/movies", cid))
+                ),
                 Arrays.asList(
                         new HtmlElement("br","Movie ID"),
-                        new HtmlElement("input")
-                            .addAttributes("name","mid")
-                            .addAttributes("type","text")
-                            .addAttributes("required",null))
+                        HtmlTree.createDropDownMenu("mid", getMoviesList())
+                )
         );
 
         return page.getHtml();
+    }
+
+    private static List<Pair<String, String>> getMoviesList() throws SQLException, InvalidCommandException {
+        final int TITLE_POSITION = 1, YEAR_POSITION = 2, ID_POSITION = 0;
+
+        List<Pair<String, String>> movies = new ArrayList<>();
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("sortBy","title");
+
+        GetMovies command = new GetMovies();
+        ResultInfo ri = command.execute(param);
+
+        if (ri.getValues().isEmpty()){
+            return movies;
+        }
+
+        for (ArrayList<String> line : ri.getValues()) {
+            Pair<String,String> movie = new Pair<>(
+                    String.format("%s (%s)", line.get(TITLE_POSITION), line.get(YEAR_POSITION)),line.get(ID_POSITION));
+            movies.add(movie);
+        }
+
+        return movies;
     }
 }

@@ -37,7 +37,7 @@ public class HtmlTree {
                         .addChild(div("footer")));
     }
 
-    private static HtmlElement findElement(HtmlElement root, String key, BiPredicate<String,HtmlElement> pred){
+    private HtmlElement findElement(HtmlElement root, String key, BiPredicate<String,HtmlElement> pred){
         if(pred.test(key,root))
             return root;
         for(HtmlElement child : root.getChilds()){
@@ -148,6 +148,14 @@ public class HtmlTree {
         return p;
     }
 
+    public static HtmlElement createDropDownMenu(String parameterName, List<Pair<String,String>> movies){
+         HtmlElement dropdown=new HtmlElement("select").addAttributes("name", parameterName);
+         movies.forEach(
+                 pair -> dropdown.addChild(new HtmlElement("option", pair.value2).addAttributes("value", pair.value1))
+         );
+        return dropdown;
+    }
+
     public String getHtml(){
         StringBuilder sb = new StringBuilder("<!DOCTYPE html>\n");
         getHtml(sb,root, 0);
@@ -240,39 +248,3 @@ public class HtmlTree {
         addElementToDiv("footer", data);
     }
 }
-
-
-/*
-<!DOCTYPE html>
-<html>
-	<head>
-		<title> Titulo tab browser </title>
-		<style> table, th, td { border: 1px solid black; border-collapse: collapse;} </style>
-	</head>
-	<body>
-		<h2> Titulo Tabela </h2>
-		<table style="width:100%">
-			<tr>
-				<th>Titulo</th>
-				<th>Ano de Lancamento</th>
-				<th>Review</th>
-			</tr>
-		   	<tr>
-				<td>Jill</td>
-				<td>Smith</td>
-				<td>50</td>
-		  	</tr>
-		  	<tr>
-				<td>Eve</td>
-				<td>Jackson</td>
-				<td>94</td>
-		  	</tr>
-		  	<tr>
-				<td>John</td>
-				<td>Doe</td>
-				<td>80</td>
-		  	</tr>
-		</table>
-	</body>
-</html>
-*/
